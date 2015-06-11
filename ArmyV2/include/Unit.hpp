@@ -9,14 +9,15 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cmath>
-#include "Capacity.hpp"
-#include "SpeedCapacity.hpp"
-#include "LifeCapacity.hpp"
-#include "RegenCapacity.hpp"
-#include "DamageCapacity.hpp"
-#include "FirerateCapacity.hpp"
-#include "RangeCapacity.hpp"
-#include "ArmorCapacity.hpp"
+
+#include "Capacity/Capacity.hpp"
+#include "Capacity/SpeedCapacity.hpp"
+#include "Capacity/LifeCapacity.hpp"
+#include "Capacity/RegenCapacity.hpp"
+#include "Capacity/DamageCapacity.hpp"
+#include "Capacity/FirerateCapacity.hpp"
+#include "Capacity/RangeCapacity.hpp"
+#include "Capacity/ArmorCapacity.hpp"
 #include "Point.hpp"
 
 

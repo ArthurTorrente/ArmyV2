@@ -1,6 +1,6 @@
 #include "battle.hpp"
 #include "Army.hpp"
-#include "AI.hpp"
+#include "IA/AI.hpp"
 
 #include <vector>
 #include <algorithm>

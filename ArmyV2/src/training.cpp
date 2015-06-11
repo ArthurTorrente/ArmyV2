@@ -45,7 +45,8 @@ std::unique_ptr<Army> train(int iterations, int threshold, int populationSize, i
     });
 
     //start the training
-    while(iterations--) {
+    while(iterations--)
+    {
         //tornament of all armies
         for(auto itA = armies.begin(); itA != armies.end(); ++itA) {
 

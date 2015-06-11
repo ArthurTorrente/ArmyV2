@@ -22,6 +22,15 @@
     <Filter Include="Fichiers d%27en-tête\tools">
       <UniqueIdentifier>{e05feca1-4441-41c8-9c80-7a27f5d7d810}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\DecisionTree">
+      <UniqueIdentifier>{cffd79f6-0793-489e-903a-16b71a658540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\IA">
+      <UniqueIdentifier>{6ebf6fe1-267c-4c99-ad42-8d68831b0f32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Filters">
+      <UniqueIdentifier>{53bc4a83-d5ad-4681-bc50-54b9a032fed6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AI.cpp">
@@ -44,9 +53,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\AI.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\Army.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -59,44 +65,62 @@
     <ClInclude Include="include\Unit.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\ArmorCapacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Capacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DamageCapacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\FirerateCapacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\LifeCapacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\RangeCapacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\RegenCapacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SpeedCapacity.hpp">
-      <Filter>Fichiers d%27en-tête\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Action.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="include\EmptyAction.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MoveAction.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ShotAction.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
     <ClInclude Include="include\Point.hpp">
       <Filter>Fichiers d%27en-tête\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Filters\IFilters.hpp">
+      <Filter>Fichiers d%27en-tête\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\Action.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\EmptyAction.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\MoveAction.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\ShotAction.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\ArmorCapacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\Capacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\DamageCapacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\FirerateCapacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\LifeCapacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\RangeCapacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\RegenCapacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\SpeedCapacity.hpp">
+      <Filter>Fichiers d%27en-tête\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\ActionNode.hpp">
+      <Filter>Fichiers d%27en-tête\DecisionTree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\DecisionNode.hpp">
+      <Filter>Fichiers d%27en-tête\DecisionTree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\INode.hpp">
+      <Filter>Fichiers d%27en-tête\DecisionTree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IA\AI.hpp">
+      <Filter>Fichiers d%27en-tête\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IA\TreeIA.hpp">
+      <Filter>Fichiers d%27en-tête\IA</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

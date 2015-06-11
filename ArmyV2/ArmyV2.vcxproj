@@ -19,22 +19,27 @@
     <ClCompile Include="src\Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Action.hpp" />
-    <ClInclude Include="include\AI.hpp" />
-    <ClInclude Include="include\ArmorCapacity.hpp" />
+    <ClInclude Include="include\Actions\Action.hpp" />
+    <ClInclude Include="include\Actions\EmptyAction.hpp" />
+    <ClInclude Include="include\Actions\MoveAction.hpp" />
+    <ClInclude Include="include\Actions\ShotAction.hpp" />
     <ClInclude Include="include\Army.hpp" />
     <ClInclude Include="include\battle.hpp" />
-    <ClInclude Include="include\Capacity.hpp" />
-    <ClInclude Include="include\DamageCapacity.hpp" />
-    <ClInclude Include="include\EmptyAction.hpp" />
-    <ClInclude Include="include\FirerateCapacity.hpp" />
-    <ClInclude Include="include\LifeCapacity.hpp" />
-    <ClInclude Include="include\MoveAction.hpp" />
+    <ClInclude Include="include\Capacity\ArmorCapacity.hpp" />
+    <ClInclude Include="include\Capacity\Capacity.hpp" />
+    <ClInclude Include="include\Capacity\DamageCapacity.hpp" />
+    <ClInclude Include="include\Capacity\FirerateCapacity.hpp" />
+    <ClInclude Include="include\Capacity\LifeCapacity.hpp" />
+    <ClInclude Include="include\Capacity\RangeCapacity.hpp" />
+    <ClInclude Include="include\Capacity\RegenCapacity.hpp" />
+    <ClInclude Include="include\Capacity\SpeedCapacity.hpp" />
+    <ClInclude Include="include\DecisionTree\ActionNode.hpp" />
+    <ClInclude Include="include\DecisionTree\DecisionNode.hpp" />
+    <ClInclude Include="include\DecisionTree\INode.hpp" />
+    <ClInclude Include="include\Filters\IFilters.hpp" />
+    <ClInclude Include="include\IA\AI.hpp" />
+    <ClInclude Include="include\IA\TreeIA.hpp" />
     <ClInclude Include="include\Point.hpp" />
-    <ClInclude Include="include\RangeCapacity.hpp" />
-    <ClInclude Include="include\RegenCapacity.hpp" />
-    <ClInclude Include="include\ShotAction.hpp" />
-    <ClInclude Include="include\SpeedCapacity.hpp" />
     <ClInclude Include="include\training.hpp" />
     <ClInclude Include="include\Unit.hpp" />
   </ItemGroup>
@@ -75,7 +80,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -86,7 +91,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

@@ -4,8 +4,7 @@
 #include <memory>
 #include <functional>
 
-#include "ActionNode.h"
-#include "Action.hpp"
+#include "Actions/Action.hpp"
 #include "Army.hpp"
 
 class INode

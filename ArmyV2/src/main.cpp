@@ -5,6 +5,12 @@
 #include "training.hpp"
 #include "fstream"
 
+#include "Filters/IFilters.hpp"
+
+void unitTest()
+{
+
+}
 
 int main(void)
 {

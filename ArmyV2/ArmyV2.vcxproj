@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\DecisionNode.cpp" />
+    <ClCompile Include="src\ActionNode.cpp" />
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Army.cpp" />
     <ClCompile Include="src\battle.cpp" />

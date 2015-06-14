@@ -6,21 +6,28 @@
 
 #include "Army.hpp"
 
+/*
 template<typename OUT>
 class IFilter
 {
 public:
-    IFilter();
-    virtual ~IFilter();
+    OUT operator()(const std::vector<Unit>&) const;
+}*/
 
-    virtual OUT operator()(std::shared_ptr<Unit>, const std::unique_ptr<Army>&, const std::unique_ptr<Army>&) = 0;
-};
-
-template<typename OUT, typename IN>
-class FilterWithInput : public Filter < OUT >
+template < typename OUT, typename ... Args >
+class IFilter 
 {
-    virtual OUT operator(std::shared_ptr<Unit>, const std::unique_ptr<Army>&, const std::unique_ptr<Army>&, IN);
+public:
+    virtual OUT operator()(Args) = 0;
 };
 
+class FloatFliter : public IFilter < float, int, int, int >
+{
+public:
+    float operator()(int a, int b, int c)
+    {
+        return static_cast<float>(a + b + c);
+    }
+};
 
 #endif //_IFILTERS_H_h

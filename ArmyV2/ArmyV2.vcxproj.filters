@@ -31,6 +31,9 @@
     <Filter Include="Fichiers d%27en-tête\Filters">
       <UniqueIdentifier>{53bc4a83-d5ad-4681-bc50-54b9a032fed6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\DecisionTree">
+      <UniqueIdentifier>{be2268ba-204d-4092-ba56-c62c68257e17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AI.cpp">
@@ -50,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="src\Unit.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="include\DecisionNode.cpp">
+      <Filter>Fichiers sources\DecisionTree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ActionNode.cpp">
+      <Filter>Fichiers sources\DecisionTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

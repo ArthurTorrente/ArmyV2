@@ -3,14 +3,13 @@
 
 #include <memory>
 
-#include "INode.h"
-#include "Action.hpp"
+#include "INode.hpp"
 
 class ActionNode : INode
 {
 public:
     ActionNode();
-    
+
     std::unique_ptr<Action> getValue();
 };
 

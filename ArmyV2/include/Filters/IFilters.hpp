@@ -11,22 +11,37 @@ template<typename OUT>
 class IFilter
 {
 public:
-    OUT operator()(const std::vector<Unit>&) const;
+OUT operator()(const std::vector<Unit>&) const;
 }*/
 
-template < typename OUT, typename ... Args >
-class IFilter 
+template < typename OUT >
+class IFilter
 {
 public:
-    virtual OUT operator()(Args) = 0;
+    /* Return value of Filter */
+    virtual OUT operator()() = 0;
+
+protected:
+    std::shared_ptr<Unit> m_unit;
+    std::shared_ptr<Army> m_coop;
+    std::shared_ptr<Army> m_opponent;
 };
 
-class FloatFliter : public IFilter < float, int, int, int >
+class FloatFliter : public IFilter < float >
 {
 public:
-    float operator()(int a, int b, int c)
+    float operator()()
     {
-        return static_cast<float>(a + b + c);
+        return m_unit->getCapacity(1)->getValue();
+    }
+};
+
+class UnitVectorFilter : public IFilter< std::vector<std::shared_ptr<Unit>> >
+{
+public:
+    std::vector<std::shared_ptr<Unit>> operator()()
+    {
+        return std::vector<std::shared_ptr<Unit>>();
     }
 };
 

@@ -20,7 +20,8 @@
 #include "Capacity/ArmorCapacity.hpp"
 #include "Point.hpp"
 
-
+#include "Tools.hpp"
+#include "Config.h"
 
 //Class representing a unit, i.e. element of an army
 class Unit {
@@ -150,6 +151,14 @@ public:
     void moveToPosition(const Point& position)
     {
         position_.moveTo(position, getSpeed().getValue());
+
+        position_.setX(
+            tools::clamp<float>(0, static_cast<float>(Config::getInsance()->getWidth()), position.getX())
+            );
+
+        position_.setY(
+            tools::clamp<float>(0, static_cast<float>(Config::getInsance()->getHeight()), position.getY())
+            );
     }
 
     //Provide the global level of the unit (I.E. the sum of all capacities levels)

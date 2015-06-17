@@ -11,11 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\DecisionNode.cpp" />
     <ClCompile Include="src\ActionNode.cpp" />
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Army.cpp" />
     <ClCompile Include="src\battle.cpp" />
+    <ClCompile Include="src\Config.cpp" />
+    <ClCompile Include="src\DecisionNode.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\training.cpp" />
     <ClCompile Include="src\Unit.cpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="include\Capacity\RangeCapacity.hpp" />
     <ClInclude Include="include\Capacity\RegenCapacity.hpp" />
     <ClInclude Include="include\Capacity\SpeedCapacity.hpp" />
+    <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\DecisionTree\ActionNode.hpp" />
     <ClInclude Include="include\DecisionTree\DecisionNode.hpp" />
     <ClInclude Include="include\DecisionTree\INode.hpp" />
@@ -42,6 +44,7 @@
     <ClInclude Include="include\IA\AI.hpp" />
     <ClInclude Include="include\IA\TreeIA.hpp" />
     <ClInclude Include="include\Point.hpp" />
+    <ClInclude Include="include\Tools.hpp" />
     <ClInclude Include="include\training.hpp" />
     <ClInclude Include="include\Unit.hpp" />
   </ItemGroup>

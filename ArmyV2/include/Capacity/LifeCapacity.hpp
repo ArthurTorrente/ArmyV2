@@ -36,7 +36,9 @@ public:
     void takeRegen(float regenValue)
     {
         value_ += regenValue;
-        if(value_>maxLife_)value_ = maxLife_;
+        
+        if(value_>maxLife_)
+            value_ = maxLife_;
     }
 };
 #endif

@@ -54,11 +54,14 @@
     <ClCompile Include="src\Unit.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="include\DecisionNode.cpp">
-      <Filter>Fichiers sources\DecisionTree</Filter>
-    </ClCompile>
     <ClCompile Include="src\ActionNode.cpp">
       <Filter>Fichiers sources\DecisionTree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DecisionNode.cpp">
+      <Filter>Fichiers sources\DecisionTree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Config.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +133,12 @@
     </ClInclude>
     <ClInclude Include="include\IA\TreeIA.hpp">
       <Filter>Fichiers d%27en-tête\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Config.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Tools.hpp">
+      <Filter>Fichiers d%27en-tête\tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

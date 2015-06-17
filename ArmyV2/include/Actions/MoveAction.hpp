@@ -23,9 +23,15 @@ public:
     //Log parameter indicate if we write something or not on the standard output
     void execute(bool log = false)
     {
-        if(log)std::cout<<"Unit "<<unit_->getId()<<" move from "<<unit_->getPosition();
+        if(log)
+            std::cout<<"Unit "<<unit_->getId()<<" move from "<<unit_->getPosition();
+        
         unit_->moveToPosition(position_);
-        if(log)std::cout<<" to "<<unit_->getPosition()<<std::endl;
+
+        
+        
+        if(log)
+            std::cout<<" to "<<unit_->getPosition()<<std::endl;
     }
 };
 

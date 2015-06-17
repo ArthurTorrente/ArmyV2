@@ -12,7 +12,7 @@ static unsigned int h = 10;
 
 void computeArg(int argc, char** argv)
 {
-    for (size_t i = 0; i < argc; ++i)
+    for (int i = 0; i < argc; ++i)
     {
         if (strcmp(argv[i], "-h") == 0)
         {
@@ -29,6 +29,9 @@ void computeArg(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
+    if (argc > 1)
+        computeArg(argc, &(argv[1]));
+
     std::srand(static_cast<unsigned int>(time(nullptr)));
     std::vector<std::unique_ptr<Army> > champions;
     try
@@ -42,24 +45,17 @@ int main(int argc, char** argv)
     {
     }
 
-    try
-    {
-        auto config = Config::getInsance();
+    auto config = Config::getInsance();
 
-        config->setWidth(w);
-        config->setHeight(h);
+    config->setWidth(w);
+    config->setHeight(h);
 
-        std::unique_ptr<Army> army = train(10, 100, 20, 10, 100, champions);
-        std::cout << *army << std::endl;
-        std::ofstream out("Army_10_100.save");
-        army->save(out);
-        out.flush();
-        out.close();
-    }
-    catch (std::invalid_argument& e)
-    {
-        std::cout << "toto" << std::endl;
-    }
+    std::unique_ptr<Army> army = train(10, 100, 20, 10, 100, champions);
+    std::cout << *army << std::endl;
+    std::ofstream out("Army_10_100.save");
+    army->save(out);
+    out.flush();
+    out.close();
 
     return 0;
 }

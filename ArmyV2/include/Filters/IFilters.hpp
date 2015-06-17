@@ -6,43 +6,36 @@
 
 #include "Army.hpp"
 
-/*
-template<typename OUT>
-class IFilter
-{
-public:
-OUT operator()(const std::vector<Unit>&) const;
-}*/
-
 template < typename OUT >
-class IFilter
+class Extractor
 {
 public:
     /* Return value of Filter */
-    virtual OUT operator()() = 0;
+    virtual OUT operator()(const std::shared_ptr<Unit>&, const std::shared_ptr<Army>&, const std::shared_ptr<Army>&) = 0;
+};
+
+class FloatExtractor : public Extractor < float >
+{
+public:
+    virtual float operator()(const std::shared_ptr<Unit>& u, const std::shared_ptr<Army>& a, const std::shared_ptr<Army>& b) = 0;
+}; 
+
+class CapacityValueExtractor : public FloatExtractor
+{
+public:
+    float operator()(const std::shared_ptr<Unit>& u, const std::shared_ptr<Army>& a, const std::shared_ptr<Army>& b)
+    {
+        return u->getCapacity(m_capacity)->getValue();
+    }
 
 protected:
-    std::shared_ptr<Unit> m_unit;
-    std::shared_ptr<Army> m_coop;
-    std::shared_ptr<Army> m_opponent;
+    int m_capacity;
 };
 
-class FloatFliter : public IFilter < float >
+class UnitVectorExtractor : public Extractor< std::vector<std::shared_ptr<Unit>> >
 {
 public:
-    float operator()()
-    {
-        return m_unit->getCapacity(1)->getValue();
-    }
-};
-
-class UnitVectorFilter : public IFilter< std::vector<std::shared_ptr<Unit>> >
-{
-public:
-    std::vector<std::shared_ptr<Unit>> operator()()
-    {
-        return std::vector<std::shared_ptr<Unit>>();
-    }
+    virtual std::vector<std::shared_ptr<Unit>> operator()(const std::shared_ptr<Unit>&, const std::shared_ptr<Army>&, const std::shared_ptr<Army>&) = 0;
 };
 
 #endif //_IFILTERS_H_h

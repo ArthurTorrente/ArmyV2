@@ -62,7 +62,9 @@ Unit& Army::getFurthestUnit(const Point& p)
 {
     if(units_.empty())throw std::invalid_argument("empty army");    
     Unit* result = nullptr;
-    float maxDist = 0.0f;
+    
+    float maxDist = -1.0f;
+
     for(auto it = units_.begin(); it != units_.end(); ++it) {
         float d = (*it)->getPosition().distance(p);
         if(d > maxDist) {

@@ -6,9 +6,9 @@
 namespace tools
 {
     template<typename T>
-    inline T clamp(T min, T max, t value)
+    inline T clamp(T min, T max, T value)
     {
-        return std::min(max, std::min(value, max));
+        return std::min(max, std::max(value, min));
     }
 }
 

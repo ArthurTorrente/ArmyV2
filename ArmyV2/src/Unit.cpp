@@ -4,14 +4,29 @@
 #include "Unit.hpp"
 #include <memory>
 
+#include "Tools.hpp"
+#include "Config.h"
+
 //static counter used for unique id creation
 int Unit::idCount_=0;
 
 //Method in charge of the initialization of id, position(random), and capacities
 void Unit::init_()
 {
+
     id_ = idCount_++;
     this->position_ = Point(static_cast<float>(std::rand()%100),static_cast<float>(std::rand()%100));
+
+    auto config = Config::getInsance();
+
+    position_.setX(
+        tools::clamp<float>(0, static_cast<float>(config->getWidth()), position_.getX())
+        );
+
+    position_.setY(
+        tools::clamp<float>(0, static_cast<float>(config->getHeight()), position_.getY())
+        );
+
     this->capacities_.reserve(7);
     this->capacities_.push_back(std::unique_ptr<Capacity>(new SpeedCapacity()));
     this->capacities_.push_back(std::unique_ptr<Capacity>(new LifeCapacity()));

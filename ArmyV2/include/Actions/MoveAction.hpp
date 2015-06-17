@@ -28,8 +28,6 @@ public:
         
         unit_->moveToPosition(position_);
 
-        
-        
         if(log)
             std::cout<<" to "<<unit_->getPosition()<<std::endl;
     }

@@ -1,9 +1,26 @@
-﻿La génération a démarré 17/06/2015 11:50:42.
+﻿La génération a démarré 17/06/2015 12:50:37.
      1>Projet "D:\workspace\ESGI\4A\semestre_2\C++\ArmyV2\ArmyV2\ArmyV2.vcxproj" sur le nœud 2 (Build cible(s)).
-     1>Link:
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\include /I"C:\Program Files (x86)\Visual Leak Detector\include" /Zi /nologo /W4 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt src\AI.cpp src\Army.cpp src\Unit.cpp
+         AI.cpp
+     1>src\AI.cpp(14): warning C4100: 'allies' : paramètre formel non référencé
+         Army.cpp
+         Unit.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\ArmyV2.exe" /NOLOGO /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"bin\ArmyV2.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\ArmyV2.lib" /MACHINE:X86 /SAFESEH Release\ActionNode.obj
+         Release\AI.obj
+         Release\Army.obj
+         Release\battle.obj
+         Release\Config.obj
+         Release\DecisionNode.obj
+         Release\main.obj
+         Release\training.obj
+         Release\Unit.obj
+         Génération de code en cours
+         Fin de la génération du code
          ArmyV2.vcxproj -> D:\workspace\ESGI\4A\semestre_2\C++\ArmyV2\ArmyV2\bin\ArmyV2.exe
      1>Génération du projet "D:\workspace\ESGI\4A\semestre_2\C++\ArmyV2\ArmyV2\ArmyV2.vcxproj" terminée (Build cible(s)).
 
 La génération a réussi.
 
-Temps écoulé 00:00:00.15
+Temps écoulé 00:00:02.18

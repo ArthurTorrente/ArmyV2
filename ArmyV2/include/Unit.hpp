@@ -207,4 +207,6 @@ inline std::ostream& operator<<(std::ostream& out, const Unit& unit)
     return out;
 }
 
+typedef std::vector<std::shared_ptr<Unit>> UnitVector;
+
 #endif

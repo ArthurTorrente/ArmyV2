@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "Tools.hpp"
-#include "Config.h"
+#include "Config.hpp"
 
 //static counter used for unique id creation
 int Unit::idCount_=0;

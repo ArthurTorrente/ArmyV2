@@ -13,10 +13,10 @@
 class Army {
 private:
     //vector storing the units
-    std::vector<std::unique_ptr<Unit> > units_;
+    std::vector<UnitPtr > units_;
 
     //Method for deep copying the units vector
-    void copyUnits_(const std::vector<std::unique_ptr<Unit> >& units);
+    void copyUnits_(const std::vector<UnitPtr >& units);
 
 public:
 
@@ -24,7 +24,7 @@ public:
     Army(int size, int level);
 
     //Constructor from a vector of units, which will be deep copied
-    Army(std::vector<std::unique_ptr<Unit> >& units);
+    Army(std::vector<UnitPtr >& units);
 
     //Copy constructor
     Army(const Army& army);
@@ -36,7 +36,7 @@ public:
     Army& operator=(Army army);
 
     //Getter fot the units list
-    std::vector<std::unique_ptr<Unit> >& getUnitsList()
+    UnitVector& getUnitsList()
     {
         return units_;
     }
@@ -51,7 +51,7 @@ public:
     //Return the unit with the given ID
     Unit& getUnit(int id)
     {
-        auto it = std::find_if(units_.begin(), units_.end(), [id](const std::unique_ptr<Unit>& unit) {
+        auto it = std::find_if(units_.begin(), units_.end(), [id](const UnitPtr& unit) {
             return unit->getId()==id;
         });
         if(it == units_.end())throw std::invalid_argument("wrong id : unit "+ std::to_string(id)+" not found");
@@ -67,11 +67,11 @@ public:
 
 
     //Get the unit with the lowest level for the given capacity
-    Unit& getLowestUnit(int capa_index);
+    Unit& getLowestUnit(unsigned int capa_index);
 
 
     //Get the unit with the highest level for the given capacity
-    Unit& getHigestUnit(int capa_index);
+    Unit& getHigestUnit(unsigned int capa_index);
 
     //Remove all the units with non positive life value
     void purge();
@@ -96,7 +96,7 @@ public:
 inline std::ostream& operator<<(std::ostream& out, const Army& army)
 {
     out<<"====================ARMY===================================="<<std::endl;
-    std::vector<std::unique_ptr<Unit> >& units = const_cast<Army&>(army).getUnitsList();
+    std::vector<UnitPtr >& units = const_cast<Army&>(army).getUnitsList();
     for(auto it = units.begin(); it != units.end(); ++it) {
         out<<**it<<std::endl;
     }
@@ -105,5 +105,6 @@ inline std::ostream& operator<<(std::ostream& out, const Army& army)
     return out;
 }
 
-
+typedef std::shared_ptr<Army> ArmyPtr;
+typedef std::vector<ArmyPtr> ArmyVector;
 #endif

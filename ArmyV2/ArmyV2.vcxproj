@@ -36,11 +36,15 @@
     <ClInclude Include="include\Capacity\RangeCapacity.hpp" />
     <ClInclude Include="include\Capacity\RegenCapacity.hpp" />
     <ClInclude Include="include\Capacity\SpeedCapacity.hpp" />
-    <ClInclude Include="include\Config.h" />
+    <ClInclude Include="include\Config.hpp" />
     <ClInclude Include="include\DecisionTree\ActionNode.hpp" />
     <ClInclude Include="include\DecisionTree\DecisionNode.hpp" />
     <ClInclude Include="include\DecisionTree\INode.hpp" />
-    <ClInclude Include="include\Filters\IFilters.hpp" />
+    <ClInclude Include="include\Extractor\IExtractor.hpp" />
+    <ClInclude Include="include\Extractor\PointExtractor.hpp" />
+    <ClInclude Include="include\Extractor\SetExtractor.hpp" />
+    <ClInclude Include="include\Extractor\UnitExtractor.hpp" />
+    <ClInclude Include="include\Extractor\ValueExtractor.hpp" />
     <ClInclude Include="include\IA\AI.hpp" />
     <ClInclude Include="include\IA\TreeIA.hpp" />
     <ClInclude Include="include\Point.hpp" />

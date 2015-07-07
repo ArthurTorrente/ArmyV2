@@ -28,11 +28,11 @@
     <Filter Include="Fichiers d%27en-tête\IA">
       <UniqueIdentifier>{6ebf6fe1-267c-4c99-ad42-8d68831b0f32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Filters">
-      <UniqueIdentifier>{53bc4a83-d5ad-4681-bc50-54b9a032fed6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\DecisionTree">
       <UniqueIdentifier>{be2268ba-204d-4092-ba56-c62c68257e17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Extractors">
+      <UniqueIdentifier>{53bc4a83-d5ad-4681-bc50-54b9a032fed6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,9 +79,6 @@
     </ClInclude>
     <ClInclude Include="include\Point.hpp">
       <Filter>Fichiers d%27en-tête\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Filters\IFilters.hpp">
-      <Filter>Fichiers d%27en-tête\Filters</Filter>
     </ClInclude>
     <ClInclude Include="include\Actions\Action.hpp">
       <Filter>Fichiers d%27en-tête\Actions</Filter>
@@ -134,11 +131,26 @@
     <ClInclude Include="include\IA\TreeIA.hpp">
       <Filter>Fichiers d%27en-tête\IA</Filter>
     </ClInclude>
-    <ClInclude Include="include\Config.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\Tools.hpp">
       <Filter>Fichiers d%27en-tête\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Config.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Extractor\ValueExtractor.hpp">
+      <Filter>Fichiers d%27en-tête\Extractors</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Extractor\IExtractor.hpp">
+      <Filter>Fichiers d%27en-tête\Extractors</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Extractor\UnitExtractor.hpp">
+      <Filter>Fichiers d%27en-tête\Extractors</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Extractor\PointExtractor.hpp">
+      <Filter>Fichiers d%27en-tête\Extractors</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Extractor\SetExtractor.hpp">
+      <Filter>Fichiers d%27en-tête\Extractors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

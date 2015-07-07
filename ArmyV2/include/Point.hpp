@@ -127,6 +127,16 @@ public:
             (*this)+= (vec*(max/d));
         }
     }
+
+    bool operator==(const Point& p) const
+    {
+        return x_ == p.x_ && y_ == p.y_;
+    }
+
+    bool operator!=(const Point& p) const
+    {
+        return !((*this) == p);
+    }
 };
 
 //Star operator overloading. Case  Scalar*Point

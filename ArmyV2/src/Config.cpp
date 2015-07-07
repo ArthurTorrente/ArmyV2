@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "Config.hpp"
 
 std::shared_ptr<Config> Config::m_instance(nullptr);
 

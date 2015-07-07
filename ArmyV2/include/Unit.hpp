@@ -21,7 +21,7 @@
 #include "Point.hpp"
 
 #include "Tools.hpp"
-#include "Config.h"
+#include "Config.hpp"
 
 //Class representing a unit, i.e. element of an army
 class Unit {
@@ -123,13 +123,13 @@ public:
     }
 
     //Provide the capacity with the given index
-    Capacity* getCapacity(int index)
+    Capacity* getCapacity(unsigned int index)
     {
         return capacities_.at(index).get();
     }
 
     //Provide the capacity with the given index
-    const Capacity* getCapacity(int index) const
+    const Capacity* getCapacity(unsigned int index) const
     {
         return capacities_.at(index).get();
     }
@@ -196,6 +196,15 @@ public:
     static Unit load(std::istream& in);
 
 
+    bool operator==(const Unit& u) const
+    {
+        return id_ == u.id_;
+    }
+
+    bool operator!=(const Unit& u) const
+    {
+        return !((*this) == u);
+    }
 };
 
 //Shift operator overloading, printing the unit in the output stream.
@@ -207,6 +216,7 @@ inline std::ostream& operator<<(std::ostream& out, const Unit& unit)
     return out;
 }
 
-typedef std::vector<std::shared_ptr<Unit>> UnitVector;
+typedef std::shared_ptr<Unit> UnitPtr;
+typedef std::vector<UnitPtr> UnitVector;
 
 #endif

@@ -1,9 +1,23 @@
-﻿La génération a démarré 17/06/2015 19:18:01.
+﻿La génération a démarré 05/07/2015 19:17:50.
      1>Projet "D:\workspace\ESGI\4A\semestre_2\C++\ArmyV2\ArmyV2\ArmyV2.vcxproj" sur le nœud 2 (Build cible(s)).
-     1>Link:
-         ArmyV2.vcxproj -> D:\workspace\ESGI\4A\semestre_2\C++\ArmyV2\ArmyV2\bin\ArmyV2.exe
-     1>Génération du projet "D:\workspace\ESGI\4A\semestre_2\C++\ArmyV2\ArmyV2\ArmyV2.vcxproj" terminée (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\include /I"C:\Program Files (x86)\Visual Leak Detector\include" /Zi /nologo /W4 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt src\AI.cpp src\ActionNode.cpp src\Army.cpp src\DecisionNode.cpp src\Unit.cpp src\battle.cpp src\main.cpp src\training.cpp
+         AI.cpp
+         ActionNode.cpp
+         Army.cpp
+         DecisionNode.cpp
+         Unit.cpp
+         battle.cpp
+         main.cpp
+     1>d:\workspace\esgi\4a\semestre_2\c++\armyv2\armyv2\include\Tools.hpp(15): warning C4100: 'value' : paramètre formel non référencé
+                 src\main.cpp(37) : voir la référence à l'instanciation de la fonction modèle 'void tools::unusedArg<int,char**>(T,char **)' en cours de compilation
+                 with
+                 [
+                     T=int
+                 ]
+         training.cpp
+     1>Génération du projet "D:\workspace\ESGI\4A\semestre_2\C++\ArmyV2\ArmyV2\ArmyV2.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
 
-La génération a réussi.
+ÉCHEC de la build.
 
-Temps écoulé 00:00:00.20
+Temps écoulé 00:00:03.78

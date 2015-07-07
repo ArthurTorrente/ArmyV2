@@ -5,7 +5,16 @@
 #include "training.hpp"
 #include "fstream"
 
-#include "Config.h"
+#include "Config.hpp"
+
+//#define UNITTEST
+
+#ifdef UNITTEST
+    #include "Extractor/ValueExtractor.hpp"
+    #include "Extractor/UnitExtractor.hpp"
+    #include "Extractor/PointExtractor.hpp"
+    #include "Extractor/SetExtractor.hpp"
+#endif
 
 static unsigned int w = 10;
 static unsigned int h = 10;
@@ -27,8 +36,28 @@ void computeArg(int argc, char** argv)
     }
 }
 
+void unitTest()
+{
+    if (!unitTest_ValueExtractor() ||
+        !unitTest_PointExtractor() ||
+        !unitTest_UnitExtractor() ||
+        !unitTest_SetExtractor())
+    {
+        std::cout << "One unit test has failed!" << std::endl;
+    }
+    else
+    {
+        std::cout << "All test are OK !" << std::endl;
+    }
+}
+
 int main(int argc, char** argv)
 {
+#ifdef UNITTEST
+    tools::unusedArg(argc, argv);
+    unitTest();
+
+#else
     if (argc > 1)
         computeArg(argc, &(argv[1]));
 
@@ -57,5 +86,6 @@ int main(int argc, char** argv)
     out.flush();
     out.close();
 
+#endif
     return 0;
 }

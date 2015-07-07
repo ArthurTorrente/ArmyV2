@@ -1,0 +1,24 @@
+Extractor list
+
+Valeur :
+- retourne une valeur paramétré au pré alable, [val]
+- Retourne la valeur d'une capacité d'une unité, C0-C6<unit>
+- retourne la distance d'une unité par rapport à un point, D<unit><point>
+- Min/Max/Avg d'une capacité d'un ensemble, M/m/a0-6<set>
+- Distance Min/Max/Avg d'un ensemble par rapport à un point< M/m/aD<set><point>
+
+Unit:
+- Unité propriétaire de l'ia U
+- unité qui a la valeur min/max d'une capacité au sein d'un ensemble, L0-L6<set> H0-H6<set>
+- unité qui est plus proche/loin d'un point au sein d'un ensemble, LD-HD<set><point>
+
+Point:
+- barycentre des positions d'un ensemble, B<set>
+- position d'une unité, P<unit>
+
+Ensemble d'unité:
+- Armé de l'ia, A
+- Armé opposé, O
+- N ayant la plus grande/petite capacité au sein d'un ensemble, NL0-6[val]<set> NH0-6[val]<set>
+- N plus proche/loin d'un point au sein d'un ensemble, NLD[val]<set> NHD[val]<set>
+- Sous-ensemble  ayant capacité/distance >/< seuil, TL0-6[val]<set> TH0-6[val]<set>

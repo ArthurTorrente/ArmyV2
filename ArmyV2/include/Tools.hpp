@@ -5,6 +5,20 @@
 
 namespace tools
 {
+    template <typename T>
+    void unusedArg(T value)
+    {
+        (void)value;
+    }
+
+    template < typename T, typename... TArgs >
+    void unusedArg(T value, TArgs... args)
+    {   
+        (void)value;
+
+        unusedArg(args...);
+    }
+
     template<typename T>
     inline T clamp(T min, T max, T value)
     {

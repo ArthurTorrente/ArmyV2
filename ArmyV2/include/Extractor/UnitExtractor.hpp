@@ -6,7 +6,7 @@
 class IAUnitExtractor : public UnitExtractor
 {
 public:
-    virtual UnitPtr operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    virtual UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         tools::unusedArg(allies, opponent);
 
@@ -17,28 +17,23 @@ public:
 class MinMaxCapacityExtractor : public UnitExtractor
 {
 public:
-    MinMaxCapacityExtractor(bool minAlgorithm, unsigned int capacityIndex, const UnitVector& set)
+    MinMaxCapacityExtractor(bool isMin, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : UnitExtractor(),
-        m_isMin(minAlgorithm),
         m_capacityIndex(capacityIndex),
-        m_set(set)
-    {}
-
-    virtual UnitPtr operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+        m_setGetter(std::move(sex))
     {
-        tools::unusedArg(unit, allies, opponent);
+        if (isMin)
+            m_algo = std::bind(&MinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
 
-        if (m_isMin)
-        {
-            return getMin();
-        }
-
-        return getMax();
+        else
+            m_algo = std::bind(&MinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
     }
 
-    bool isMin() const
+    virtual UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
-        return m_isMin;
+        return m_algo(
+            (*m_setGetter)(unit, allies, opponent)
+            );
     }
 
     unsigned int getCapacityIndex() const
@@ -46,14 +41,13 @@ public:
         return m_capacityIndex;
     }
 
-    const UnitVector& getSet() const
-    {
-        return m_set;
-    }
-
     void setAlgorithm(bool isMin)
     {
-        m_isMin = isMin;
+        if (isMin)
+            m_algo = std::bind(&MinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
+        
+        else
+            m_algo = std::bind(&MinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
     }
 
     void setCapacityIndex(unsigned int capacityIndex)
@@ -61,27 +55,29 @@ public:
         m_capacityIndex = capacityIndex;
     }
 
-    void setSet(const UnitVector& set)
-    {
-        m_set = set;
-    }
-
 protected:
-    bool m_isMin;
     unsigned int m_capacityIndex;
-    UnitVector m_set;
+    SetExtractorUPtr m_setGetter;
 
-    UnitPtr getMin()
+    std::function<UnitSPtr(const UnitVector&)> m_algo;
+
+    UnitSPtr getMin(const UnitVector& set)
     {
-        return *std::min_element(m_set.begin(), m_set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        if (set.size() == 0)
+            return UnitSPtr(nullptr);
+
+        return *std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getCapacity(m_capacityIndex)->getValue() < b->getCapacity(m_capacityIndex)->getValue();
         });
     }
 
-    UnitPtr getMax()
+    UnitSPtr getMax(const UnitVector& set)
     {
-        return *std::max_element(m_set.begin(), m_set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        if (set.size() == 0)
+            return UnitSPtr(nullptr);
+
+        return *std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getCapacity(m_capacityIndex)->getValue() < b->getCapacity(m_capacityIndex)->getValue();
         });
@@ -92,125 +88,54 @@ class FarNearExtractor : public UnitExtractor
 {
 public:
 
-    FarNearExtractor(bool isFar, const Point& p, const UnitVector& set)
+    FarNearExtractor(bool isFar, SetExtractorUPtr& sex, PointExtractorUPtr& pex)
         : UnitExtractor(),
-        m_isFar(isFar),
-        m_point(p),
-        m_set(set)
-    {}
-
-    virtual UnitPtr operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+        m_setExtractor(std::move(sex)),
+        m_pointExtractor(std::move(pex))
     {
-        tools::unusedArg(unit, allies, opponent);
+        if (isFar)
+            m_algo = std::bind(&FarNearExtractor::getFar, this, std::placeholders::_1, std::placeholders::_2);
 
-        if (m_isFar)
-        {
-            return getFar();
-        }
+        else
+            m_algo = std::bind(&FarNearExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
+    }
 
-        return getNear();
+    virtual UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    {
+        return m_algo(
+            (*m_setExtractor)(unit, allies, opponent),
+            (*m_pointExtractor)(unit, allies, opponent)
+            );
     }
 
 protected:
     bool m_isFar;
-    Point m_point;
-    UnitVector m_set;
+    SetExtractorUPtr m_setExtractor;
+    PointExtractorUPtr m_pointExtractor;
 
-    UnitPtr getFar()
+    std::function<UnitSPtr(const UnitVector&, const Point&)> m_algo;
+
+    UnitSPtr getFar(const UnitVector& set, const Point& p)
     {
-        return *std::max_element(m_set.begin(), m_set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        if (set.size() == 0)
+            return UnitSPtr(nullptr);
+
+        return *std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
-            return a->getPosition().distance(m_point) < b->getPosition().distance(m_point);
+            return a->getPosition().distance(p) < b->getPosition().distance(p);
         });
     }
 
-    UnitPtr getNear()
+    UnitSPtr getNear(const UnitVector& set, const Point& p)
     {
-        return *std::min_element(m_set.begin(), m_set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        if (set.size() == 0)
+            return UnitSPtr(nullptr);
+
+        return *std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
-            return a->getPosition().distance(m_point) < b->getPosition().distance(m_point);
+            return a->getPosition().distance(p) < b->getPosition().distance(p);
         });
     }
 };
-
-bool unitTest_IAUnitExtractor()
-{
-    UnitPtr u(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-    
-    IAUnitExtractor iaE;
-
-    if (iaE(u, a, b)->getId() != u->getId())
-        return false;
-
-    return true;
-}
-
-bool unitTest_MinMaxCapacityExtractor()
-{
-    UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-
-    UnitVector set;
-    set.push_back(u);
-    set.push_back(u2);
-    set.push_back(u3);
-
-    /* MAX*/
-    MinMaxCapacityExtractor mmCMax(false, 0, set);
-    u3->getCapacity(0)->upgrade();
-
-    if (mmCMax(u, a, b)->getId() != u3->getId())
-        return false;
-
-    /* MIN */
-    MinMaxCapacityExtractor mmCMin(true, 0, set);
-    u2->getCapacity(0)->upgrade();
-
-    if (mmCMin(u, a, b)->getId() != u->getId())
-        return false;
-
-    return true;
-}
-
-bool unitTest_FarNearExtractor()
-{
-    UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-
-    UnitVector set;
-    set.push_back(u);
-    set.push_back(u2);
-    set.push_back(u3);
-
-    Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
-    u->setPosition(uP);
-    u2->setPosition(uP2);
-    u3->setPosition(uP3);
-
-    /* FAR */
-    FarNearExtractor fnFar(true, ori, set);
-
-    if (fnFar(u, a, b)->getId() != u3->getId())
-        return false;
-
-    /* NEAR */
-    FarNearExtractor fnNear(false, ori, set);
-
-    if (fnNear(u, a, b)->getId() != u->getId())
-        return false;
-
-    return true;
-}
-
-bool unitTest_UnitExtractor()
-{
-    if (!unitTest_IAUnitExtractor() ||
-        !unitTest_MinMaxCapacityExtractor() ||
-        !unitTest_FarNearExtractor())
-        return false;
-
-    return true;
-}
 
 #endif //_UNITEXTRACTOR_H_

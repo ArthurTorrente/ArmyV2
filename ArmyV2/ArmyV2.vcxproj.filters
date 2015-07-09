@@ -152,5 +152,8 @@
     <ClInclude Include="include\Extractor\SetExtractor.hpp">
       <Filter>Fichiers d%27en-tête\Extractors</Filter>
     </ClInclude>
+    <ClInclude Include="include\Extractor\UnitTest.hpp">
+      <Filter>Fichiers d%27en-tête\Extractors</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,6 +6,11 @@
 
 #include "IExtractor.hpp"
 
+#include <functional>
+
+/**
+ * Returns the unit army of Allies army
+ */
 class AlliesArmyExtractor : public SetExtractor
 {
 public:
@@ -13,13 +18,17 @@ public:
         : SetExtractor()
     {}
 
-    virtual UnitVector operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         tools::unusedArg(unit, opponent);
 
         return allies->getUnitsList();
     }
 };
+
+/**
+* Returns the unit army of Opponent army
+*/
 
 class OpponentArmyExtractor : public SetExtractor
 {
@@ -28,13 +37,18 @@ public:
         : SetExtractor()
     {}
 
-    virtual UnitVector operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         tools::unusedArg(unit, allies);
 
         return opponent->getUnitsList();
     }
 };
+
+/**
+ * 
+ *
+ */
 
 class NMinMaxCapacityExtractor : public SetExtractor
 {
@@ -45,29 +59,27 @@ public:
         MAX
     };
 
-    NMinMaxCapacityExtractor(Type type, unsigned int capacityIndex, unsigned int N, const UnitVector& set = UnitVector())
+    NMinMaxCapacityExtractor(Type type, unsigned int N, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : SetExtractor(),
-        m_type(type),
-        m_capacityIndex(capacityIndex),
         m_n(N),
-        m_set(set)
-    {}
-
-    virtual UnitVector operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+        m_capacityIndex(capacityIndex),
+        m_setExtractor(std::move(sex))
     {
-        tools::unusedArg(unit, allies, opponent);
+        if (type == Type::MAX)
+            m_algo = std::bind(&NMinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
 
-        if (m_type == Type::MIN)
-        {
-            return getMin();
-        }
-
-        return getMax();
+        else
+            m_algo = std::bind(&NMinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
     }
 
-    Type getType() const
+    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
-        return m_type;
+        return m_algo((*m_setExtractor)(unit, allies, opponent));
+    }
+
+    unsigned int getN() const
+    {
+        return m_n;
     }
 
     unsigned int getCapacityIndex() const
@@ -75,24 +87,13 @@ public:
         return m_capacityIndex;
     }
 
-    unsigned int getN() const
-    {
-        return m_n;
-    }
-
-    const UnitVector& getSet() const
-    {
-        return m_set;
-    }
-
     void setType(Type type)
     {
-        m_type = type;
-    }
+        if (type == Type::MAX)
+            m_algo = std::bind(&NMinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
 
-    void setCapacityIndex(unsigned int cI)
-    {
-        m_capacityIndex = cI;
+        else
+            m_algo = std::bind(&NMinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
     }
 
     void setN(unsigned int N)
@@ -100,78 +101,72 @@ public:
         m_n = N;
     }
 
-    void setSet(const UnitVector& set)
+    void setCapacityIndex(unsigned int capacityIndex)
     {
-        m_set = set;
+        m_capacityIndex = capacityIndex;
     }
+
 protected:
-    Type m_type;
-    unsigned int m_capacityIndex;
     unsigned int m_n;
-    UnitVector m_set;
+    unsigned int m_capacityIndex;
+    
+    SetExtractorSPtr m_setExtractor;
+    std::function<UnitVector(UnitVector)> m_algo;
+    
 
-    UnitVector getMin()
+    UnitVector getMin(UnitVector set)
     {
-        UnitVector set(m_set);
+        if (set.size() == 0 || set.size() < m_n)
+            return UnitVector(set);
 
-        if (set.size() == 0)
-            return set;
-
-        std::sort(set.begin(), set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getCapacity(m_capacityIndex)->getValue() < b->getCapacity(m_capacityIndex)->getValue();
         });
 
-        return UnitVector(set.begin(), set.begin() + (set.size() > m_n ? m_n : set.size()));
+        set.erase(set.begin() + m_n, set.end());
+
+        return set;
     }
 
-    UnitVector getMax()
+    UnitVector getMax(UnitVector set)
     {
-        UnitVector set(m_set);
-
-        if (set.size() == 0)
+        if (set.size() == 0 || set.size() < m_n)
             return set;
 
-        std::sort(set.begin(), set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
-            return a->getCapacity(m_capacityIndex)->getValue() > b->getCapacity(m_capacityIndex)->getValue();
+            return  b->getCapacity(m_capacityIndex)->getValue() < a->getCapacity(m_capacityIndex)->getValue();
         });
 
-        return UnitVector(set.begin(), set.begin() + (set.size() > m_n ? m_n : set.size()));
+        set.erase(set.begin() + m_n, set.end());
+
+        return set;
     }
 };
 
 class NFarNearExtractor : public SetExtractor
 {
 public:
-    NFarNearExtractor(bool isFar, const Point& p, unsigned int N, const UnitVector& set = UnitVector())
+    NFarNearExtractor(bool isFar, unsigned int N, SetExtractorUPtr& sex, PointExtractorUPtr& pex)
         : SetExtractor(),
-        m_isFar(isFar),
-        m_p(p),
         m_n(N),
-        m_set(set)
-    {}
-
-    virtual UnitVector operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+        m_setExtractor(std::move(sex)),
+        m_pointExtractor(std::move(pex))
     {
-        tools::unusedArg(unit, allies, opponent);
-
-        if (m_isFar)
+        if (isFar)
         {
-            return getFar();
+            m_algo = std::bind(&NFarNearExtractor::getFar, this, std::placeholders::_1, std::placeholders::_2);
         }
-
-        return getNear();
+        else
+        {
+            m_algo = std::bind(&NFarNearExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
+        }
     }
 
-    bool isFar() const
+    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
-        return m_isFar;
-    }
-
-    const Point& getPoint() const
-    {
-        return m_p;
+        return m_algo((*m_setExtractor)(unit, allies, opponent), (*m_pointExtractor)(unit, allies, opponent));
     }
 
     unsigned int getN() const
@@ -179,19 +174,16 @@ public:
         return m_n;
     }
 
-    const UnitVector& getSet() const
-    {
-        return m_set;
-    }
-
     void setIsFar(bool isFar)
     {
-        m_isFar = isFar;
-    }
-
-    void setPoint(const Point& p)
-    {
-        m_p = p;
+        if (isFar)
+        {
+            m_algo = std::bind(&NFarNearExtractor::getFar, this, std::placeholders::_1, std::placeholders::_2);
+        }
+        else
+        {
+            m_algo = std::bind(&NFarNearExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
+        }
     }
 
     void setN(unsigned int N)
@@ -199,98 +191,70 @@ public:
         m_n = N;
     }
 
-    void setSet(const UnitVector& set)
-    {
-        m_set = set;
-    }
-
 protected:
     bool m_isFar;
-    Point m_p;
     unsigned int m_n;
-    UnitVector m_set;
+    SetExtractorUPtr m_setExtractor;
+    PointExtractorUPtr m_pointExtractor;
 
-    UnitVector getFar()
+    std::function<UnitVector(UnitVector, const Point&)> m_algo;
+
+    UnitVector getFar(UnitVector set, const Point& p)
     {
-        UnitVector set(m_set);
-
-        if (set.size() == 0)
+        if (set.size() == 0 || set.size() < m_n)
             return set;
 
-        std::sort(set.begin(), set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
-            return a->getPosition().distance(m_p) > b->getPosition().distance(m_p);
+            return a->getPosition().distance(p) > b->getPosition().distance(p);
         });
 
-        return UnitVector(set.begin(), set.begin() + (set.size() > m_n ? m_n : set.size()));
+        set.erase(set.begin() + m_n, set.end());
+
+        return set;
     }
 
-    UnitVector getNear()
+    UnitVector getNear(UnitVector set, const Point& p)
     {
-        UnitVector set(m_set);
 
-        if (set.size() == 0)
+        if (set.size() == 0 || set.size() < m_n)
             return set;
 
-        std::sort(set.begin(), set.end(), [&](const UnitPtr& a, const UnitPtr& b)
+        std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
-            return b->getPosition().distance(m_p) > a->getPosition().distance(m_p);
+            return b->getPosition().distance(p) > a->getPosition().distance(p);
+
         });
 
-        return UnitVector(set.begin(), set.begin() + (set.size() > m_n ? m_n : set.size()));
+        set.erase(set.begin() + m_n, set.end());
+
+        return set;
     }
 };
 
-class ThresholdCapacityDistanceExtractor : public SetExtractor
+class ThresholdCapacityExtractor : public SetExtractor
 {
 public:
-    ThresholdCapacityDistanceExtractor(const Point& p, bool isMin, float threshold, unsigned int N, const UnitVector& set = UnitVector())
+    ThresholdCapacityExtractor(bool isMin, float threshold, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : SetExtractor(),
-        m_isDistance(true),
-        m_isMin(isMin),
         m_threshold(threshold),
-        m_n(N),
-        m_set(set),
-        m_p(p),
-        m_capacityIndex(0)
-    {}
-
-    ThresholdCapacityDistanceExtractor(unsigned int capacityIndex, bool isMin, float threshold, unsigned int N, const UnitVector& set = UnitVector())
-        : SetExtractor(),
-        m_isDistance(false),
-        m_isMin(isMin),
-        m_threshold(threshold),
-        m_n(N),
-        m_set(set),
-        m_capacityIndex(capacityIndex)
-    {}
-
-    virtual UnitVector operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+        m_capacityIndex(capacityIndex),
+        m_setExtractor(std::move(sex))
     {
-        tools::unusedArg(unit, allies, opponent);
-
-        if (m_isMin)
+        if (isMin)
         {
-            if (m_isDistance)
-                return getNear();
-
-            return getMin();
+            m_algo = std::bind(&ThresholdCapacityExtractor::getMin, this, std::placeholders::_1);
         }
-
-        if (m_isDistance)
-            return getFar();
-
-        return getMax();
+        else
+        {
+            m_algo = std::bind(&ThresholdCapacityExtractor::getMax, this, std::placeholders::_1);
+        }
     }
 
-    bool isDistance() const
+    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
-        return m_isDistance;
-    }
-
-    bool isMin() const
-    {
-        return m_isMin;
+        
+        return m_algo((*m_setExtractor)(unit, allies, opponent));
     }
 
     float getTreshold() const
@@ -298,44 +262,26 @@ public:
         return m_threshold;
     }
 
-    const UnitVector& getSet() const
-    {
-        return m_set;
-    }
-
-    const Point& getPoint() const
-    {
-        return m_p;
-    }
-
     unsigned int getCapacityIndex() const
     {
         return m_capacityIndex;
     }
 
-    void setIsDitance(bool isDistance)
-    {
-        m_isDistance = isDistance;
-    }
-
     void setIsMin(bool isMin)
     {
-        m_isMin = isMin;
+        if (isMin)
+        {
+            m_algo = std::bind(&ThresholdCapacityExtractor::getMin, this, std::placeholders::_1);
+        }
+        else
+        {
+            m_algo = std::bind(&ThresholdCapacityExtractor::getMax, this, std::placeholders::_1);
+        }
     }
-    
+
     void setThreshold(float threshold)
     {
         m_threshold = threshold;
-    }
-
-    void setSet(const UnitVector& set)
-    {
-        m_set = set;
-    }
-
-    void setPoint(const Point& p)
-    {
-        m_p = p;
     }
 
     void setCapacityIndex(unsigned int cI)
@@ -344,321 +290,122 @@ public:
     }
 
 protected:
-    bool m_isDistance;
-    bool m_isMin;
     float m_threshold;
-    unsigned int m_n;
-    UnitVector m_set;
     unsigned int m_capacityIndex;
-    Point m_p;
+    SetExtractorUPtr m_setExtractor;
 
-    UnitVector getMin()
+    std::function<UnitVector(UnitVector)> m_algo;
+
+    UnitVector getMin(UnitVector set)
     {
-        UnitVector set(m_set);
-
-        if (m_set.size() == 0)
+        if (set.size() == 0)
             return set;
 
         set.erase(
-            std::remove_if(set.begin(), set.end(), [&](const UnitPtr& u)
+            std::remove_if(set.begin(), set.end(), [&](const UnitSPtr& u)
         {
             return u->getCapacity(m_capacityIndex)->getValue() > m_threshold;
         }), set.end());
 
-        if (set.size() > m_n)
-        {
-            set.erase(set.begin() + m_n, set.end());
-        }
-
         return set;
     }
 
-    UnitVector getMax()
+    UnitVector getMax(UnitVector set)
     {
-        UnitVector set(m_set);
-
-        if (m_set.size() == 0)
+        if (set.size() == 0)
             return set;
 
         set.erase(
-            std::remove_if(set.begin(), set.end(), [&](const UnitPtr& u)
+            std::remove_if(set.begin(), set.end(), [&](const UnitSPtr& u)
         {
             return u->getCapacity(m_capacityIndex)->getValue() < m_threshold;
         }), set.end());
-
-        if (set.size() > m_n)
-        {
-            set.erase(set.begin() + m_n, set.end());
-        }
-
-        return set;
-    }
-
-    UnitVector getNear()
-    {
-        UnitVector set(m_set);
-
-        if (m_set.size() == 0)
-            return set;
-
-        set.erase(
-            std::remove_if(set.begin(), set.end(), [&](const UnitPtr& u)
-        {
-            return u->getPosition().distance(m_p) > m_threshold;
-        }), set.end());
-
-        if (set.size() > m_n)
-        {
-            set.erase(set.begin() + m_n, set.end());
-        }
-
-        return set;
-    }
-
-    UnitVector getFar()
-    {
-        UnitVector set(m_set);
-
-        if (m_set.size() == 0)
-            return set;
-
-        set.erase(
-            std::remove_if(set.begin(), set.end(), [&](const UnitPtr& u)
-        {
-            return u->getPosition().distance(m_p) < m_threshold;
-        }), set.end());
-
-        if (set.size() > m_n)
-        {
-            set.erase(set.begin() + m_n, set.end());
-        }
 
         return set;
     }
 };
 
-bool unitTest_AlliesArmyExtractor()
+class ThresholdDistanceExtractor : public SetExtractor
 {
-    UnitPtr u(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(20, 200));
+public:
+    ThresholdDistanceExtractor(bool isMin, float threshold, SetExtractorUPtr& sex, PointExtractorUPtr& pex)
+        : SetExtractor(),
+        m_threshold(threshold),
+        m_setExtractor(std::move(sex)),
+        m_pointExtractor(std::move(pex))
+    {
+        if (isMin)
+        {
+            m_algo = std::bind(&ThresholdDistanceExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
+        }
+        else
+        {
+            m_algo = std::bind(&ThresholdDistanceExtractor::getFar, this, std::placeholders::_1, std::placeholders::_2);
+        }
+    }
 
-    AlliesArmyExtractor aE;
+    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    {
+        return m_algo((*m_setExtractor)(unit, allies, opponent), (*m_pointExtractor)(unit, allies, opponent));
+    }
 
-    if (aE(u, a, b).size() != 10)
-        return false;
-
-    return true;
-}
-
-bool unitTest_OpponentArmyExtractor()
-{
-    UnitPtr u(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(20, 200));
-
-    OpponentArmyExtractor oE;
-
-    if (oE(u, a, b).size() != 20)
-        return false;
+    float getTreshold() const
+    {
+        return m_threshold;
+    }
     
-    return true;
-}
-
-bool unitTest_NMinMaxCapacityExtractor()
-{
-    UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-
-    UnitVector set;
-    set.push_back(u);
-    set.push_back(u2);
-    set.push_back(u3);
-
-    u->getCapacity(0)->upgrade();
-
-    NMinMaxCapacityExtractor nmmcEMax(NMinMaxCapacityExtractor::MAX, 0, 1, set);
-
-    auto result = nmmcEMax(u, a, b);
-
-    if (result.size() != 1 || result.front() != u)
-        return false;
-
-    NMinMaxCapacityExtractor nmmcEMaxOut(NMinMaxCapacityExtractor::MAX, 0, 4, set);
-
-    result = nmmcEMaxOut(u, a, b);
-
-    if (result.size() != 3)
-        return false;
-
-    u2->getCapacity(0)->upgrade();
-    NMinMaxCapacityExtractor nmmcEMin(NMinMaxCapacityExtractor::MIN, 0, 1, set);
-    
-    result = nmmcEMin(u, a, b);
-
-    if (result.size() != 1 || result.front() != u3)
-        return false;
-
-    NMinMaxCapacityExtractor nmmcEMinOut(NMinMaxCapacityExtractor::MIN, 0, 4, set);
-    result = nmmcEMinOut(u, a, b);
-
-    if (result.size() != 3)
-        return false;
-
-    return true;
-}
-
-bool unitTest_NFarNearExtractor()
-{
-    UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-
-    UnitVector set;
-    set.push_back(u);
-    set.push_back(u2);
-    set.push_back(u3);
-
-    Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
-    u->setPosition(uP);
-    u2->setPosition(uP2);
-    u3->setPosition(uP3);
-
-    NFarNearExtractor nfnEFar(true, ori, 1, set);
-
-    auto result = nfnEFar(u, a, b);
-
-    if (result.size() != 1 || result.front() != u3)
-        return false;
-
-    NFarNearExtractor nfnEFarOut(true, ori, 4, set);
-
-    result = nfnEFarOut(u, a, b);
-
-    if (result.size() != 3)
-        return false;
-
-    NFarNearExtractor nfnENear(false, ori, 1, set);
-
-    result = nfnENear(u, a, b);
-
-    if (result.size() != 1 || result.front() != u)
-        return false;
-
-    NFarNearExtractor nfnENearOut(false, ori, 4, set);
-    result = nfnENearOut(u, a, b);
-
-    if (result.size() != 3)
-        return false;
-
-    return true;
-}
-
-bool unitTest_ThresholdCapacityDistanceExtractor()
-{
-    float distThreshold = 2.0f;
-    float capacityThreshold = 5.0f;
-
-    UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-
-    UnitVector set;
-    set.push_back(u);
-    set.push_back(u2);
-    set.push_back(u3);
-
-    Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
-    u->setPosition(uP);
-    u2->setPosition(uP2);
-    u3->setPosition(uP3);
-
-    ThresholdCapacityDistanceExtractor tcECapMin(0, true, capacityThreshold, 1, set);
-    u2->getCapacity(0)->upgrade(6);
-    
-    auto result = tcECapMin(u, a, b);
-
-    if (result.front() != u)
-        return false;
-
-    ThresholdCapacityDistanceExtractor tcECapMinOut(0, true, capacityThreshold, 4, set);
-
-    result = tcECapMinOut(u, a, b);
-
-    if (result.size() > 3)
-        return false;
-
-
-    ThresholdCapacityDistanceExtractor tcECapMax(0, false, capacityThreshold, 1, set);
-
-    result = tcECapMax(u, a, b);
-
-    if (result.front() != u2)
-        return false;
-
-
-    ThresholdCapacityDistanceExtractor tcECapMaxOut(0, false, capacityThreshold, 4, set);
-
-    result = tcECapMaxOut(u, a, b);
-
-    if (result.size() > 3)
-        return false;
-
-    ThresholdCapacityDistanceExtractor tcEDistMin(ori, true, distThreshold, 1, set);
-
-    result = tcEDistMin(u, a, b);
-
-    if (result.front() != u)
-        return false;
-
-
-    ThresholdCapacityDistanceExtractor tcEDistMinOut(ori, true, distThreshold, 4, set);
-
-    result = tcEDistMinOut(u, a, b);
-
-    if (result.size() > 3)
-        return false;
-
-
-    ThresholdCapacityDistanceExtractor tcEDistMax(ori, false, distThreshold, 1, set);
-
-    result = tcEDistMax(u, a, b);
-
-    if (result.front() != u2)
-        return false;
-
-
-    ThresholdCapacityDistanceExtractor tcEDistMaxOut(ori, false, distThreshold, 4, set);
-
-    result = tcEDistMaxOut(u, a, b);
-
-    if (result.size() > 3)
-        return false;
-
-    return true;
-}
-
-/*
-UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-
-UnitVector set;
-set.push_back(u);
-set.push_back(u2);
-set.push_back(u3);
-
-Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
-u->setPosition(uP);
-u2->setPosition(uP2);
-u3->setPosition(uP3);
-*/
-
-bool unitTest_SetExtractor()
-{
-    if (!unitTest_AlliesArmyExtractor() ||
-        !unitTest_OpponentArmyExtractor() ||
-        !unitTest_NMinMaxCapacityExtractor() ||
-        !unitTest_NFarNearExtractor() ||
-        !unitTest_ThresholdCapacityDistanceExtractor())
-        return false;
-    
-    return true;
-}
+    void setThreshold(float threshold)
+    {
+        m_threshold = threshold;
+    }
+
+    void setMin(bool isMin)
+    {
+        if (isMin)
+        {
+            m_algo = std::bind(&ThresholdDistanceExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
+        }
+        else
+        {
+            m_algo = std::bind(&ThresholdDistanceExtractor::getFar, this, std::placeholders::_1, std::placeholders::_2);
+        }
+    }
+
+protected:
+    float m_threshold;
+
+    SetExtractorUPtr m_setExtractor;
+    PointExtractorUPtr m_pointExtractor;
+
+    std::function<UnitVector(UnitVector, const Point&)> m_algo;
+
+    UnitVector getNear(UnitVector set, const Point& p)
+    {
+        if (set.size() == 0)
+            return set;
+
+        set.erase(
+            std::remove_if(set.begin(), set.end(), [&](const UnitSPtr& u)
+        {
+            return u->getPosition().distance(p) > m_threshold;
+        }), set.end());
+
+        return set;
+    }
+
+    UnitVector getFar(UnitVector set, const Point& p)
+    {
+        if (set.size() == 0)
+            return set;
+
+        set.erase(
+            std::remove_if(set.begin(), set.end(), [&](const UnitSPtr& u)
+        {
+            return u->getPosition().distance(p) < m_threshold;
+        }), set.end());
+
+        return set;
+    }
+};
 
 #endif //_SETEXTRACTOR_H_

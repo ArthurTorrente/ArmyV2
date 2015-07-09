@@ -10,10 +10,7 @@
 //#define UNITTEST
 
 #ifdef UNITTEST
-    #include "Extractor/ValueExtractor.hpp"
-    #include "Extractor/UnitExtractor.hpp"
-    #include "Extractor/PointExtractor.hpp"
-    #include "Extractor/SetExtractor.hpp"
+    #include "Extractor/UnitTest.hpp"
 #endif
 
 static unsigned int w = 10;
@@ -38,6 +35,7 @@ void computeArg(int argc, char** argv)
 
 void unitTest()
 {
+#ifdef UNITTEST
     if (!unitTest_ValueExtractor() ||
         !unitTest_PointExtractor() ||
         !unitTest_UnitExtractor() ||
@@ -49,6 +47,7 @@ void unitTest()
     {
         std::cout << "All test are OK !" << std::endl;
     }
+#endif
 }
 
 int main(int argc, char** argv)

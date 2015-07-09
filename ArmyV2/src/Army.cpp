@@ -5,22 +5,22 @@
 #include "Army.hpp"
 
 
-void Army::copyUnits_(const std::vector<UnitPtr >& units)
+void Army::copyUnits_(const std::vector<UnitSPtr >& units)
 {
     units_.clear();
     for(auto it = units.begin(); it != units.end(); ++it) {
-        units_.push_back(UnitPtr(new Unit(*(it->get()))));
+        units_.push_back(UnitSPtr(new Unit(*(it->get()))));
     }
 }
 
 Army::Army(int size, int level)
 {
     while(size--) {
-        units_.push_back(UnitPtr(new Unit(level)));
+        units_.push_back(UnitSPtr(new Unit(level)));
     }
 }
 
-Army::Army(std::vector<UnitPtr >& units)
+Army::Army(std::vector<UnitSPtr >& units)
 {
     copyUnits_(units);
 }
@@ -80,7 +80,7 @@ Unit& Army::getLowestUnit(unsigned int capa_index)
     if(units_.empty())throw std::invalid_argument("empty army");
 
     return **std::min_element(units_.begin(), units_.end(),
-        [&capa_index](const UnitPtr& a, const UnitPtr& b) {
+        [&capa_index](const UnitSPtr& a, const UnitSPtr& b) {
         return a->getCapacity(capa_index)->getLevel() < b->getCapacity(capa_index)->getLevel();
     });
 }
@@ -90,14 +90,14 @@ Unit& Army::getHigestUnit(unsigned int capa_index)
     if(units_.empty())throw std::invalid_argument("empty army");
 
     return **std::max_element(units_.begin(), units_.end(),
-        [&capa_index](const UnitPtr& a, const UnitPtr& b) {
+        [&capa_index](const UnitSPtr& a, const UnitSPtr& b) {
         return a->getCapacity(capa_index)->getLevel() < b->getCapacity(capa_index)->getLevel();
     });
 }
 
 void Army::purge()
 {
-    units_.erase(std::remove_if(units_.begin(), units_.end(), [](const UnitPtr& u) {
+    units_.erase(std::remove_if(units_.begin(), units_.end(), [](const UnitSPtr& u) {
         return !(u->isAlive());
     }), units_.end());
 }
@@ -111,17 +111,17 @@ Army Army::mutate()const
     int count = 1+std::rand()%units_.size();
     while(count--) {
         if(std::rand()%3==0 || units_.size() == 1)
-            mutated.units_[std::rand() % units_.size()] = UnitPtr(new Unit(units_[0]->getLevel()));
+            mutated.units_[std::rand() % units_.size()] = UnitSPtr(new Unit(units_[0]->getLevel()));
         else if(std::rand()%2) {
             int i1 = std::rand()%units_.size();
             int i2 = std::rand()%units_.size();
             while(i1 == i2)i2 = std::rand()%units_.size();
-            mutated.units_[i1] = UnitPtr(new Unit(*(units_[i2])));
+            mutated.units_[i1] = UnitSPtr(new Unit(*(units_[i2])));
         } else {
             int i1 = std::rand()%units_.size();
             int i2 = std::rand()%units_.size();
             while(i1 == i2)i2 = std::rand()%units_.size();
-            mutated.units_[i1] = UnitPtr(new Unit((*(units_[i2]))*(*(units_[i1]))));
+            mutated.units_[i1] = UnitSPtr(new Unit((*(units_[i2]))*(*(units_[i1]))));
 
         }
     }
@@ -133,20 +133,20 @@ Army Army::operator*(const Army& army)const
 {
     if(this->size() == 0 && army.size() == 0)return Army(*this);
     int s = std::min(this->size(),army.size());
-    std::vector<UnitPtr > crossing;
+    std::vector<UnitSPtr > crossing;
     for(int i = 0; i < s; i++) {
         switch(std::rand()%4) {
         case 0 :
-            crossing.push_back(UnitPtr(new Unit(*(units_[i]))));
+            crossing.push_back(UnitSPtr(new Unit(*(units_[i]))));
             break;
         case 1 :
-            crossing.push_back(UnitPtr(new Unit(*(army.units_[i]))));
+            crossing.push_back(UnitSPtr(new Unit(*(army.units_[i]))));
             break;
         case 2 :
-            crossing.push_back(UnitPtr(new Unit(*(units_[i])**(army.units_[std::rand() % army.units_.size()]))));
+            crossing.push_back(UnitSPtr(new Unit(*(units_[i])**(army.units_[std::rand() % army.units_.size()]))));
             break;
         case 3 :
-            crossing.push_back(UnitPtr(new Unit(*(army.units_[i])**(units_[std::rand() % units_.size()]))));
+            crossing.push_back(UnitSPtr(new Unit(*(army.units_[i])**(units_[std::rand() % units_.size()]))));
             break;
         }
     }
@@ -156,19 +156,19 @@ Army Army::operator*(const Army& army)const
 
 void Army::save(std::ostream& out)const
 {
-    std::for_each(units_.begin(), units_.end(), [&out](const UnitPtr& unit) {
+    std::for_each(units_.begin(), units_.end(), [&out](const UnitSPtr& unit) {
         unit->save(out);
     });
 }
 
 Army Army::load(std::istream& in)
 {
-    std::vector<UnitPtr > units;
+    std::vector<UnitSPtr > units;
 
     in.exceptions(std::istream::failbit | std::istream::eofbit);
     while(in) {
         try {
-            units.push_back(UnitPtr(new Unit(Unit::load(in))));
+            units.push_back(UnitSPtr(new Unit(Unit::load(in))));
         } catch(...) {}
     }
     return Army(units);

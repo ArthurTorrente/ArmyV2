@@ -13,10 +13,10 @@
 class Army {
 private:
     //vector storing the units
-    std::vector<UnitPtr > units_;
+    std::vector<UnitSPtr > units_;
 
     //Method for deep copying the units vector
-    void copyUnits_(const std::vector<UnitPtr >& units);
+    void copyUnits_(const std::vector<UnitSPtr >& units);
 
 public:
 
@@ -24,7 +24,7 @@ public:
     Army(int size, int level);
 
     //Constructor from a vector of units, which will be deep copied
-    Army(std::vector<UnitPtr >& units);
+    Army(std::vector<UnitSPtr >& units);
 
     //Copy constructor
     Army(const Army& army);
@@ -51,7 +51,7 @@ public:
     //Return the unit with the given ID
     Unit& getUnit(int id)
     {
-        auto it = std::find_if(units_.begin(), units_.end(), [id](const UnitPtr& unit) {
+        auto it = std::find_if(units_.begin(), units_.end(), [id](const UnitSPtr& unit) {
             return unit->getId()==id;
         });
         if(it == units_.end())throw std::invalid_argument("wrong id : unit "+ std::to_string(id)+" not found");
@@ -96,7 +96,7 @@ public:
 inline std::ostream& operator<<(std::ostream& out, const Army& army)
 {
     out<<"====================ARMY===================================="<<std::endl;
-    std::vector<UnitPtr >& units = const_cast<Army&>(army).getUnitsList();
+    std::vector<UnitSPtr >& units = const_cast<Army&>(army).getUnitsList();
     for(auto it = units.begin(); it != units.end(); ++it) {
         out<<**it<<std::endl;
     }

@@ -43,6 +43,7 @@
     <ClInclude Include="include\Extractor\IExtractor.hpp" />
     <ClInclude Include="include\Extractor\PointExtractor.hpp" />
     <ClInclude Include="include\Extractor\SetExtractor.hpp" />
+    <ClInclude Include="include\Extractor\UnitTest.hpp" />
     <ClInclude Include="include\Extractor\UnitExtractor.hpp" />
     <ClInclude Include="include\Extractor\ValueExtractor.hpp" />
     <ClInclude Include="include\IA\AI.hpp" />

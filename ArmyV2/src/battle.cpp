@@ -40,12 +40,12 @@ void fight(const Army& a, const Army& b, int& scoreA, int& scoreB, bool log)
 
         std::vector<UnitChoice> order;
         std::transform(A.getUnitsList().begin(),A.getUnitsList().end(), std::back_inserter(order),
-            [&A, &B](UnitPtr& u) {
+            [&A, &B](UnitSPtr& u) {
             u->refresh();
             return UnitChoice(u->getId(), &A, &B);
         });
         std::transform(B.getUnitsList().begin(),B.getUnitsList().end(), std::back_inserter(order),
-            [&A, &B](UnitPtr& u) {
+            [&A, &B](UnitSPtr& u) {
             u->refresh();
             return UnitChoice(u->getId(), &B, &A);
         });

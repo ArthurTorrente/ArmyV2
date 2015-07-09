@@ -5,108 +5,90 @@
 
 #include "IExtractor.hpp"
 
+/**
+ * This file contain all Extrator which return a Point value
+ */
+
+
+/**
+ * Barycenter takes a set extrator and returns the average of positions of all unit contained into the set
+ */
 class BaryCenterExtractor : public PointExtractor
 {
 public:
-    BaryCenterExtractor(const UnitVector& set)
+    BaryCenterExtractor(SetExtractorUPtr& extractor)
         : PointExtractor(),
-        m_set(set)
+        m_getter(std::move(extractor))
     {}
 
-    virtual Point operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    virtual Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
-        tools::unusedArg(unit, allies, opponent);
+        const UnitVector& set((*m_getter)(unit, allies, opponent));
 
-        if (m_set.size() == 0)
+        if (set.size() == 0)
             return Point(0.0f, 0.0f);
 
-        auto sum = std::accumulate(m_set.begin(), m_set.end(), Point(0.0f, 0.0f), [](const Point& p, const UnitPtr& u)
+        else if (set.size() == 1)
+            return set.front()->getPosition();
+
+        auto sum = std::accumulate(set.begin(), set.end(), Point(0.0f, 0.0f), [](const Point& p, const UnitSPtr& u)
         {
             return p + u->getPosition();
         });
 
-        return sum / static_cast<float>(m_set.size());
+        return sum / static_cast<float>(set.size());
     }
 
 protected:
-    UnitVector m_set;
+    SetExtractorUPtr m_getter;
 };
+
+/**
+ * UnitPosition returns the position of the unit contained into the UnitExtractor
+ */
 
 class UnitPositionExtractor : public PointExtractor
 {
 public:
-    UnitPositionExtractor(const UnitPtr& u)
+    UnitPositionExtractor(UnitExtractorUPtr& extractor)
         : PointExtractor(),
-        m_unit(u)
+        m_getter(std::move(extractor))
     {}
 
-    virtual Point operator()(const UnitPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    virtual Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
-        tools::unusedArg(unit, allies, opponent);
+        const UnitSPtr& u((*m_getter)(unit, allies, opponent));
+        
+        if (u)
+            return u->getPosition();
 
-        return m_unit->getPosition();
+        return Point(0.0f, 0.0f);
     }
 
 protected:
-    UnitPtr m_unit;
+    UnitExtractorUPtr m_getter;
 };
 
-
-bool unitTest_BaryCenterExtractor()
+/**
+ * Returns the predefine position
+ */
+class PredefinePoint : public PointExtractor
 {
-    UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
+public:
+    PredefinePoint(const Point& p)
+        : PointExtractor(),
+        m_p(p)
+    {}
 
-    UnitVector set;
-    set.push_back(u);
-    set.push_back(u2);
-    set.push_back(u3);
+    Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    {
+        tools::unusedArg(unit, allies, opponent);
 
-    Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
-    u->setPosition(uP);
-    u2->setPosition(uP2);
-    u3->setPosition(uP3);
+        return m_p;
+    }
 
-    auto baryCenter = (uP + uP2 + uP3) / 3.0f;
-
-    BaryCenterExtractor bcE(set);
-
-    if (baryCenter != bcE(u, a, b))
-        return false;
-
-    return true;
-}
-
-bool unitTest_UnitPositionExtractor()
-{
-    UnitPtr u(new Unit(0)), u2(new Unit(0)), u3(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
-
-    UnitVector set;
-    set.push_back(u);
-    set.push_back(u2);
-    set.push_back(u3);
-
-    Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
-    u->setPosition(uP);
-    u2->setPosition(uP2);
-    u3->setPosition(uP3);
-
-    UnitPositionExtractor uPE(u2);
-
-    if (uP2 != uPE(u, a, b))
-        return false;
-
-    return true;
-}
-
-bool unitTest_PointExtractor()
-{
-    if (!unitTest_BaryCenterExtractor() ||
-        !unitTest_UnitPositionExtractor())
-        return false;
-
-    return true;
-}
+protected:
+    Point m_p;
+};
 
 #endif //_POINTEXTRACTOR_H_

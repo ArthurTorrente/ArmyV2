@@ -1,5 +1,7 @@
 #ifndef _UNIT_HPP_
 #define _UNIT_HPP_
+
+#pragma warning(push, 0)
 #include <memory>
 #include <vector>
 #include <string>
@@ -9,6 +11,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cmath>
+#pragma warning(pop)
 
 #include "Capacity/Capacity.hpp"
 #include "Capacity/SpeedCapacity.hpp"

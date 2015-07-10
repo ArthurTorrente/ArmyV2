@@ -1,9 +1,11 @@
+#pragma warning(push, 0)
 #include <cstdlib>
 #include <algorithm>
 #include <numeric>
-#include "Unit.hpp"
 #include <memory>
+#pragma warning(pop)
 
+#include "Unit.hpp"
 #include "Tools.hpp"
 #include "Config.hpp"
 

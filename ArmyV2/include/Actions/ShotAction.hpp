@@ -1,9 +1,13 @@
 #ifndef _SHOT_ACTION_HPP_
 #define _SHOT_ACTION_HPP_
-#include "Unit.hpp"
-#include "Action.hpp"
+
+#pragma warning(push, 0)
 #include <iomanip>
 #include <iostream>
+#pragma warning(pop)
+
+#include "Unit.hpp"
+#include "Action.hpp"
 //Class representing the action of attacking one unit with another
 class ShotAction : public Action {
 private:

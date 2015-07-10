@@ -1,8 +1,10 @@
 #ifndef _DECISIONNODE_H_
 #define _DECISIONNODE_H_
 
+#pragma warning(push, 0)
 #include <memory>
 #include <functional>
+#pragma warning(pop)
 
 #include "INode.hpp"
 

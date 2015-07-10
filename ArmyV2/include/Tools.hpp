@@ -1,16 +1,24 @@
 #ifndef _TOOLS_H_
 #define _TOOLS_H_
 
+#pragma warning(push, 0)
 #include <algorithm>
+#pragma warning(pop)
 
 namespace tools
 {
+    /**
+     * templated function uses for, unused parameter function
+     */
     template <typename T>
     void unusedArg(T value)
     {
         (void)value;
     }
 
+    /**
+    * Variadic template uses for remove the warnings, unused parameter function
+    */
     template < typename T, typename... TArgs >
     void unusedArg(T value, TArgs... args)
     {   
@@ -19,6 +27,9 @@ namespace tools
         unusedArg(args...);
     }
 
+    /**
+     * Clamp a value between range
+     */
     template<typename T>
     inline T clamp(T min, T max, T value)
     {

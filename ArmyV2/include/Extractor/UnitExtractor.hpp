@@ -1,8 +1,15 @@
 #ifndef _UNITEXTRACTOR_H_
 #define _UNITEXTRACTOR_H_
 
+#pragma warning(push, 0)
+#include <functional>
+#pragma warning(pop)
+
 #include "IExtractor.hpp"
 
+/**
+ * Return the Unit of current IA
+ */
 class IAUnitExtractor : public UnitExtractor
 {
 public:
@@ -13,6 +20,10 @@ public:
         return unit;
     }
 };
+
+/**
+ * Returns the unit which has the best capacity value or the worst.
+ */
 
 class MinMaxCapacityExtractor : public UnitExtractor
 {
@@ -83,6 +94,10 @@ protected:
         });
     }
 };
+
+/**
+ * It's the same of Capacity value but it use the distance between a point and the unit position
+ */
 
 class FarNearExtractor : public UnitExtractor
 {

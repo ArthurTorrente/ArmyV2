@@ -1,5 +1,7 @@
+#pragma warning(push, 0)
 #include <iostream>
 #include <memory>
+#pragma warning(pop)
 
 #include "IA/AI.hpp"
 #include "Actions/Action.hpp"
@@ -30,10 +32,10 @@ std::unique_ptr<Action> AI::operator()(Unit& unit, Army& allies, Army& opponents
             else
             {
                 if(code[0]=='L')
-                    target = &(opponents.getLowestUnit(int(code[1]-'0')));
+                    target = &(opponents.getLowestUnit(static_cast<unsigned int>(code[1] - '0')));
                 
                 else
-                    target = &(opponents.getHigestUnit(int(code[1]-'0')));
+                    target = &(opponents.getHigestUnit(static_cast<unsigned int>(code[1] - '0')));
             }
             
             if(target->getPosition().distance(unit.getPosition())>unit.getRange().getValue())

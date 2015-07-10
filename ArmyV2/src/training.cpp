@@ -1,9 +1,11 @@
-#include "training.hpp"
-#include "battle.hpp"
+#pragma warning(push, 0)
 #include <memory>
 #include <vector>
 #include <iterator>
+#pragma warning(pop)
 
+#include "training.hpp"
+#include "battle.hpp"
 
 //struct storing together an army and its score,
 //usefull for storing and sorting the armies

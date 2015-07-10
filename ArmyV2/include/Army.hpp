@@ -1,13 +1,16 @@
 #ifndef _ARMY_HPP_
 #define _ARMY_HPP_
-#include "Unit.hpp"
+
+#pragma warning(push, 0)
 #include <vector>
 #include <memory>
 #include <stdexcept>
 #include <algorithm>
 #include <iostream>
 #include <ostream>
+#pragma warning(pop)
 
+#include "Unit.hpp"
 
 //Class representing an army, i.e. a set of units
 class Army {
@@ -43,7 +46,7 @@ public:
 
 
     //Return the number of units
-    int size()const
+    unsigned int size()const
     {
         return units_.size();
     }

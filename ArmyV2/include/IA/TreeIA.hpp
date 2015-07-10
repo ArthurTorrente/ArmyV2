@@ -1,10 +1,12 @@
 #ifndef _TREEIA_H_
 #define _TREEIA_H_
 
+#pragma warning(push, 0)
 #include <memory>
 #include <string>
+#pragma warning(pop)
 
-#include "Action.hpp"
+#include "Actions/Action.hpp"
 #include "Army.hpp"
 
 class TreeIa

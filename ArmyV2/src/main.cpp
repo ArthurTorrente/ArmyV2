@@ -1,10 +1,12 @@
-#include "Army.hpp"
+#pragma warning(push, 0)
 #include <cstdlib>
 #include <time.h>
 #include <iostream>
-#include "training.hpp"
-#include "fstream"
+#include <fstream>
+#pragma warning(pop)
 
+#include "Army.hpp"
+#include "training.hpp"
 #include "Config.hpp"
 
 //#define UNITTEST

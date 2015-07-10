@@ -1,12 +1,14 @@
-#include "battle.hpp"
-#include "Army.hpp"
-#include "IA/AI.hpp"
-
+#pragma warning(push, 0)
 #include <vector>
 #include <algorithm>
 #include <memory>
 #include <stdexcept>
 #include <iostream>
+#pragma warning(pop)
+
+#include "battle.hpp"
+#include "Army.hpp"
+#include "IA/AI.hpp"
 
 //Struct used to manipulate a unit together with its army and its opponents
 struct UnitChoice {

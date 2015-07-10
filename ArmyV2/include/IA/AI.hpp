@@ -1,6 +1,10 @@
 #ifndef _AI_HPP_
 #define _AI_HPP_
+
+#pragma warning(push, 0)
 #include <memory>
+#pragma warning(pop)
+
 #include "Actions/Action.hpp"
 #include "Unit.hpp"
 #include "Army.hpp"

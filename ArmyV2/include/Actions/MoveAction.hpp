@@ -1,9 +1,14 @@
 #ifndef _MOVE_ACTION_HPP_
 #define _MOVE_ACTION_HPP_
+
+#pragma warning(push, 0)
+#include <iostream>
+#pragma warning(pop)
+
 #include "Unit.hpp"
 #include "Action.hpp"
 #include "Point.hpp"
-#include <iostream>
+
 
 
 //Class representing the action to move a unit in direction of a specific position

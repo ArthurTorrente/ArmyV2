@@ -1,9 +1,13 @@
 #ifndef _EMPTY_ACTION_HPP_
 #define _EMPTY_ACTION_HPP_
+
+#pragma warning(push, 0)
+#include <iostream>
+#pragma warning(pop)
+
 #include "Unit.hpp"
 #include "Action.hpp"
 #include "Point.hpp"
-#include <iostream>
 
 //Class representing an action which do nothing
 class EmptyAction : public Action {

@@ -1,8 +1,11 @@
 #ifndef _POINT_HPP_
 #define _POINT_HPP_
+
+#pragma warning(push, 0)
 #include <cmath>
 #include <ostream>
 #include <iomanip>
+#pragma warning(pop)
 
 //Class representing a D point
 class Point {

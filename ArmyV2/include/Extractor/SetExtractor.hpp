@@ -1,12 +1,15 @@
 #ifndef _SETEXTRACTOR_H_
 #define _SETEXTRACTOR_H_
 
+#pragma warning(push, 0)
 #include <numeric>
 #include <algorithm>
+#include <functional>
+#pragma warning(pop)
 
 #include "IExtractor.hpp"
 
-#include <functional>
+
 
 /**
  * Returns the unit army of Allies army
@@ -46,8 +49,8 @@ public:
 };
 
 /**
- * 
- *
+ * Return the first N units that have the best capacity or worse
+ * It use 3 parameters, CapacityIndex for choose the capacity, N is the number of unit returns, and a SetExtractor
  */
 
 class NMinMaxCapacityExtractor : public SetExtractor
@@ -119,6 +122,7 @@ protected:
         if (set.size() == 0 || set.size() < m_n)
             return UnitVector(set);
 
+        /* nth is for not sorting all the vector */
         std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getCapacity(m_capacityIndex)->getValue() < b->getCapacity(m_capacityIndex)->getValue();
@@ -134,6 +138,7 @@ protected:
         if (set.size() == 0 || set.size() < m_n)
             return set;
 
+        /* nth is for not sorting all the vector */
         std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return  b->getCapacity(m_capacityIndex)->getValue() < a->getCapacity(m_capacityIndex)->getValue();
@@ -145,6 +150,10 @@ protected:
     }
 };
 
+/**
+ * The same as NMinMaxCapacity but with distance
+ * Take a PointExtractor instead of a capacityIndex
+ */
 class NFarNearExtractor : public SetExtractor
 {
 public:
@@ -204,6 +213,7 @@ protected:
         if (set.size() == 0 || set.size() < m_n)
             return set;
 
+        /* nth is for not sorting all the vector */
         std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getPosition().distance(p) > b->getPosition().distance(p);
@@ -220,6 +230,7 @@ protected:
         if (set.size() == 0 || set.size() < m_n)
             return set;
 
+        /* nth is for not sorting all the vector */
         std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return b->getPosition().distance(p) > a->getPosition().distance(p);
@@ -232,6 +243,9 @@ protected:
     }
 };
 
+/**
+ * Make an array of all the unit which have a greater capacity value or lower than the treshold's value
+ */
 class ThresholdCapacityExtractor : public SetExtractor
 {
 public:
@@ -324,6 +338,10 @@ protected:
         return set;
     }
 };
+
+/**
+ * It's the same of Threshold for capacity value but with the distance
+ */
 
 class ThresholdDistanceExtractor : public SetExtractor
 {

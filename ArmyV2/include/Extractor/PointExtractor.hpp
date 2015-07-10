@@ -1,7 +1,9 @@
 #ifndef _POINTEXTRACTOR_H_
 #define _POINTEXTRACTOR_H_
 
+#pragma warning(push, 0)
 #include <numeric>
+#pragma warning(pop)
 
 #include "IExtractor.hpp"
 

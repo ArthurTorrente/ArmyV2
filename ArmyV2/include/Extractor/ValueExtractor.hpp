@@ -1,9 +1,11 @@
 #ifndef _VALUEEXTRACTOR_H
 #define _VALUEEXTRACTOR_H
 
+#pragma warning(push, 0)
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#pragma warning(pop)
 
 #include "IExtractor.hpp"
 

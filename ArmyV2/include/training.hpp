@@ -1,10 +1,13 @@
 #ifndef _TRAINING_HPP_
 #define _TRAINING_HPP_
+
+#pragma warning(push, 0)
 #include <memory>
 #include <vector>
+#pragma warning(pop)
+
+
 #include "Army.hpp"
-
-
 
 //Train armies by genetic algorithm,  with fitness function obtained by tournament
 //params :

@@ -1,8 +1,10 @@
 #ifndef _IEXTRACTOR_H_
 #define _IEXTRACTOR_H_
 
+#pragma warning(push, 0)
 #include <memory>
 #include <vector>
+#pragma warning(pop)
 
 #include "Point.hpp"
 #include "Army.hpp"

@@ -34,11 +34,17 @@
     <Filter Include="Fichiers d%27en-tête\Extractors">
       <UniqueIdentifier>{53bc4a83-d5ad-4681-bc50-54b9a032fed6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\IA">
+      <UniqueIdentifier>{9dfc044d-5951-42e3-9cc4-1beb8e3d8fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Factory">
+      <UniqueIdentifier>{cdce3777-0352-4148-b6fa-c69d780e8dba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Factory">
+      <UniqueIdentifier>{9d6fe3c7-b966-46d9-aa6b-df6b7dee6888}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\AI.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Army.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -54,14 +60,26 @@
     <ClCompile Include="src\Unit.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\ActionNode.cpp">
-      <Filter>Fichiers sources\DecisionTree</Filter>
-    </ClCompile>
     <ClCompile Include="src\DecisionNode.cpp">
       <Filter>Fichiers sources\DecisionTree</Filter>
     </ClCompile>
     <ClCompile Include="src\Config.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AI.cpp">
+      <Filter>Fichiers sources\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TreeIA.cpp">
+      <Filter>Fichiers sources\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Factory.cpp">
+      <Filter>Fichiers sources\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NodeFactory.cpp">
+      <Filter>Fichiers sources\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ExtractorFactory.cpp">
+      <Filter>Fichiers sources\Factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +172,21 @@
     </ClInclude>
     <ClInclude Include="include\Extractor\UnitTest.hpp">
       <Filter>Fichiers d%27en-tête\Extractors</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Factory\Factory.hpp">
+      <Filter>Fichiers d%27en-tête\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Factory\ExtractorFactory.hpp">
+      <Filter>Fichiers d%27en-tête\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Factory\NodeFactory.hpp">
+      <Filter>Fichiers d%27en-tête\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Factory\UnitTest.hpp">
+      <Filter>Fichiers d%27en-tête\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Factory\FactoryException.hpp">
+      <Filter>Fichiers d%27en-tête\Factory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

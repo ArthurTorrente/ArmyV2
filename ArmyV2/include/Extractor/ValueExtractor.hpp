@@ -22,7 +22,7 @@ public:
         m_value(value)
     {}
 
-    virtual float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         tools::unusedArg(unit, allies, opponent);
 
@@ -52,7 +52,7 @@ public:
         m_unitExtractor(std::move(uex))
     {}
 
-    virtual float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         const UnitSPtr& u = (*m_unitExtractor)(unit, allies, opponent);
 
@@ -86,7 +86,7 @@ public:
         m_unitExtractor(std::move(uex))
     {}
 
-    virtual float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         const Point& point = (*m_pointExtractor)(unit, allies, opponent);
         const UnitSPtr& u = (*m_unitExtractor)(unit, allies, opponent);
@@ -119,7 +119,7 @@ public:
     {
         if (type == Type::MIN)
             m_algo = std::bind(&MinMaxAverageCapacityValueExtractor::getMinValue, this, std::placeholders::_1);
-        
+
         else if (type == Type::MAX)
             m_algo = std::bind(&MinMaxAverageCapacityValueExtractor::getMaxValue, this, std::placeholders::_1);
 
@@ -127,7 +127,7 @@ public:
             m_algo = std::bind(&MinMaxAverageCapacityValueExtractor::getAverageValue, this, std::placeholders::_1);
     }
 
-    virtual float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent));
     }
@@ -159,7 +159,7 @@ protected:
     SetExtractorUPtr m_setExtractor;
 
     std::function<float(const UnitVector&)> m_algo;
-    
+
     float getMinValue(const UnitVector& set)
     {
         if (set.size() == 0)
@@ -225,7 +225,7 @@ public:
         }
     }
 
-    virtual float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         return m_algo(
             (*m_setExtractor)(unit, allies, opponent),

@@ -16,7 +16,10 @@ private:
 
 public:
     //Constructor with as first paramter the unit attacking, and as second, its target
-    ShotAction(Unit& unit, Unit& opponent):unit_(&unit), opponent_(&opponent) {}
+    ShotAction(Unit& unit, Unit& opponent)
+        : unit_(&unit),
+        opponent_(&opponent)
+    {}
 
     //Run the action
     //Log parameter indicate if we write something or not on the standard output

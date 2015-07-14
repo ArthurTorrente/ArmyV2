@@ -11,14 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ActionNode.cpp" />
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Army.cpp" />
     <ClCompile Include="src\battle.cpp" />
     <ClCompile Include="src\Config.cpp" />
     <ClCompile Include="src\DecisionNode.cpp" />
+    <ClCompile Include="src\ExtractorFactory.cpp" />
+    <ClCompile Include="src\Factory.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\NodeFactory.cpp" />
     <ClCompile Include="src\training.cpp" />
+    <ClCompile Include="src\TreeIA.cpp" />
     <ClCompile Include="src\Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +49,11 @@
     <ClInclude Include="include\Extractor\UnitTest.hpp" />
     <ClInclude Include="include\Extractor\UnitExtractor.hpp" />
     <ClInclude Include="include\Extractor\ValueExtractor.hpp" />
+    <ClInclude Include="include\Factory\ExtractorFactory.hpp" />
+    <ClInclude Include="include\Factory\Factory.hpp" />
+    <ClInclude Include="include\Factory\FactoryException.hpp" />
+    <ClInclude Include="include\Factory\NodeFactory.hpp" />
+    <ClInclude Include="include\Factory\UnitTest.hpp" />
     <ClInclude Include="include\IA\AI.hpp" />
     <ClInclude Include="include\IA\TreeIA.hpp" />
     <ClInclude Include="include\Point.hpp" />

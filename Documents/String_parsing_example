@@ -1,0 +1,40 @@
+//root
+// vie de l'ennemie le plus proche < damage unité courante
+? : Noeud de decision
+C1 : valeur de la capacité 1
+LD : distance d'un set et d'un point
+O : armé opposé
+P : extracteur de position
+U : Unité courante
+< : comparator
+C4 : valeur de la capacité 4
+U : Unité courante
+
+//Noeud action de gauche
+//attaque l'unité la plus proche
+! : Action
+A : Attaque
+LD : distance d'un set et d'un point
+O : opponent army
+P : extracteur de position
+U : Unité courante
+
+//Noeud décision de droite
+? : Décision
+aD : moyenne des distance entre un set et une position
+O : amré opposé
+P : extracteur de position
+U : extracteur unité courante
+< : comparateur
+a5 : moyenne de la capacité 5 d'un set
+O : armé opposée
+
+//Noeud de droite
+! : Action
+E : Escape
+B : Barycentre d'un set
+O : amrée opposé
+
+//Noeud de droite
+! : Action
+N : Nothing

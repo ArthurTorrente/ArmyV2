@@ -7,20 +7,57 @@
 #pragma warning(pop)
 
 #include "Actions/Action.hpp"
+#include "DecisionTree/INode.hpp"
 #include "Army.hpp"
 
 class TreeIa
 {
 public:
     /**
-     * Compute a decision tree with codeIa passed in constructor
+     * Assign iaCode and root node to the new instance of TreeIA
      */
-    TreeIa(const std::string& codeIa);
+    TreeIa(const std::string& iaCode, INodeUPtr& root);
+
+    /**
+     * Move constructor of TreeIa
+     */
+    TreeIa(TreeIa&&);
 
     /**
      * Return the action computed by the decision tree
      */
-    std::unique_ptr<Action> operator()(const Unit&, const Army&, const Army&);
+    std::unique_ptr<Action> operator()(const UnitSPtr&, const ArmyPtr&, const ArmyPtr&);
+
+    /**
+     * Getter of IACode
+     */
+    const std::string getIaCode() const;
+
+    /**
+    * Getter of root
+    */
+    const INodeUPtr& getRoot() const;
+
+    /**
+    * Setter of IACode
+    */
+    void setIaCode(const std::string&);
+
+    /**
+    * Setter of root
+    */
+    void setRoot(INodeUPtr& root);
+
+protected:
+    /**
+     * IACode of Tree
+     */
+    std::string m_iaCode;
+
+    /**
+     * Root node of tree
+     */
+    INodeUPtr m_root;
 };
 
 #endif //

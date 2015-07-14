@@ -17,14 +17,16 @@ private:
 public:
 
     //Constructor
-    EmptyAction(Unit& unit):unit_(&unit) {}
+    EmptyAction(Unit& unit)
+        : unit_(&unit)
+    {}
 
     //Run the action
     //Log parameter indicate if we write something or not on the standard output
     void execute(bool log = false)
     {
-        if(log)std::cout<<"Unit "<<unit_->getId()<<" do nothing..."<<std::endl;
-
+        if(log)
+            std::cout << "Unit " << unit_->getId() << " do nothing..." << std::endl;
     }
 };
 

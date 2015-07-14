@@ -20,9 +20,10 @@ private:
 public:
 
     //Constructor taking in paramters the unit to move and the destination
-    MoveAction(Unit& unit, const Point& position):unit_(&unit), position_(position)
-    {
-    }
+    MoveAction(Unit& unit, const Point& position)
+        : unit_(&unit),
+        position_(position)
+    {}
 
     //Run the action
     //Log parameter indicate if we write something or not on the standard output

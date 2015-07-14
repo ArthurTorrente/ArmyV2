@@ -6,7 +6,6 @@
 #include <vector>
 #pragma warning(pop)
 
-#include "Point.hpp"
 #include "Army.hpp"
 
 /**

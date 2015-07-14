@@ -9,14 +9,21 @@
 #include "training.hpp"
 #include "Config.hpp"
 
-//#define UNITTEST
+#include "DecisionTree/DecisionNode.hpp"
+#include "DecisionTree/ActionNode.hpp"
+#include "Actions/MoveAction.hpp"
+
+#define UNITTEST
 
 #ifdef UNITTEST
     #include "Extractor/UnitTest.hpp"
+    #include "Factory/UnitTest.hpp"
 #endif
 
 static unsigned int w = 10;
 static unsigned int h = 10;
+
+#include <map>
 
 void computeArg(int argc, char** argv)
 {
@@ -43,11 +50,20 @@ void unitTest()
         !unitTest_UnitExtractor() ||
         !unitTest_SetExtractor())
     {
-        std::cout << "One unit test has failed!" << std::endl;
+        std::cout << "One extractor unit test has failed!" << std::endl;
     }
     else
     {
-        std::cout << "All test are OK !" << std::endl;
+        std::cout << "All extractor test are OK !" << std::endl;
+    }
+
+    if (!unitTest_Factory())
+    {
+        std::cout << "One unit test for factory failed" << std::endl;
+    }
+    else
+    {
+        std::cout << "Factory unitTest success" << std::endl;
     }
 #endif
 }

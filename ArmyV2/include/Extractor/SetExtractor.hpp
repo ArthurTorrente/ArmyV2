@@ -21,7 +21,7 @@ public:
         : SetExtractor()
     {}
 
-    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         tools::unusedArg(unit, opponent);
 
@@ -40,7 +40,7 @@ public:
         : SetExtractor()
     {}
 
-    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         tools::unusedArg(unit, allies);
 
@@ -75,7 +75,7 @@ public:
             m_algo = std::bind(&NMinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
     }
 
-    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent));
     }
@@ -173,7 +173,7 @@ public:
         }
     }
 
-    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent), (*m_pointExtractor)(unit, allies, opponent));
     }
@@ -265,7 +265,7 @@ public:
         }
     }
 
-    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         
         return m_algo((*m_setExtractor)(unit, allies, opponent));
@@ -362,7 +362,7 @@ public:
         }
     }
 
-    virtual UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitVector operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent), (*m_pointExtractor)(unit, allies, opponent));
     }

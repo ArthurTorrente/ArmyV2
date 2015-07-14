@@ -23,7 +23,7 @@ public:
         m_getter(std::move(extractor))
     {}
 
-    virtual Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         const UnitVector& set((*m_getter)(unit, allies, opponent));
 
@@ -57,7 +57,7 @@ public:
         m_getter(std::move(extractor))
     {}
 
-    virtual Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         const UnitSPtr& u((*m_getter)(unit, allies, opponent));
         

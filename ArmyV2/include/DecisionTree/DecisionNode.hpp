@@ -10,24 +10,22 @@
 
 #include "ActionNode.hpp"
 #include "Army.hpp"
+#include "Extractor/IExtractor.hpp"
 
-class DecisionNode : INode
+class DecisionNode : public INode
 {
 public:
-    DecisionNode();
+    DecisionNode(std::unique_ptr<INode>& left, std::unique_ptr<INode>& right, std::function<bool(float, float)> comparator, FloatExtractorUPtr& leftEx, FloatExtractorUPtr& rightEx);
     
-    std::unique_ptr<Action> getValue();
+    std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmyPtr& a, const ArmyPtr& b);
+
 protected:
     std::unique_ptr<INode> m_left;
     std::unique_ptr<INode> m_right;
 
-    /**
-     * Prédicat de choix récupération valeur de droite ou de gauche
-     */
-    std::function<bool()> m_goToLeftPredicate;
-    /** Ou simplement une méthode vituel pur qui devra être redéfini par les class héritant de décision Node*/
-    virtual bool operator()() = 0;
-    /* Voir le plus simple */
+    std::function<bool(float, float)> m_comparator;
+    FloatExtractorUPtr m_leftExtractor;
+    FloatExtractorUPtr m_rightExtractor;
 };
 
 #endif //_DECISIONNODE_H_

@@ -13,7 +13,7 @@
 class IAUnitExtractor : public UnitExtractor
 {
 public:
-    virtual UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         tools::unusedArg(allies, opponent);
 
@@ -40,7 +40,7 @@ public:
             m_algo = std::bind(&MinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
     }
 
-    virtual UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         return m_algo(
             (*m_setGetter)(unit, allies, opponent)
@@ -115,7 +115,7 @@ public:
             m_algo = std::bind(&FarNearExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
     }
 
-    virtual UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
     {
         return m_algo(
             (*m_setExtractor)(unit, allies, opponent),

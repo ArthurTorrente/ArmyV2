@@ -25,19 +25,19 @@ public:
  * Returns the unit which has the best capacity value or the worst.
  */
 
-class MinMaxCapacityExtractor : public UnitExtractor
+class MinMaxCapacityUnitExtractor : public UnitExtractor
 {
 public:
-    MinMaxCapacityExtractor(bool isMin, unsigned int capacityIndex, SetExtractorUPtr& sex)
+    MinMaxCapacityUnitExtractor(bool isMin, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : UnitExtractor(),
         m_capacityIndex(capacityIndex),
         m_setGetter(std::move(sex))
     {
         if (isMin)
-            m_algo = std::bind(&MinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
+            m_algo = std::bind(&MinMaxCapacityUnitExtractor::getMin, this, std::placeholders::_1);
 
         else
-            m_algo = std::bind(&MinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
+            m_algo = std::bind(&MinMaxCapacityUnitExtractor::getMax, this, std::placeholders::_1);
     }
 
     UnitSPtr operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
@@ -55,10 +55,10 @@ public:
     void setAlgorithm(bool isMin)
     {
         if (isMin)
-            m_algo = std::bind(&MinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
+            m_algo = std::bind(&MinMaxCapacityUnitExtractor::getMin, this, std::placeholders::_1);
         
         else
-            m_algo = std::bind(&MinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
+            m_algo = std::bind(&MinMaxCapacityUnitExtractor::getMax, this, std::placeholders::_1);
     }
 
     void setCapacityIndex(unsigned int capacityIndex)

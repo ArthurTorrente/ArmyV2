@@ -19,7 +19,7 @@ public:
     {
         OUT* action;
 
-        action = new OUT(*unit, (*m_extractor)(unit, a, b));
+        action = new OUT(unit, (*m_extractor)(unit, a, b));
 
         return std::unique_ptr<Action>(action);
     }
@@ -46,14 +46,14 @@ public:
 
         OUT* action;
 
-        action = new OUT(*unit);
+        action = new OUT(unit);
 
         return std::unique_ptr<Action>(action);
     }
 };
 
 template<typename ACTIONTYPE, typename EXTRACTOR>
-ActionNode<ACTIONTYPE, EXTRACTOR>* getAction(EXTRACTOR ex)
+ActionNode<ACTIONTYPE, EXTRACTOR>* getAction(EXTRACTOR& ex)
 {
     return new ActionNode<ACTIONTYPE, EXTRACTOR>(ex);
 }

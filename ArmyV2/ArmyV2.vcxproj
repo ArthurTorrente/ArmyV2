@@ -26,9 +26,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Actions\Action.hpp" />
+    <ClInclude Include="include\Actions\AllActions.hpp" />
     <ClInclude Include="include\Actions\EmptyAction.hpp" />
     <ClInclude Include="include\Actions\MoveAction.hpp" />
-    <ClInclude Include="include\Actions\ShotAction.hpp" />
+    <ClInclude Include="include\Actions\ShootAction.hpp" />
     <ClInclude Include="include\Army.hpp" />
     <ClInclude Include="include\battle.hpp" />
     <ClInclude Include="include\Capacity\ArmorCapacity.hpp" />

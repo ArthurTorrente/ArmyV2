@@ -21,6 +21,10 @@ public:
         : unit_(&unit)
     {}
 
+    EmptyAction(UnitSPtr unit)
+        : unit_(unit.get())
+    {}
+
     //Run the action
     //Log parameter indicate if we write something or not on the standard output
     void execute(bool log = false)

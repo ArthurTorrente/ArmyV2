@@ -25,6 +25,11 @@ public:
         position_(position)
     {}
 
+    MoveAction(UnitSPtr unit, const Point& position)
+        : unit_(unit.get()),
+        position_(position)
+    {}
+
     //Run the action
     //Log parameter indicate if we write something or not on the standard output
     void execute(bool log = false)

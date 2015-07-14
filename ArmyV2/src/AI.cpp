@@ -6,7 +6,7 @@
 #include "IA/AI.hpp"
 #include "Actions/Action.hpp"
 #include "Actions/MoveAction.hpp"
-#include "Actions/ShotAction.hpp"
+#include "Actions/ShootAction.hpp"
 #include "Actions/EmptyAction.hpp"
 #include "Unit.hpp"
 #include "Army.hpp"
@@ -44,7 +44,7 @@ std::unique_ptr<Action> AI::operator()(Unit& unit, Army& allies, Army& opponents
             }
             else
             {
-                return std::unique_ptr<Action>(new ShotAction(unit, *target));
+                return std::unique_ptr<Action>(new ShootAction(unit, *target));
             }
         }
         else

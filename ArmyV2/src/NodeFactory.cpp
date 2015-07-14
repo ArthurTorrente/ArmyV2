@@ -2,9 +2,9 @@
 
 #include <array>
 
-#include "Factory/ExtractorFactory.hpp"
-#include "Actions/EmptyAction.hpp"
 #include "Factory/FactoryException.hpp"
+#include "Factory/ExtractorFactory.hpp"
+#include "Actions/AllActions.hpp"
 
 namespace Factory
 {
@@ -104,14 +104,53 @@ namespace Factory
                      * Get Action Type
                      * Get extractor if is need
                      */
+                    char actionType;
+                    code.get(actionType);
+
+                    switch (actionType)
+                    {
+                    case 'M':
+                    {
+                        auto pex = ex::getPointExtractor(code);
+                        node.reset(
+                            getAction<MoveAction, PointExtractorUPtr>(pex)
+                            );
+                    }
+                        break;
+
+                    case 'A':
+                    {
+                        auto uex = ex::getUnitExtractor(code);
+                        node.reset(
+                            getAction<ShootAction, UnitExtractorUPtr>(uex)
+                            );
+                    }
+                        break;
+
+                    case 'E':
+                    {
+                        auto pex = ex::getPointExtractor(code);
+                        node.reset(
+                            getAction<MoveAction, PointExtractorUPtr>(pex)
+                            );
+                    }
+                        break;
+
+                    default:
+                    {
+                        node.reset(
+                            getAction<EmptyAction>()
+                            );
+                    }
+                    }
                 }
             break;
 
             default:
                 {
-                    auto actionNode = getAction<EmptyAction>();
-
-                    node.reset(actionNode);
+                    node.reset(
+                        getAction<EmptyAction>()
+                        );
                 }
             }
 

@@ -98,18 +98,6 @@
     <ClInclude Include="include\Point.hpp">
       <Filter>Fichiers d%27en-tête\tools</Filter>
     </ClInclude>
-    <ClInclude Include="include\Actions\Action.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Actions\EmptyAction.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Actions\MoveAction.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Actions\ShotAction.hpp">
-      <Filter>Fichiers d%27en-tête\Actions</Filter>
-    </ClInclude>
     <ClInclude Include="include\Capacity\ArmorCapacity.hpp">
       <Filter>Fichiers d%27en-tête\Capacity</Filter>
     </ClInclude>
@@ -187,6 +175,21 @@
     </ClInclude>
     <ClInclude Include="include\Factory\FactoryException.hpp">
       <Filter>Fichiers d%27en-tête\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\Action.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\AllActions.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\EmptyAction.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\MoveAction.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\ShootAction.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

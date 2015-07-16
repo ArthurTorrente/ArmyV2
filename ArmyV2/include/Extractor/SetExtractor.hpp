@@ -27,6 +27,11 @@ public:
 
         return allies->getUnitsList();
     }
+
+    std::string getCode() const
+    {
+        return std::string("A");
+    }
 };
 
 /**
@@ -46,6 +51,11 @@ public:
 
         return opponent->getUnitsList();
     }
+
+    std::string getCode() const
+    {
+        return std::string("O");
+    }
 };
 
 /**
@@ -64,6 +74,7 @@ public:
 
     NMinMaxCapacityExtractor(Type type, unsigned int N, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : SetExtractor(),
+        m_type(type),
         m_n(N),
         m_capacityIndex(capacityIndex),
         m_setExtractor(std::move(sex))
@@ -92,6 +103,8 @@ public:
 
     void setType(Type type)
     {
+        m_type = type;
+
         if (type == Type::MAX)
             m_algo = std::bind(&NMinMaxCapacityExtractor::getMax, this, std::placeholders::_1);
 
@@ -109,7 +122,20 @@ public:
         m_capacityIndex = capacityIndex;
     }
 
+    std::string getCode() const
+    {
+        std::string code("N");
+
+        code += (m_type == MIN ? "L" : " H");
+        code += '0' + static_cast<char>(m_capacityIndex);
+        code += std::to_string(m_n);
+        code += m_setExtractor->getCode();
+
+        return code;
+    }
+
 protected:
+    Type m_type;
     unsigned int m_n;
     unsigned int m_capacityIndex;
     
@@ -159,6 +185,7 @@ class NFarNearExtractor : public SetExtractor
 public:
     NFarNearExtractor(bool isFar, unsigned int N, SetExtractorUPtr& sex, PointExtractorUPtr& pex)
         : SetExtractor(),
+        m_isFar(isFar),
         m_n(N),
         m_setExtractor(std::move(sex)),
         m_pointExtractor(std::move(pex))
@@ -185,6 +212,8 @@ public:
 
     void setIsFar(bool isFar)
     {
+        m_isFar = isFar;
+
         if (isFar)
         {
             m_algo = std::bind(&NFarNearExtractor::getFar, this, std::placeholders::_1, std::placeholders::_2);
@@ -198,6 +227,18 @@ public:
     void setN(unsigned int N)
     {
         m_n = N;
+    }
+
+    std::string getCode() const
+    {
+        std::string code("N");
+
+        code += (m_isFar ? "HD" : "LD");
+        code += std::to_string(m_n);
+        code += m_setExtractor->getCode();
+        code += m_pointExtractor->getCode();
+
+        return code;
     }
 
 protected:
@@ -251,6 +292,7 @@ class ThresholdCapacityExtractor : public SetExtractor
 public:
     ThresholdCapacityExtractor(bool isMin, float threshold, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : SetExtractor(),
+        m_isMin(isMin),
         m_threshold(threshold),
         m_capacityIndex(capacityIndex),
         m_setExtractor(std::move(sex))
@@ -283,6 +325,8 @@ public:
 
     void setIsMin(bool isMin)
     {
+        m_isMin = isMin;
+
         if (isMin)
         {
             m_algo = std::bind(&ThresholdCapacityExtractor::getMin, this, std::placeholders::_1);
@@ -303,7 +347,20 @@ public:
         m_capacityIndex = cI;
     }
 
+    std::string getCode() const
+    {
+        std::string code("T");
+
+        code += (m_isMin ? "L" : "H");
+        code += std::to_string(m_capacityIndex);
+        code += std::to_string(m_threshold);
+        code += m_setExtractor->getCode();
+
+        return code;
+    }
+
 protected:
+    bool m_isMin;
     float m_threshold;
     unsigned int m_capacityIndex;
     SetExtractorUPtr m_setExtractor;
@@ -348,6 +405,7 @@ class ThresholdDistanceExtractor : public SetExtractor
 public:
     ThresholdDistanceExtractor(bool isMin, float threshold, SetExtractorUPtr& sex, PointExtractorUPtr& pex)
         : SetExtractor(),
+        m_isMin(isMin),
         m_threshold(threshold),
         m_setExtractor(std::move(sex)),
         m_pointExtractor(std::move(pex))
@@ -379,6 +437,7 @@ public:
 
     void setMin(bool isMin)
     {
+        m_isMin = isMin;
         if (isMin)
         {
             m_algo = std::bind(&ThresholdDistanceExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
@@ -389,7 +448,20 @@ public:
         }
     }
 
+    std::string getCode() const
+    {
+        std::string code("T");
+
+        code += (m_isMin ? "LD" : "HD");
+        code += std::to_string(m_threshold);
+        code += m_setExtractor->getCode();
+        code += m_pointExtractor->getCode();
+
+        return code;
+    }
+
 protected:
+    bool m_isMin;
     float m_threshold;
 
     SetExtractorUPtr m_setExtractor;

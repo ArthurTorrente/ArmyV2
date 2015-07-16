@@ -39,6 +39,11 @@ public:
         m_value = value;
     }
 
+    std::string getCode() const
+    {
+        return std::string("V") + std::to_string(m_value);
+    }
+
 protected:
     float m_value;
 };
@@ -72,6 +77,16 @@ public:
         m_capacityIndex = c;
     }
 
+    std::string getCode() const
+    {
+        std::string code("C");
+
+        code += '0' + static_cast<char>(m_capacityIndex);
+        code += m_unitExtractor->getCode();
+
+        return code;
+    }
+
 protected:
     unsigned int m_capacityIndex;
     UnitExtractorUPtr m_unitExtractor;
@@ -97,6 +112,16 @@ public:
         return 0.0f;
     }
 
+    std::string getCode() const
+    {
+        std::string code("D");
+
+        code += m_unitExtractor->getCode();
+        code += m_pointExtractor->getCode();
+
+        return code;
+    }
+
 protected:
     PointExtractorUPtr m_pointExtractor;
     UnitExtractorUPtr m_unitExtractor;
@@ -114,6 +139,7 @@ public:
 
     MinMaxAverageCapacityValueExtractor(Type type, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : FloatExtractor(),
+        m_type(type),
         m_capacityIndex(capacityIndex),
         m_setExtractor(std::move(sex))
     {
@@ -139,6 +165,8 @@ public:
 
     void setType(Type type)
     {
+        m_type = type;
+
         if (type == Type::MIN)
             m_algo = std::bind(&MinMaxAverageCapacityValueExtractor::getMinValue, this, std::placeholders::_1);
 
@@ -154,7 +182,21 @@ public:
         m_capacityIndex = capacityIndex;
     }
 
+    std::string getCode() const
+    {
+        std::string code(
+            m_type == MAX ? "M" :
+            m_type == MIN ? "m" : "a"
+            );
+
+        code += '0' + static_cast<char>(m_capacityIndex);
+        code += m_setExtractor->getCode();
+
+        return code;
+    }
+
 protected:
+    Type m_type;
     unsigned int m_capacityIndex;
     SetExtractorUPtr m_setExtractor;
 
@@ -206,6 +248,7 @@ public:
 
     MinMaxAverageDistanceValueExtractor(Type type, SetExtractorUPtr& sex, PointExtractorUPtr& pex)
         : FloatExtractor(),
+        m_type(type),
         m_setExtractor(std::move(sex)),
         m_pointExtractor(std::move(pex))
     {
@@ -235,6 +278,8 @@ public:
 
     void setType(Type type)
     {
+        m_type = type;
+
         switch (type)
         {
         case MIN:
@@ -251,7 +296,20 @@ public:
         }
     }
 
+    std::string getCode() const
+    {
+        std::string code(
+            m_type == MAX ? "MD" :
+            m_type == MIN ? "mD" : "aD"
+            );
+
+        code += m_setExtractor->getCode();
+        code += m_pointExtractor->getCode();
+        return code;
+    }
+
 protected:
+    Type m_type;
     PointExtractorUPtr m_pointExtractor;
     SetExtractorUPtr m_setExtractor;
 

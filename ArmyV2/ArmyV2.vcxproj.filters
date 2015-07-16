@@ -43,6 +43,9 @@
     <Filter Include="Fichiers sources\Factory">
       <UniqueIdentifier>{9d6fe3c7-b966-46d9-aa6b-df6b7dee6888}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\tools">
+      <UniqueIdentifier>{d835069e-2fc4-4109-bf07-929cd57a4b2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Army.cpp">
@@ -80,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="src\ExtractorFactory.cpp">
       <Filter>Fichiers sources\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IACodeCollection.cpp">
+      <Filter>Fichiers sources\tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +195,15 @@
       <Filter>Fichiers d%27en-tête\Actions</Filter>
     </ClInclude>
     <ClInclude Include="include\Actions\ShootAction.hpp">
+      <Filter>Fichiers d%27en-tête\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IACodeGetter.hpp">
+      <Filter>Fichiers d%27en-tête\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IACodeCollection.hpp">
+      <Filter>Fichiers d%27en-tête\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\EscapeAction.hpp">
       <Filter>Fichiers d%27en-tête\Actions</Filter>
     </ClInclude>
   </ItemGroup>

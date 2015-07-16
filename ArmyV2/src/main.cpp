@@ -23,8 +23,6 @@
 static unsigned int w = 10;
 static unsigned int h = 10;
 
-#include <map>
-
 void computeArg(int argc, char** argv)
 {
     for (int i = 0; i < argc; ++i)

@@ -93,7 +93,7 @@ namespace Factory
                     auto rightNode = getNode(code);
 
                     node.reset(
-                        new DecisionNode(leftNode, rightNode, comparatorFunction, leftEx, rightEx)
+                        new DecisionNode(leftNode, rightNode, comparatorFunction, leftEx, rightEx, std::string(1, comparator))
                         );
                 }
             break;
@@ -131,7 +131,7 @@ namespace Factory
                     {
                         auto pex = ex::getPointExtractor(code);
                         node.reset(
-                            getAction<MoveAction, PointExtractorUPtr>(pex)
+                            getAction<EscapeAction, PointExtractorUPtr>(pex)
                             );
                     }
                         break;
@@ -147,11 +147,7 @@ namespace Factory
             break;
 
             default:
-                {
-                    node.reset(
-                        getAction<EmptyAction>()
-                        );
-                }
+                throw FactoryException("Error node code");
             }
 
             return node;

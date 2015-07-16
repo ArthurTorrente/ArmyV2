@@ -12,13 +12,13 @@ namespace Factory
     {
         std::stringstream ss(code);
 
-        ss.exceptions(std::stringstream::eofbit);
+        ss.exceptions(std::stringstream::eofbit | std::stringstream::badbit | std::stringstream::failbit);
 
         try
         {
             INodeUPtr root(node::getNode(ss));
 
-            return TreeIa(code, root);
+            return TreeIa(root);
         }
         catch (...)
         {
@@ -28,6 +28,6 @@ namespace Factory
 
     std::string codeFromTree(const std::unique_ptr<TreeIa>& tree)
     {
-        return std::string();
+        return tree->getIaCode();
     }
 }

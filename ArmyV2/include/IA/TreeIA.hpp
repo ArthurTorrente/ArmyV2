@@ -16,7 +16,7 @@ public:
     /**
      * Assign iaCode and root node to the new instance of TreeIA
      */
-    TreeIa(const std::string& iaCode, INodeUPtr& root);
+    TreeIa(INodeUPtr& root);
 
     /**
      * Move constructor of TreeIa
@@ -39,20 +39,11 @@ public:
     const INodeUPtr& getRoot() const;
 
     /**
-    * Setter of IACode
-    */
-    void setIaCode(const std::string&);
-
-    /**
     * Setter of root
     */
     void setRoot(INodeUPtr& root);
 
 protected:
-    /**
-     * IACode of Tree
-     */
-    std::string m_iaCode;
 
     /**
      * Root node of tree

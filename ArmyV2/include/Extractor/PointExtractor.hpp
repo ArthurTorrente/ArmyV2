@@ -41,6 +41,11 @@ public:
         return sum / static_cast<float>(set.size());
     }
 
+    std::string getCode() const
+    {
+        return std::string("B") + m_getter->getCode();
+    }
+
 protected:
     SetExtractorUPtr m_getter;
 };
@@ -67,6 +72,11 @@ public:
         return Point(0.0f, 0.0f);
     }
 
+    std::string getCode() const
+    {
+        return std::string("P") + m_getter->getCode();
+    }
+
 protected:
     UnitExtractorUPtr m_getter;
 };
@@ -87,6 +97,12 @@ public:
         tools::unusedArg(unit, allies, opponent);
 
         return m_p;
+    }
+
+    std::string getCode() const
+    {
+        return std::string("p");
+
     }
 
 protected:

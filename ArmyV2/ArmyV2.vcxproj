@@ -18,6 +18,7 @@
     <ClCompile Include="src\DecisionNode.cpp" />
     <ClCompile Include="src\ExtractorFactory.cpp" />
     <ClCompile Include="src\Factory.cpp" />
+    <ClCompile Include="src\IACodeCollection.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\NodeFactory.cpp" />
     <ClCompile Include="src\training.cpp" />
@@ -28,6 +29,7 @@
     <ClInclude Include="include\Actions\Action.hpp" />
     <ClInclude Include="include\Actions\AllActions.hpp" />
     <ClInclude Include="include\Actions\EmptyAction.hpp" />
+    <ClInclude Include="include\Actions\EscapeAction.hpp" />
     <ClInclude Include="include\Actions\MoveAction.hpp" />
     <ClInclude Include="include\Actions\ShootAction.hpp" />
     <ClInclude Include="include\Army.hpp" />
@@ -55,6 +57,8 @@
     <ClInclude Include="include\Factory\FactoryException.hpp" />
     <ClInclude Include="include\Factory\NodeFactory.hpp" />
     <ClInclude Include="include\Factory\UnitTest.hpp" />
+    <ClInclude Include="include\IACodeCollection.hpp" />
+    <ClInclude Include="include\IACodeGetter.hpp" />
     <ClInclude Include="include\IA\AI.hpp" />
     <ClInclude Include="include\IA\TreeIA.hpp" />
     <ClInclude Include="include\Point.hpp" />

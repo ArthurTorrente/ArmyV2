@@ -133,7 +133,7 @@ namespace Factory
             }
                 break;
 
-            default:
+            case 'V':
             {
                 float second;
 
@@ -143,6 +143,9 @@ namespace Factory
                     new PreDefineValueExtractor(second)
                     );
             }
+
+            default:
+                throw FactoryException("Extractor not found");
             }
         }
 

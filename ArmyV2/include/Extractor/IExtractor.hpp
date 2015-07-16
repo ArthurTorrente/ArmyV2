@@ -8,12 +8,14 @@
 
 #include "Army.hpp"
 
+#include "IACodeGetter.hpp"
+
 /**
  * Base class of Extractor
  * Return type of fonctor is template because we want use different return value from Extractor
  */
 template < typename OUT >
-class Extractor
+class Extractor : public IACodeGetter
 {
 public:
     /* Return value of Filter */

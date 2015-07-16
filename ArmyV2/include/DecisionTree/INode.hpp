@@ -9,23 +9,12 @@
 #include "Actions/Action.hpp"
 #include "Army.hpp"
 
-class INode
+#include "IACodeGetter.hpp"
+
+class INode : public IACodeGetter
 {
 public:
     virtual std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmyPtr& a, const ArmyPtr& b) = 0;
-
-    const std::string& getIaCode() const
-    {
-        return m_iaCode;
-    }
-
-    void setIaCode(const std::string& iaCode)
-    {
-        m_iaCode = iaCode;
-    }
-
-protected:
-    std::string m_iaCode;
 };
 
 typedef std::unique_ptr<INode> INodeUPtr;

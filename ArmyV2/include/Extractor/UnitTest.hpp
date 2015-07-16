@@ -263,7 +263,7 @@ bool unitTest_MinMaxCapacityExtractor()
     SetExtractorUPtr set(new AlliesArmyExtractor);
 
     /* MAX*/
-    MinMaxCapacityExtractor mmCMax(false, 0, set);
+    MinMaxCapacityUnitExtractor mmCMax(false, 0, set);
     u3->getCapacity(0)->upgrade();
 
     if (mmCMax(u, a, b)->getId() != u3->getId())
@@ -271,7 +271,7 @@ bool unitTest_MinMaxCapacityExtractor()
 
     /* MIN */
     set.reset(new AlliesArmyExtractor);
-    MinMaxCapacityExtractor mmCMin(true, 0, set);
+    MinMaxCapacityUnitExtractor mmCMin(true, 0, set);
     u2->getCapacity(0)->upgrade();
 
     if (mmCMin(u, a, b)->getId() != u->getId())

@@ -19,6 +19,11 @@ public:
 
         return unit;
     }
+
+    std::string getCode() const
+    {
+        return std::string("U");
+    }
 };
 
 /**
@@ -30,6 +35,7 @@ class MinMaxCapacityUnitExtractor : public UnitExtractor
 public:
     MinMaxCapacityUnitExtractor(bool isMin, unsigned int capacityIndex, SetExtractorUPtr& sex)
         : UnitExtractor(),
+        m_isMin(isMin),
         m_capacityIndex(capacityIndex),
         m_setGetter(std::move(sex))
     {
@@ -54,6 +60,7 @@ public:
 
     void setAlgorithm(bool isMin)
     {
+        m_isMin = isMin;
         if (isMin)
             m_algo = std::bind(&MinMaxCapacityUnitExtractor::getMin, this, std::placeholders::_1);
         
@@ -66,7 +73,18 @@ public:
         m_capacityIndex = capacityIndex;
     }
 
+    std::string getCode() const
+    {
+        std::string code(m_isMin ? "L" : "H");
+
+        code += std::to_string(m_capacityIndex);
+        code += m_setGetter->getCode();
+
+        return code;
+    }
+
 protected:
+    bool m_isMin;
     unsigned int m_capacityIndex;
     SetExtractorUPtr m_setGetter;
 
@@ -121,6 +139,16 @@ public:
             (*m_setExtractor)(unit, allies, opponent),
             (*m_pointExtractor)(unit, allies, opponent)
             );
+    }
+
+    std::string getCode() const
+    {
+        std::string code(m_isFar ? "HD" : "LD");
+
+        code += m_setExtractor->getCode();
+        code += m_pointExtractor->getCode();
+
+        return code;
     }
 
 protected:

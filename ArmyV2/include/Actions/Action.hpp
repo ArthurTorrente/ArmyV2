@@ -1,8 +1,11 @@
 #ifndef _ACTION_HPP_
 #define _ACTION_HPP_
 
+#include "IACodeGetter.hpp"
+
 //Interface representing action returned by AI
-class Action {
+class Action
+{
 public:
     //Run the action
     //Log parameter indicate if we write something or not on the standard output

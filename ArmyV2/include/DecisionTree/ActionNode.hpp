@@ -6,6 +6,7 @@
 #pragma warning(pop)
 
 #include "INode.hpp"
+#include "IACodeCollection.hpp"
 
 template<typename OUT, typename EXTRACTOR>
 class ActionNode : public INode
@@ -29,6 +30,16 @@ public:
         m_extractor = std::move(ex);
     }
 
+    std::string getCode() const
+    {
+        std::string code("!");
+
+        code += IACodeCollection[typeid(OUT)];
+        code += m_extractor->getCode();
+
+        return code;
+    }
+
 protected:
     EXTRACTOR m_extractor;
 };
@@ -49,6 +60,14 @@ public:
         action = new OUT(unit);
 
         return std::unique_ptr<Action>(action);
+    }
+
+    std::string getCode() const
+    {
+        std::string code("!");
+
+        code += IACodeCollection[typeid(OUT)];
+        return code;
     }
 };
 

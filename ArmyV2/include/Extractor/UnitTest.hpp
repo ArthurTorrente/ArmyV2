@@ -22,7 +22,7 @@ bool unitTest_predefineValueExtractor()
 
     PreDefineValueExtractor e(predefine);
 
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(10, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front());
 
     auto result = e(u, a, b);
@@ -35,7 +35,7 @@ bool unitTest_predefineValueExtractor()
 
 bool unitTest_CapacityValueExtractor()
 {
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(10, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front());
 
     auto capacityValue = u->getCapacity(0)->getValue();
@@ -52,7 +52,7 @@ bool unitTest_CapacityValueExtractor()
 
 bool unitTest_DistanceExtractor()
 {
-    ArmyPtr a(new Army(10, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(10, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front());
 
     Point ori(0.0f, 0.0f), uP(10.0f, 10.0f);
@@ -74,7 +74,7 @@ bool unitTest_DistanceExtractor()
 
 bool unitTest_MinMaxAverageCapacityValueExtracteur()
 {
-    ArmyPtr a(new Army(3, 0)), b(new Army(10, 0));
+    ArmySPtr a(new Army(3, 0)), b(new Army(10, 0));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     u3->getCapacity(0)->upgrade(5);
@@ -117,7 +117,7 @@ bool unitTest_MinMaxAverageCapacityValueExtracteur()
 
 bool unitTest_MinMaxAverageDistanceValueExtractor()
 {
-    ArmyPtr a(new Army(3, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(3, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), u2P(2.0f, 2.0f), u3P(3.0f, 3.0f);
@@ -187,7 +187,7 @@ bool unitTest_ValueExtractor()
  *  ===================================================================================================== */
 bool unitTest_BaryCenterExtractor()
 {
-    ArmyPtr a(new Army(3, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(3, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
@@ -208,7 +208,7 @@ bool unitTest_BaryCenterExtractor()
 
 bool unitTest_UnitPositionExtractor()
 {
-    ArmyPtr a(new Army(3, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(3, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
@@ -244,7 +244,7 @@ bool unitTest_PointExtractor()
 
 bool unitTest_IAUnitExtractor()
 {
-    ArmyPtr a(new Army(3, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(3, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front());
 
     IAUnitExtractor iaE;
@@ -257,7 +257,7 @@ bool unitTest_IAUnitExtractor()
 
 bool unitTest_MinMaxCapacityExtractor()
 {
-    ArmyPtr a(new Army(3, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(3, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     SetExtractorUPtr set(new AlliesArmyExtractor);
@@ -282,7 +282,7 @@ bool unitTest_MinMaxCapacityExtractor()
 
 bool unitTest_FarNearExtractor()
 {
-    ArmyPtr a(new Army(3, 200)), b(new Army(10, 200));
+    ArmySPtr a(new Army(3, 200)), b(new Army(10, 200));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
@@ -330,7 +330,7 @@ bool unitTest_UnitExtractor()
 bool unitTest_AlliesArmyExtractor()
 {
     UnitSPtr u(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(20, 200));
+    ArmySPtr a(new Army(10, 200)), b(new Army(20, 200));
 
     AlliesArmyExtractor aE;
 
@@ -343,7 +343,7 @@ bool unitTest_AlliesArmyExtractor()
 bool unitTest_OpponentArmyExtractor()
 {
     UnitSPtr u(new Unit(0));
-    ArmyPtr a(new Army(10, 200)), b(new Army(20, 200));
+    ArmySPtr a(new Army(10, 200)), b(new Army(20, 200));
 
     OpponentArmyExtractor oE;
 
@@ -355,7 +355,7 @@ bool unitTest_OpponentArmyExtractor()
 
 bool unitTest_NMinMaxCapacityExtractor()
 {
-    ArmyPtr a(new Army(3, 0)), b(new Army(3, 0));
+    ArmySPtr a(new Army(3, 0)), b(new Army(3, 0));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     u->getCapacity(0)->upgrade(5);
@@ -383,7 +383,7 @@ bool unitTest_NMinMaxCapacityExtractor()
 
 bool unitTest_NFarNearExtractor()
 {
-    ArmyPtr a(new Army(3, 0)), b(new Army(3, 0));
+    ArmySPtr a(new Army(3, 0)), b(new Army(3, 0));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     Point ori(0.0f, 0.0f), uP(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);
@@ -416,7 +416,7 @@ bool unitTest_NFarNearExtractor()
 
 bool unitTest_ThresholdCapacityExtractor()
 {
-    ArmyPtr a(new Army(3, 0)), b(new Army(3, 0));
+    ArmySPtr a(new Army(3, 0)), b(new Army(3, 0));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     SetExtractorUPtr set(new AlliesArmyExtractor);
@@ -445,7 +445,7 @@ bool unitTest_ThresholdCapacityExtractor()
 
 bool unitTest_ThresholdDistanceExtractor()
 {
-    ArmyPtr a(new Army(3, 0)), b(new Army(3, 0));
+    ArmySPtr a(new Army(3, 0)), b(new Army(3, 0));
     UnitSPtr u(a->getUnitsList().front()), u2(a->getUnitsList()[1]), u3(a->getUnitsList()[2]);
 
     Point ori, uP1(1.0f, 1.0f), uP2(2.0f, 2.0f), uP3(3.0f, 3.0f);

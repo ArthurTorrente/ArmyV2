@@ -9,7 +9,7 @@ DecisionNode::DecisionNode(std::unique_ptr<INode>& left, std::unique_ptr<INode>&
     m_comparatorCode(comparatorCode)
 {}
 
-std::unique_ptr<Action> DecisionNode::getValue(const UnitSPtr& unit, const ArmyPtr& a, const ArmyPtr& b)
+std::unique_ptr<Action> DecisionNode::getValue(const UnitSPtr& unit, const ArmySPtr& a, const ArmySPtr& b)
 {
     if (m_comparator((*m_leftExtractor)(unit, a, b), (*m_rightExtractor)(unit, a, b)))
         return m_left->getValue(unit, a, b);

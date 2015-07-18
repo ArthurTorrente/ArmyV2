@@ -23,7 +23,7 @@ public:
         m_getter(std::move(extractor))
     {}
 
-    Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    Point operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         const UnitVector& set((*m_getter)(unit, allies, opponent));
 
@@ -62,7 +62,7 @@ public:
         m_getter(std::move(extractor))
     {}
 
-    Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    Point operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         const UnitSPtr& u((*m_getter)(unit, allies, opponent));
         
@@ -92,7 +92,7 @@ public:
         m_p(p)
     {}
 
-    Point operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    Point operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         tools::unusedArg(unit, allies, opponent);
 

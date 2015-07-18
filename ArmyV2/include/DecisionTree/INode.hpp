@@ -7,14 +7,18 @@
 #pragma warning(pop)
 
 #include "Actions/Action.hpp"
-#include "Army.hpp"
-
 #include "IACodeGetter.hpp"
+
+class Army;
+class Unit;
+
+typedef std::shared_ptr<Army> ArmySPtr;
+typedef std::shared_ptr<Unit> UnitSPtr;
 
 class INode : public IACodeGetter
 {
 public:
-    virtual std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmyPtr& a, const ArmyPtr& b) = 0;
+    virtual std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmySPtr& a, const ArmySPtr& b) = 0;
 };
 
 typedef std::unique_ptr<INode> INodeUPtr;

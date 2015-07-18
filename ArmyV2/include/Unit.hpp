@@ -13,44 +13,17 @@
 #include <cmath>
 #pragma warning(pop)
 
-#include "Capacity/Capacity.hpp"
-#include "Capacity/SpeedCapacity.hpp"
-#include "Capacity/LifeCapacity.hpp"
-#include "Capacity/RegenCapacity.hpp"
-#include "Capacity/DamageCapacity.hpp"
-#include "Capacity/FirerateCapacity.hpp"
-#include "Capacity/RangeCapacity.hpp"
-#include "Capacity/ArmorCapacity.hpp"
+#include "Capacity/AllCapacity.hpp"
+#include "IA/TreeIA.hpp"
+
 #include "Point.hpp"
 
 #include "Tools.hpp"
 #include "Config.hpp"
 
 //Class representing a unit, i.e. element of an army
-class Unit {
-
-private:
-
-    //static counter used for unique id creation
-    static int idCount_;
-
-    //unique id of the Unit
-    int id_;
-
-    //code representing the AI used by the unit
-    std::string iaCode_;
-
-    //vector of the unit's capacities
-    //order is : speed, life, armor, regen, damage, range, firerate
-    std::vector<std::unique_ptr<Capacity> > capacities_;
-
-    //position of the unit
-    Point position_;
-
-
-    //Method in charge of the initialization of id, position(random), and capacities
-    void init_();
-
+class Unit
+{
 public:
 
     //Constructor : global level will be randomly dispatched among the capacities
@@ -182,7 +155,7 @@ public:
     //Return true if the unit have still life, false otherwise.
     bool isAlive()const
     {
-        return const_cast< Unit * const>(this)->getLife().isAlive();
+        return const_cast<Unit * const>(this)->getLife().isAlive();
     }
 
     //Provide a randomly mutated version of the current unit
@@ -208,14 +181,36 @@ public:
     {
         return !((*this) == u);
     }
+
+private:
+    //static counter used for unique id creation
+    static int idCount_;
+
+    //unique id of the Unit
+    int id_;
+
+    //code representing the AI used by the unit
+    std::string iaCode_;
+
+    //vector of the unit's capacities
+    //order is : speed, life, armor, regen, damage, range, firerate
+    std::vector<std::unique_ptr<Capacity> > capacities_;
+
+    //position of the unit
+    Point position_;
+
+    //Method in charge of the initialization of id, position(random), and capacities
+    void init_();
+
+    TreeIa m_ia;
 };
 
 //Shift operator overloading, printing the unit in the output stream.
 inline std::ostream& operator<<(std::ostream& out, const Unit& unit)
 {
-    out<<"Unit#"<<unit.getId()<<"["<<unit.getIACode();
-    for(int i = 0; i < 7; i++)out<<"; "<<(unit).getCapacity(i)->getLevel();
-    out<<"]";
+    out << "Unit#" << unit.getId() << "[" << unit.getIACode();
+    for (int i = 0; i < 7; i++)out << "; " << (unit).getCapacity(i)->getLevel();
+    out << "]";
     return out;
 }
 

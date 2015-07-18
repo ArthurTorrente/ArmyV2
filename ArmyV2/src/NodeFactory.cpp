@@ -15,7 +15,7 @@ namespace Factory
             static char validComparator[] = {
                 '>', '<', '=', '!'
             };
-
+            
             auto compFound = std::find(validComparator, validComparator + 3, comparator);
 
             if (compFound == validComparator + 4)

@@ -7,6 +7,11 @@ namespace Factory
 {
     TreeIa treeFromCode(const std::string& code);
     std::string codeFromTree(const std::unique_ptr<TreeIa>& tree);
+    
+    /**
+     * Make a random ia
+     */
+    TreeIa randomIa();
 }
 
 #endif //_FACTORY_H_

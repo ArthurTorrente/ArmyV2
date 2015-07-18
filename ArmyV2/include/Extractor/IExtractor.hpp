@@ -19,7 +19,7 @@ class Extractor : public IACodeGetter
 {
 public:
     /* Return value of Filter */
-    virtual OUT operator()(const UnitSPtr&, const ArmyPtr&, const ArmyPtr&) = 0;
+    virtual OUT operator()(const UnitSPtr&, const ArmySPtr&, const ArmySPtr&) = 0;
 };
 
 /**

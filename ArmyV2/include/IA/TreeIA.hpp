@@ -8,7 +8,6 @@
 
 #include "Actions/Action.hpp"
 #include "DecisionTree/INode.hpp"
-#include "Army.hpp"
 
 class TreeIa
 {
@@ -16,7 +15,7 @@ public:
     /**
      * Assign iaCode and root node to the new instance of TreeIA
      */
-    TreeIa(INodeUPtr& root);
+    TreeIa(INodeUPtr& root = INodeUPtr(nullptr));
 
     /**
      * Move constructor of TreeIa
@@ -24,9 +23,16 @@ public:
     TreeIa(TreeIa&&);
 
     /**
+     * Operator =
+     * Get the root node of TreeIa parameter and release the internal node if TreeIa has one
+     */
+    TreeIa& operator=(TreeIa&&);
+
+
+    /**
      * Return the action computed by the decision tree
      */
-    std::unique_ptr<Action> operator()(const UnitSPtr&, const ArmyPtr&, const ArmyPtr&);
+    std::unique_ptr<Action> operator()(const UnitSPtr&, const ArmySPtr&, const ArmySPtr&);
 
     /**
      * Getter of IACode

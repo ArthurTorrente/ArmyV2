@@ -11,7 +11,7 @@
 //usefull for storing and sorting the armies
 struct ArmyWrapper {
     int score;
-    ArmyPtr army;
+    ArmySPtr army;
     ArmyWrapper(Army* army_ptr):score(0),army(army_ptr) {}
 
     bool operator<(const ArmyWrapper& aw)const

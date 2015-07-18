@@ -108,6 +108,7 @@ inline std::ostream& operator<<(std::ostream& out, const Army& army)
     return out;
 }
 
-typedef std::shared_ptr<Army> ArmyPtr;
-typedef std::vector<ArmyPtr> ArmyVector;
+typedef std::shared_ptr<Army> ArmySPtr;
+typedef std::unique_ptr<Army> ArmyUPtr;
+typedef std::vector<ArmySPtr> ArmyVector;
 #endif

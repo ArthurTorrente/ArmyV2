@@ -34,6 +34,7 @@
     <ClInclude Include="include\Actions\ShootAction.hpp" />
     <ClInclude Include="include\Army.hpp" />
     <ClInclude Include="include\battle.hpp" />
+    <ClInclude Include="include\Capacity\AllCapacity.hpp" />
     <ClInclude Include="include\Capacity\ArmorCapacity.hpp" />
     <ClInclude Include="include\Capacity\Capacity.hpp" />
     <ClInclude Include="include\Capacity\DamageCapacity.hpp" />
@@ -107,6 +108,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,6 +122,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

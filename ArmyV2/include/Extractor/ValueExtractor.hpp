@@ -22,7 +22,7 @@ public:
         m_value(value)
     {}
 
-    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         tools::unusedArg(unit, allies, opponent);
 
@@ -57,7 +57,7 @@ public:
         m_unitExtractor(std::move(uex))
     {}
 
-    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         const UnitSPtr& u = (*m_unitExtractor)(unit, allies, opponent);
 
@@ -101,7 +101,7 @@ public:
         m_unitExtractor(std::move(uex))
     {}
 
-    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         const Point& point = (*m_pointExtractor)(unit, allies, opponent);
         const UnitSPtr& u = (*m_unitExtractor)(unit, allies, opponent);
@@ -153,7 +153,7 @@ public:
             m_algo = std::bind(&MinMaxAverageCapacityValueExtractor::getAverageValue, this, std::placeholders::_1);
     }
 
-    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent));
     }
@@ -268,7 +268,7 @@ public:
         }
     }
 
-    float operator()(const UnitSPtr& unit, const ArmyPtr& allies, const ArmyPtr& opponent)
+    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
     {
         return m_algo(
             (*m_setExtractor)(unit, allies, opponent),

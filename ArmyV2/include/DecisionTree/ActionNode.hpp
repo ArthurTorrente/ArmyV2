@@ -16,7 +16,7 @@ public:
         : m_extractor(std::move(ex))
     {}
 
-    std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmyPtr& a, const ArmyPtr& b)
+    std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmySPtr& a, const ArmySPtr& b)
     {
         OUT* action;
 
@@ -51,7 +51,7 @@ public:
     ActionNodeWithOutExtractor()
     {}
 
-    std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmyPtr& a, const ArmyPtr& b)
+    std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmySPtr& a, const ArmySPtr& b)
     {
         tools::unusedArg(a, b);
 

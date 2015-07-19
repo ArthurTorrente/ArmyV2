@@ -26,9 +26,9 @@ namespace Factory
         }
     }
 
-    std::string codeFromTree(const std::unique_ptr<TreeIa>& tree)
+    std::string codeFromTree(const TreeIa& tree)
     {
-        return tree->getIaCode();
+        return tree.getIaCode();
     }
 
     static void makeFloatExtractor(std::stringstream& ss);
@@ -39,7 +39,7 @@ namespace Factory
 
     static void makeFloatExtractor(std::stringstream& ss)
     {
-        int exChoose = rand() % 7;
+        int exChoose = rand() % 6;
         
         switch (exChoose)
         {
@@ -113,10 +113,11 @@ namespace Factory
             }
             break;
 
-        case 6:
+        case 5:
         {
             ss << "V";
-            float randomValue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            float randomValue = tools::randomFloat();
+            ss << std::setprecision(4) << std::fixed;
             ss << randomValue;
             break;
         }
@@ -214,42 +215,70 @@ namespace Factory
             if (rand() % 2)
             {
                 ss << "L";
-
-                if (rand() % 2)
-                {
-                    ss << "D";
-                }
-                else
-                {
-                    ss << static_cast<unsigned int>(rand() % 7);
-                }
             }
             else
             {
                 ss << "H";
+            }
 
-                if (rand() % 2)
-                {
-                    ss << "D";
-                }
-                else
-                {
-                    ss << static_cast<unsigned int>(rand() % 7);
-                }
+            bool isDist = rand() % 2 == 0;
+
+            if (isDist)
+            {
+                ss << "D";
+            }
+            else
+            {
+                ss << static_cast<unsigned int>(rand() % 7);
             }
 
             ss << static_cast<unsigned int>(rand());
             makeSetExtractor(ss);
+
+            if (isDist)
+                makePointExtractor(ss);
+
         }
             break;
 
         case 3:
+        {
             ss << "T";
+
+            if (rand() % 2)
+            {
+                ss << "H";
+            }
+            else
+            {
+                ss << "L";
+            }
+
+            bool isDist = rand() % 2 == 0;
+
+            if (isDist)
+            {
+                ss << "D";
+            }
+            else
+            {
+                ss << static_cast<unsigned int>(rand() % 7);
+            }
+           
+            float randomValue = tools::randomFloat();
+            ss << std::setprecision(4) << std::fixed;
+            ss << randomValue;
+
+            makeSetExtractor(ss);
+
+            if (isDist)
+                makePointExtractor(ss);
+        }
             break;
         }
     }
 
-    static void makeActionNode(std::stringstream& ss)
+    void makeActionNode(std::stringstream& ss)
     {
         /*
         typeid(EmptyAction), std::string("N")
@@ -258,33 +287,25 @@ namespace Factory
         typeid(ShootAction), std::string("A") 
         */
         
-        int choose = rand() % IACodeCollection.size();
-        auto it = IACodeCollection.begin();
-
-        while (choose)
-        {
-            it = ++it;
-        }
-
-        auto& sChoose(it->second);
+        int choose = static_cast<unsigned int>(rand()) % 100;
 
         ss << "!";
 
-        if (sChoose == "N")
+        if (choose < 10)
         {
             ss << "N";
         }
-        else if (sChoose == "M")
+        else if (choose < 40)
         {
             ss << "M";
             makePointExtractor(ss);
         }
-        else if (sChoose == "E")
+        else if (choose < 70)
         {
             ss << "E";
             makePointExtractor(ss);
         }
-        else if (sChoose == "A")
+        else
         {
             ss << "A";
             makeUnitExtractor(ss);
@@ -302,7 +323,7 @@ namespace Factory
         ss << validComparator[comparatorChoos];
     }
 
-    static void makeDecisionNode(std::stringstream& ss)
+    void makeDecisionNode(std::stringstream& ss)
     {
         /**
         * Make a decision
@@ -310,6 +331,8 @@ namespace Factory
         * rand for leftNode
         * rand for rightNode
         */
+        
+        ss << "?";
 
         makeFloatExtractor(ss);
         makeComparator(ss);
@@ -317,24 +340,56 @@ namespace Factory
 
         for (unsigned int i = 0; i < 2; ++i)
         {
-            if (rand() % 2)
-                makeDecisionNode(ss);
-            else
+            unsigned int randomRatio = static_cast<unsigned int>(rand()) % 10;
+
+            if (randomRatio <= 8)
                 makeActionNode(ss);
+            else
+                makeDecisionNode(ss);
         }
     }
 
     TreeIa randomIa()
     {
-        std::string randomIa;
-        std::stringstream ssRandom(randomIa);
+        std::stringstream ssRandom;
 
-        if (rand() % 2)
-            makeDecisionNode(ssRandom);
-        else
+        auto config = Config::getInstance();
+
+        unsigned int randomRatio = static_cast<unsigned int>(rand()) % config->getMaxNodeRatio();
+        
+        if (randomRatio <= config->getChooseNodeRatio())
             makeActionNode(ssRandom);
+        else
+            makeDecisionNode(ssRandom);
 
+        std::string randomIa(ssRandom.str());
 
         return treeFromCode(randomIa);
+    }
+
+    std::string::iterator getBranch(std::string::iterator& startBranch, const std::string::iterator& endOfString)
+    {
+        if (*startBranch != '?')
+            return endOfString;
+
+        int cpt = 0;
+
+        while (startBranch != endOfString)
+        {
+            ++startBranch;
+
+            if (*startBranch == '?')
+                --cpt;
+
+            else if (*startBranch == '!')
+            {
+                ++cpt;
+
+                if (cpt == 0)
+                    return startBranch + 1;
+            }
+        }
+
+        return endOfString;
     }
 }

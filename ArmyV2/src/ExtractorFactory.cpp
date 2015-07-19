@@ -136,7 +136,8 @@ namespace Factory
             case 'V':
             {
                 float second;
-
+                
+                code << std::setprecision(4) << std::fixed;
                 code >> second;
 
                 return FloatExtractorUPtr(
@@ -322,6 +323,8 @@ namespace Factory
 
                 code.get(comp);
                 code.get(second);
+                
+                code << std::setprecision(4) << std::fixed;
                 code >> threshold;
 
                 auto sex = getSetExtractor(code);

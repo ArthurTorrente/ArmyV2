@@ -19,15 +19,15 @@ class Extractor : public IACodeGetter
 {
 public:
     /* Return value of Filter */
-    virtual OUT operator()(const UnitSPtr&, const ArmySPtr&, const ArmySPtr&) = 0;
+    virtual OUT operator()(Unit&, Army&, Army&) = 0;
 };
 
 /**
  * Declare all possible type of Extractor with typedef
  */
 typedef Extractor<float> FloatExtractor;
-typedef Extractor<UnitSPtr> UnitExtractor;
-typedef Extractor<UnitVector> SetExtractor;
+typedef Extractor<Unit&> UnitExtractor;
+typedef Extractor<UnitSPtrVector> SetExtractor;
 typedef Extractor<Point> PointExtractor;
 
 

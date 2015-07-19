@@ -5,6 +5,7 @@
 #include <numeric>
 #include <algorithm>
 #include <functional>
+#include <sstream>
 #pragma warning(pop)
 
 #include "IExtractor.hpp"
@@ -21,11 +22,11 @@ public:
         : SetExtractor()
     {}
 
-    UnitVector operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    UnitSPtrVector operator()(Unit& unit, Army& allies, Army& opponent)
     {
         tools::unusedArg(unit, opponent);
 
-        return allies->getUnitsList();
+        return allies.getUnitsList();
     }
 
     std::string getCode() const
@@ -45,11 +46,11 @@ public:
         : SetExtractor()
     {}
 
-    UnitVector operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    UnitSPtrVector operator()(Unit& unit, Army& allies, Army& opponent)
     {
         tools::unusedArg(unit, allies);
 
-        return opponent->getUnitsList();
+        return opponent.getUnitsList();
     }
 
     std::string getCode() const
@@ -86,7 +87,7 @@ public:
             m_algo = std::bind(&NMinMaxCapacityExtractor::getMin, this, std::placeholders::_1);
     }
 
-    UnitVector operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    UnitSPtrVector operator()(Unit& unit, Army& allies, Army& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent));
     }
@@ -140,13 +141,13 @@ protected:
     unsigned int m_capacityIndex;
     
     SetExtractorSPtr m_setExtractor;
-    std::function<UnitVector(UnitVector)> m_algo;
+    std::function<UnitSPtrVector(UnitSPtrVector)> m_algo;
     
 
-    UnitVector getMin(UnitVector set)
+    UnitSPtrVector getMin(UnitSPtrVector set)
     {
         if (set.size() == 0 || set.size() < m_n)
-            return UnitVector(set);
+            return set;
 
         /* nth is for not sorting all the vector */
         std::nth_element(set.begin(), set.begin() + m_n, set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
@@ -159,7 +160,7 @@ protected:
         return set;
     }
 
-    UnitVector getMax(UnitVector set)
+    UnitSPtrVector getMax(UnitSPtrVector set)
     {
         if (set.size() == 0 || set.size() < m_n)
             return set;
@@ -200,7 +201,7 @@ public:
         }
     }
 
-    UnitVector operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    UnitSPtrVector operator()(Unit& unit, Army& allies, Army& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent), (*m_pointExtractor)(unit, allies, opponent));
     }
@@ -247,9 +248,9 @@ protected:
     SetExtractorUPtr m_setExtractor;
     PointExtractorUPtr m_pointExtractor;
 
-    std::function<UnitVector(UnitVector, const Point&)> m_algo;
+    std::function<UnitSPtrVector(UnitSPtrVector, const Point&)> m_algo;
 
-    UnitVector getFar(UnitVector set, const Point& p)
+    UnitSPtrVector getFar(UnitSPtrVector set, const Point& p)
     {
         if (set.size() == 0 || set.size() < m_n)
             return set;
@@ -265,7 +266,7 @@ protected:
         return set;
     }
 
-    UnitVector getNear(UnitVector set, const Point& p)
+    UnitSPtrVector getNear(UnitSPtrVector set, const Point& p)
     {
 
         if (set.size() == 0 || set.size() < m_n)
@@ -307,7 +308,7 @@ public:
         }
     }
 
-    UnitVector operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    UnitSPtrVector operator()(Unit& unit, Army& allies, Army& opponent)
     {
         
         return m_algo((*m_setExtractor)(unit, allies, opponent));
@@ -349,14 +350,16 @@ public:
 
     std::string getCode() const
     {
-        std::string code("T");
+        std::stringstream ss;
 
-        code += (m_isMin ? "L" : "H");
-        code += std::to_string(m_capacityIndex);
-        code += std::to_string(m_threshold);
-        code += m_setExtractor->getCode();
+        ss << "T";
+        ss << (m_isMin ? "L" : "H");
+        ss << m_capacityIndex;
+        ss << std::setprecision(4) << std::fixed;
+        ss << m_threshold;
+        ss << m_setExtractor->getCode();
 
-        return code;
+        return ss.str();
     }
 
 protected:
@@ -365,9 +368,9 @@ protected:
     unsigned int m_capacityIndex;
     SetExtractorUPtr m_setExtractor;
 
-    std::function<UnitVector(UnitVector)> m_algo;
+    std::function<UnitSPtrVector(UnitSPtrVector)> m_algo;
 
-    UnitVector getMin(UnitVector set)
+    UnitSPtrVector getMin(UnitSPtrVector set)
     {
         if (set.size() == 0)
             return set;
@@ -381,7 +384,7 @@ protected:
         return set;
     }
 
-    UnitVector getMax(UnitVector set)
+    UnitSPtrVector getMax(UnitSPtrVector set)
     {
         if (set.size() == 0)
             return set;
@@ -420,7 +423,7 @@ public:
         }
     }
 
-    UnitVector operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    UnitSPtrVector operator()(Unit& unit, Army& allies, Army& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent), (*m_pointExtractor)(unit, allies, opponent));
     }
@@ -450,14 +453,17 @@ public:
 
     std::string getCode() const
     {
-        std::string code("T");
 
-        code += (m_isMin ? "LD" : "HD");
-        code += std::to_string(m_threshold);
-        code += m_setExtractor->getCode();
-        code += m_pointExtractor->getCode();
+        std::stringstream ss;
 
-        return code;
+        ss << "T";
+        ss << (m_isMin ? "LD" : "HD");
+        ss << std::setprecision(4) << std::fixed;
+        ss << m_threshold;
+        ss << m_setExtractor->getCode();
+        ss << m_pointExtractor->getCode();
+
+        return ss.str();
     }
 
 protected:
@@ -467,9 +473,9 @@ protected:
     SetExtractorUPtr m_setExtractor;
     PointExtractorUPtr m_pointExtractor;
 
-    std::function<UnitVector(UnitVector, const Point&)> m_algo;
+    std::function<UnitSPtrVector(UnitSPtrVector, const Point&)> m_algo;
 
-    UnitVector getNear(UnitVector set, const Point& p)
+    UnitSPtrVector getNear(UnitSPtrVector set, const Point& p)
     {
         if (set.size() == 0)
             return set;
@@ -483,7 +489,7 @@ protected:
         return set;
     }
 
-    UnitVector getFar(UnitVector set, const Point& p)
+    UnitSPtrVector getFar(UnitSPtrVector set, const Point& p)
     {
         if (set.size() == 0)
             return set;

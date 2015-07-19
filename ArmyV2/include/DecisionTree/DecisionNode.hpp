@@ -17,7 +17,7 @@ class DecisionNode : public INode
 public:
     DecisionNode(std::unique_ptr<INode>& left, std::unique_ptr<INode>& right, std::function<bool(float, float)> comparator, FloatExtractorUPtr& leftEx, FloatExtractorUPtr& rightEx, const std::string& comparatorCode);
     
-    std::unique_ptr<Action> getValue(const UnitSPtr& unit, const ArmySPtr& a, const ArmySPtr& b);
+    std::unique_ptr<Action> getValue(Unit& unit, Army& a, Army& b);
 
     std::string getCode() const;
 

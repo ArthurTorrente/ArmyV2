@@ -4,15 +4,22 @@
 #include "Factory.hpp"
 #include "FactoryException.hpp"
 
-bool unitTest_Factory()
+bool codeToTree()
 {
     std::string code(
         "?C1LDOPU<C4U!ALDOPU?aDOPU<a5O!EBO!N"
         );
 
-    std::string predefineValue(
-        "?V10.000000=V11.000000!AU!N"
-        );
+    std::stringstream ss;
+
+    ss << std::setprecision(4) << std::fixed;
+    ss << "?V";
+    ss << 10.0f;
+    ss << "=V";
+    ss << 11.0f;
+    ss << "!AU!N";
+
+    std::string predefineValue(ss.str());
 
     std::string errorNodeCode(
         "VNTREZ"
@@ -28,7 +35,7 @@ bool unitTest_Factory()
 
         std::string treeCode(tree.getIaCode());
 
-        if ( treeCode != code)
+        if (treeCode != code)
         {
             std::cout << "IACode is different !!" << std::endl;
             return false;
@@ -60,7 +67,7 @@ bool unitTest_Factory()
     try
     {
         auto tree = Factory::treeFromCode(errorNodeCode);
-        
+
         std::cout << "No error found in error node code" << std::endl;
 
         return false;
@@ -84,6 +91,27 @@ bool unitTest_Factory()
     }
 
     return true;
+}
+
+bool randomIa()
+{
+    try
+    {
+        auto tree = Factory::randomIa();
+
+        auto randomIaCode = Factory::codeFromTree(tree);
+    }
+    catch (Factory::FactoryException& fe)
+    {
+        std::cout << fe.what() << std::endl;
+    }
+
+    return true;
+}
+
+bool unitTest_Factory()
+{
+    return codeToTree() && randomIa();
 }
 
 #endif //_UNITTESTFACTORY_H_

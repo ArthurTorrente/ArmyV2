@@ -13,7 +13,7 @@
 class IAUnitExtractor : public UnitExtractor
 {
 public:
-    UnitSPtr operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    Unit& operator()(Unit& unit, Army& allies, Army& opponent)
     {
         tools::unusedArg(allies, opponent);
 
@@ -46,7 +46,7 @@ public:
             m_algo = std::bind(&MinMaxCapacityUnitExtractor::getMax, this, std::placeholders::_1);
     }
 
-    UnitSPtr operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    Unit& operator()(Unit& unit, Army& allies, Army& opponent)
     {
         return m_algo(
             (*m_setGetter)(unit, allies, opponent)
@@ -88,25 +88,25 @@ protected:
     unsigned int m_capacityIndex;
     SetExtractorUPtr m_setGetter;
 
-    std::function<UnitSPtr(const UnitVector&)> m_algo;
+    std::function<Unit&(const UnitSPtrVector&)> m_algo;
 
-    UnitSPtr getMin(const UnitVector& set)
+    Unit& getMin(const UnitSPtrVector& set)
     {
         if (set.size() == 0)
-            return UnitSPtr(nullptr);
+            throw std::invalid_argument("Unit not found");
 
-        return *std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
+        return **std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getCapacity(m_capacityIndex)->getValue() < b->getCapacity(m_capacityIndex)->getValue();
         });
     }
 
-    UnitSPtr getMax(const UnitVector& set)
+    Unit& getMax(const UnitSPtrVector& set)
     {
         if (set.size() == 0)
-            return UnitSPtr(nullptr);
+            throw std::invalid_argument("Unit not found");
 
-        return *std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
+        return **std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getCapacity(m_capacityIndex)->getValue() < b->getCapacity(m_capacityIndex)->getValue();
         });
@@ -133,7 +133,7 @@ public:
             m_algo = std::bind(&FarNearExtractor::getNear, this, std::placeholders::_1, std::placeholders::_2);
     }
 
-    UnitSPtr operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    Unit& operator()(Unit& unit, Army& allies, Army& opponent)
     {
         return m_algo(
             (*m_setExtractor)(unit, allies, opponent),
@@ -156,25 +156,25 @@ protected:
     SetExtractorUPtr m_setExtractor;
     PointExtractorUPtr m_pointExtractor;
 
-    std::function<UnitSPtr(const UnitVector&, const Point&)> m_algo;
+    std::function<Unit&(const UnitSPtrVector&, const Point&)> m_algo;
 
-    UnitSPtr getFar(const UnitVector& set, const Point& p)
+    Unit& getFar(const UnitSPtrVector& set, const Point& p)
     {
         if (set.size() == 0)
-            return UnitSPtr(nullptr);
+            throw std::invalid_argument("Unit not found");
 
-        return *std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
+        return **std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getPosition().distance(p) < b->getPosition().distance(p);
         });
     }
 
-    UnitSPtr getNear(const UnitVector& set, const Point& p)
+    Unit& getNear(const UnitSPtrVector& set, const Point& p)
     {
         if (set.size() == 0)
-            return UnitSPtr(nullptr);
+            throw std::invalid_argument("Unit not found");
 
-        return *std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
+        return **std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
             return a->getPosition().distance(p) < b->getPosition().distance(p);
         });

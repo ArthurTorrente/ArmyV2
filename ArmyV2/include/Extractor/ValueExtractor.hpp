@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#include <sstream>
 #pragma warning(pop)
 
 #include "IExtractor.hpp"
@@ -22,7 +23,7 @@ public:
         m_value(value)
     {}
 
-    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    float operator()(Unit& unit, Army& allies, Army& opponent)
     {
         tools::unusedArg(unit, allies, opponent);
 
@@ -41,7 +42,13 @@ public:
 
     std::string getCode() const
     {
-        return std::string("V") + std::to_string(m_value);
+        std::stringstream ss;
+
+        ss << "V";
+        ss << std::setprecision(4) << std::fixed;
+        ss << m_value;
+
+        return ss.str();
     }
 
 protected:
@@ -57,14 +64,11 @@ public:
         m_unitExtractor(std::move(uex))
     {}
 
-    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    float operator()(Unit& unit, Army& allies, Army& opponent)
     {
-        const UnitSPtr& u = (*m_unitExtractor)(unit, allies, opponent);
+        Unit& u = (*m_unitExtractor)(unit, allies, opponent);
 
-        if (u)
-            return u->getCapacity(m_capacityIndex)->getValue();
-
-        return 0.0f;
+        return u.getCapacity(m_capacityIndex)->getValue();
     }
 
     unsigned int getCapacityIndex() const
@@ -101,15 +105,12 @@ public:
         m_unitExtractor(std::move(uex))
     {}
 
-    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    float operator()(Unit& unit, Army& allies, Army& opponent)
     {
         const Point& point = (*m_pointExtractor)(unit, allies, opponent);
-        const UnitSPtr& u = (*m_unitExtractor)(unit, allies, opponent);
+        Unit& u = (*m_unitExtractor)(unit, allies, opponent);
 
-        if (u)
-            return u->getPosition().distance(point);
-
-        return 0.0f;
+        return u.getPosition().distance(point);
     }
 
     std::string getCode() const
@@ -153,7 +154,7 @@ public:
             m_algo = std::bind(&MinMaxAverageCapacityValueExtractor::getAverageValue, this, std::placeholders::_1);
     }
 
-    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    float operator()(Unit& unit, Army& allies, Army& opponent)
     {
         return m_algo((*m_setExtractor)(unit, allies, opponent));
     }
@@ -200,12 +201,12 @@ protected:
     unsigned int m_capacityIndex;
     SetExtractorUPtr m_setExtractor;
 
-    std::function<float(const UnitVector&)> m_algo;
+    std::function<float(const UnitSPtrVector&)> m_algo;
 
-    float getMinValue(const UnitVector& set)
+    float getMinValue(const UnitSPtrVector& set)
     {
         if (set.size() == 0)
-            return 0.0f;
+            throw std::invalid_argument("Unit vector is empty");
 
         return (*std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
@@ -213,10 +214,10 @@ protected:
         }))->getCapacity(m_capacityIndex)->getValue();
     }
 
-    float getMaxValue(const UnitVector& set)
+    float getMaxValue(const UnitSPtrVector& set)
     {
         if (set.size() == 0)
-            return 0.0f;
+            throw std::invalid_argument("Unit vector is empty");
 
         return (*std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
@@ -224,10 +225,10 @@ protected:
         }))->getCapacity(m_capacityIndex)->getValue();
     }
 
-    float getAverageValue(const UnitVector& set)
+    float getAverageValue(const UnitSPtrVector& set)
     {
         if (set.size() == 0)
-            return 0.0f;
+            throw std::invalid_argument("Unit vector is empty");
 
         return std::accumulate(set.begin(), set.end(), 0.0f, [&](const float& v, const UnitSPtr& unit)
         {
@@ -268,7 +269,7 @@ public:
         }
     }
 
-    float operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    float operator()(Unit& unit, Army& allies, Army& opponent)
     {
         return m_algo(
             (*m_setExtractor)(unit, allies, opponent),
@@ -313,12 +314,12 @@ protected:
     PointExtractorUPtr m_pointExtractor;
     SetExtractorUPtr m_setExtractor;
 
-    std::function<float(const UnitVector&, const Point&)> m_algo;
+    std::function<float(const UnitSPtrVector&, const Point&)> m_algo;
 
-    float getMinValue(const UnitVector& set, const Point& p)
+    float getMinValue(const UnitSPtrVector& set, const Point& p)
     {
         if (set.size() == 0)
-            return 0.0f;
+            throw std::invalid_argument("Unit vector is empty");
 
         return (*std::min_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
@@ -326,10 +327,10 @@ protected:
         }))->getPosition().distance(p);
     }
 
-    float getMaxValue(const UnitVector& set, const Point& p)
+    float getMaxValue(const UnitSPtrVector& set, const Point& p)
     {
         if (set.size() == 0)
-            return 0.0f;
+            throw std::invalid_argument("Unit vector is empty");
 
         return (*std::max_element(set.begin(), set.end(), [&](const UnitSPtr& a, const UnitSPtr& b)
         {
@@ -337,10 +338,10 @@ protected:
         }))->getPosition().distance(p);
     }
 
-    float getAverageValue(const UnitVector& set, const Point& p)
+    float getAverageValue(const UnitSPtrVector& set, const Point& p)
     {
         if (set.size() == 0)
-            return 0.0f;
+            throw std::invalid_argument("Unit vector is empty");
 
         return std::accumulate(set.begin(), set.end(), 0.0f, [&](const float& v, const UnitSPtr& unit)
         {

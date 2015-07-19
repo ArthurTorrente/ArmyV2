@@ -39,6 +39,8 @@ std::unique_ptr<Army> train(int iterations, int threshold, int populationSize, i
     if(!champions.empty())
         championsBonus =  1+(populationSize/champions.size());
 
+    auto config = Config::getInstance();
+
 
     //generation of the initial population
     armies.reserve(populationSize);
@@ -54,7 +56,7 @@ std::unique_ptr<Army> train(int iterations, int threshold, int populationSize, i
 
             for(auto itB = itA+1; itB != armies.end(); ++itB){
             	int sA, sB;
-            	fight(*(itA->army), *(itB->army), sA, sB);
+            	fight(*(itA->army), *(itB->army), sA, sB, config->log());
             	itA->score += sA;
             	itB->score += sB;
             }
@@ -77,7 +79,8 @@ std::unique_ptr<Army> train(int iterations, int threshold, int populationSize, i
         std::cout<<std::endl;
 
         //if an army reach the fixed threshold, we are done
-        if(armies[0].score>threshold)break;
+        if(armies[0].score>threshold)
+            break;
 
 
 

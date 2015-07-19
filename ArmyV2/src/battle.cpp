@@ -53,16 +53,31 @@ void fight(const Army& a, const Army& b, int& scoreA, int& scoreB, bool log)
         });
         std::random_shuffle(order.begin(), order.end());
 
-        for(auto it = order.begin(); it != order.end(); it++) {
-            try {
-                if(log)std::cout<<"Unit#"<<it->unitId<<" (Army "<<((it->army)==&A?"A":"B")<<") : ";
-                Unit& unit = it->army->getUnit(it->unitId);
-                std::unique_ptr<Action> action = ai(unit, *(it->army), *(it->opponents));
+        for(auto it = order.begin(); it != order.end(); it++)
+        {
+            try
+            {
+                if(log)
+                    std::cout<<"Unit#"<<it->unitId<<" (Army "<<((it->army)==&A?"A":"B")<<") : ";
+
+                //Unit& unit = it->army->getUnit(it->unitId);
+                auto unit = it->army->getUnit(it->unitId);
+                /**
+                 * Old version
+                 */
+                //std::unique_ptr<Action> action = ai(unit, *(it->army), *(it->opponents));
+                
+                /**
+                 * TreeIa version
+                 */
+                std::unique_ptr<Action> action = unit->getTree()(*unit, *(it->army), *(it->opponents));
+                
                 action->execute(log);
                 it->opponents->purge();
             } catch(std::invalid_argument e) {
 
                 //can happens if the unit is already dead or if an army is empty
+                std::cerr << "catch" << std::endl;
                 continue;
             }
         }

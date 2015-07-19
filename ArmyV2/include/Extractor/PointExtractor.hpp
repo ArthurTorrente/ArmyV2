@@ -23,17 +23,17 @@ public:
         m_getter(std::move(extractor))
     {}
 
-    Point operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    Point operator()(Unit& unit, Army& allies, Army& opponent)
     {
-        const UnitVector& set((*m_getter)(unit, allies, opponent));
+        const UnitSPtrVector& set((*m_getter)(unit, allies, opponent));
 
         if (set.size() == 0)
-            return Point(0.0f, 0.0f);
+            throw std::invalid_argument("Set is empty");
 
         else if (set.size() == 1)
             return set.front()->getPosition();
 
-        auto sum = std::accumulate(set.begin(), set.end(), Point(0.0f, 0.0f), [](const Point& p, const UnitSPtr& u)
+        auto sum = std::accumulate(set.begin(), set.end(), Point(0.0f, 0.0f), [](const Point& p, const UnitSPtr u)
         {
             return p + u->getPosition();
         });
@@ -62,14 +62,11 @@ public:
         m_getter(std::move(extractor))
     {}
 
-    Point operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    Point operator()(Unit& unit, Army& allies, Army& opponent)
     {
-        const UnitSPtr& u((*m_getter)(unit, allies, opponent));
+        Unit& u((*m_getter)(unit, allies, opponent));
         
-        if (u)
-            return u->getPosition();
-
-        return Point(0.0f, 0.0f);
+        return u.getPosition();
     }
 
     std::string getCode() const
@@ -92,7 +89,7 @@ public:
         m_p(p)
     {}
 
-    Point operator()(const UnitSPtr& unit, const ArmySPtr& allies, const ArmySPtr& opponent)
+    Point operator()(Unit& unit, Army& allies, Army& opponent)
     {
         tools::unusedArg(unit, allies, opponent);
 

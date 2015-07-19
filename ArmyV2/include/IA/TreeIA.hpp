@@ -13,9 +13,14 @@ class TreeIa
 {
 public:
     /**
+     * Default constructor
+     */
+    TreeIa();
+
+    /**
      * Assign iaCode and root node to the new instance of TreeIA
      */
-    TreeIa(INodeUPtr& root = INodeUPtr(nullptr));
+    TreeIa(INodeUPtr& root);
 
     /**
      * Move constructor of TreeIa
@@ -32,7 +37,17 @@ public:
     /**
      * Return the action computed by the decision tree
      */
-    std::unique_ptr<Action> operator()(const UnitSPtr&, const ArmySPtr&, const ArmySPtr&);
+    std::unique_ptr<Action> operator()(Unit&, Army&, Army&);
+
+    /**
+     * Mutation of TreeIa
+     */
+    std::string mutate() const;
+
+    /**
+     * Cross Over of two TreeIa
+     */
+    std::string operator*(const TreeIa&) const;
 
     /**
      * Getter of IACode
@@ -55,6 +70,8 @@ protected:
      * Root node of tree
      */
     INodeUPtr m_root;
+
+    TreeIa& operator=(const TreeIa&) = delete;
 };
 
 #endif //

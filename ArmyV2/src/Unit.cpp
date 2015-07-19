@@ -9,17 +9,18 @@
 #include "Tools.hpp"
 #include "Config.hpp"
 
+#include "Factory/Factory.hpp"
+
 //static counter used for unique id creation
 int Unit::idCount_=0;
 
 //Method in charge of the initialization of id, position(random), and capacities
 void Unit::init_()
 {
-
     id_ = idCount_++;
     this->position_ = Point(static_cast<float>(std::rand()%100),static_cast<float>(std::rand()%100));
 
-    auto config = Config::getInsance();
+    auto config = Config::getInstance();
 
     position_.setX(
         tools::clamp<float>(0, static_cast<float>(config->getWidth()), position_.getX())
@@ -79,9 +80,21 @@ Unit::Unit(std::string iaCode, std::vector<int>& levels)
     }
 }
 
+Unit::Unit(std::string iaCode, std::vector<int>& levels, TreeIa& ia)
+{
+    init_();
+    this->iaCode_ = iaCode;
+    for (unsigned int i = 0; i < levels.size() && i < capacities_.size(); ++i) {
+        capacities_[i]->upgrade(levels[i]);
+    }
+
+    m_ia = std::move(ia);
+}
+
 
 //Copy constructor
 Unit::Unit(const Unit& unit)
+    :m_ia(Factory::treeFromCode(Factory::codeFromTree(unit.m_ia)))
 {
     init_();
     this->iaCode_ = unit.iaCode_;
@@ -98,6 +111,7 @@ void Unit::swap(Unit& unit)
     std::swap(iaCode_, unit.iaCode_);
     std::swap(position_, unit.position_);
     std::swap(id_, unit.id_);
+    std::swap(m_ia, unit.m_ia);
 }
 
 
@@ -153,18 +167,27 @@ Unit Unit::mutate()const
 {
     int index = std::rand()%7;
     std::vector<int> levels(7);
-    for(int i = 0; i < 7; ++i) {
+
+    for(int i = 0; i < 7; ++i)
+    {
         levels[i] = capacities_[i]->getLevel();
     }
-    while(levels[index]==0) {
+
+    while(levels[index]==0)
+    {
         index = std::rand()%7;
     }
+
     int index2 = std::rand()%7;
-    while(index == index2) {
+    
+    while(index == index2)
+    {
         index2 = std::rand()%7;
     }
+
     levels[index]--;
     levels[index2]++;
+
     return Unit(iaCode_,levels);
 }
 

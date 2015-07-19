@@ -35,6 +35,9 @@ public:
     //Constructor from the code of AI and the level of the 7 capacities
     Unit(std::string iaCode, std::vector<int>& levels);
 
+    //Constructor from the code of AI and the level of the 7 capacities
+    Unit(std::string iaCode, std::vector<int>& levels, TreeIa& ia);
+
     //Copy constructor
     Unit(const Unit& unit);
 
@@ -129,11 +132,11 @@ public:
         position_.moveTo(position, getSpeed().getValue());
 
         position_.setX(
-            tools::clamp<float>(0, static_cast<float>(Config::getInsance()->getWidth()), position.getX())
+            tools::clamp<float>(0, static_cast<float>(Config::getInstance()->getWidth()), position.getX())
             );
 
         position_.setY(
-            tools::clamp<float>(0, static_cast<float>(Config::getInsance()->getHeight()), position.getY())
+            tools::clamp<float>(0, static_cast<float>(Config::getInstance()->getHeight()), position.getY())
             );
     }
 
@@ -182,6 +185,11 @@ public:
         return !((*this) == u);
     }
 
+    TreeIa& getTree()
+    {
+        return m_ia;
+    }
+
 private:
     //static counter used for unique id creation
     static int idCount_;
@@ -216,6 +224,7 @@ inline std::ostream& operator<<(std::ostream& out, const Unit& unit)
 
 typedef std::shared_ptr<Unit> UnitSPtr;
 typedef std::unique_ptr<Unit> UnitUPtr;
-typedef std::vector<UnitSPtr> UnitVector;
+typedef std::vector<Unit*> UnitPtrVector;
+typedef std::vector<UnitSPtr> UnitSPtrVector;
 
 #endif

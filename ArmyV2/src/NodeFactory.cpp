@@ -76,7 +76,7 @@ namespace Factory
                      * Get Right Node
                      */
 
-                    auto leftEx = ex::getFloatExtractor(code);
+                    FloatExtractorUPtr leftEx = ex::getFloatExtractor(code);
 
                     char comparator;
                     code.get(comparator);
@@ -86,11 +86,11 @@ namespace Factory
 
                     auto comparatorFunction = getFunctionComparator(comparator);
 
-                    auto rightEx = ex::getFloatExtractor(code);
+                    FloatExtractorUPtr rightEx = ex::getFloatExtractor(code);
 
-                    auto leftNode = getNode(code);
+                    INodeUPtr leftNode = getNode(code);
 
-                    auto rightNode = getNode(code);
+                    INodeUPtr rightNode = getNode(code);
 
                     node.reset(
                         new DecisionNode(leftNode, rightNode, comparatorFunction, leftEx, rightEx, std::string(1, comparator))

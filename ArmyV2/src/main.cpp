@@ -13,7 +13,7 @@
 #include "DecisionTree/ActionNode.hpp"
 #include "Actions/MoveAction.hpp"
 
-#define UNITTEST
+//#define UNITTEST
 
 #ifdef UNITTEST
     #include "Extractor/UnitTest.hpp"
@@ -22,6 +22,7 @@
 
 static unsigned int w = 10;
 static unsigned int h = 10;
+static bool isLog = false;
 
 void computeArg(int argc, char** argv)
 {
@@ -37,12 +38,32 @@ void computeArg(int argc, char** argv)
             ++i;
             w = std::strtol(argv[i], nullptr, 10);
         }
+        else if (strcmp(argv[i], "-l") == 0)
+        {
+            isLog = true;
+        }
     }
+
+    auto config = Config::getInstance();
+    
+    config->setWidth(w);
+    config->setHeight(h);
+
+    config->setLog(isLog);
 }
 
 void unitTest()
 {
 #ifdef UNITTEST
+    if (!unitTest_Factory())
+    {
+        std::cout << "One unit test for factory failed" << std::endl;
+    }
+    else
+    {
+        std::cout << "Factory unitTest success" << std::endl;
+    }
+
     if (!unitTest_ValueExtractor() ||
         !unitTest_PointExtractor() ||
         !unitTest_UnitExtractor() ||
@@ -55,14 +76,23 @@ void unitTest()
         std::cout << "All extractor test are OK !" << std::endl;
     }
 
-    if (!unitTest_Factory())
+    std::vector<Unit*> unitList;
+
+    unitList.reserve(100);
+
+    std::generate_n(std::back_inserter(unitList), 100, []()
     {
-        std::cout << "One unit test for factory failed" << std::endl;
-    }
-    else
+        return new Unit(5);
+    });
+
+    tools::unusedArg(unitList);
+
+    for (auto u : unitList)
     {
-        std::cout << "Factory unitTest success" << std::endl;
+        std::cout << u->getTree().getIaCode() << std::endl << std::endl;
+        delete u;
     }
+    
 #endif
 }
 
@@ -74,7 +104,7 @@ int main(int argc, char** argv)
 
 #else
     if (argc > 1)
-        computeArg(argc, &(argv[1]));
+        computeArg(argc-1, &(argv[1]));
 
     std::srand(static_cast<unsigned int>(time(nullptr)));
     std::vector<std::unique_ptr<Army> > champions;
@@ -88,11 +118,6 @@ int main(int argc, char** argv)
     catch(...)
     {
     }
-
-    auto config = Config::getInsance();
-
-    config->setWidth(w);
-    config->setHeight(h);
 
     std::unique_ptr<Army> army = train(10, 100, 20, 10, 100, champions);
     std::cout << *army << std::endl;

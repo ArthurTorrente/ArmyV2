@@ -16,7 +16,7 @@
 class Army {
 private:
     //vector storing the units
-    std::vector<UnitSPtr > units_;
+    UnitSPtrVector units_;
 
     //Method for deep copying the units vector
     void copyUnits_(const std::vector<UnitSPtr >& units);
@@ -39,7 +39,12 @@ public:
     Army& operator=(Army army);
 
     //Getter fot the units list
-    UnitVector& getUnitsList()
+    UnitSPtrVector& getUnitsList()
+    {
+        return units_;
+    }
+
+    const UnitSPtrVector& getUnitsList() const
     {
         return units_;
     }
@@ -52,6 +57,10 @@ public:
     }
 
     //Return the unit with the given ID
+    /**
+    * Old version
+    */
+    /*
     Unit& getUnit(int id)
     {
         auto it = std::find_if(units_.begin(), units_.end(), [id](const UnitSPtr& unit) {
@@ -59,6 +68,19 @@ public:
         });
         if(it == units_.end())throw std::invalid_argument("wrong id : unit "+ std::to_string(id)+" not found");
         return *(it->get());
+    }
+    */
+
+    UnitSPtr& getUnit(int id)
+    {
+        auto it = std::find_if(units_.begin(), units_.end(), [id](const UnitSPtr& unit) {
+            return unit->getId() == id;
+        });
+        
+        if (it == units_.end())
+            throw std::invalid_argument("wrong id : unit " + std::to_string(id) + " not found");
+        
+        return *it;
     }
 
 

@@ -35,6 +35,13 @@ namespace tools
     {
         return std::min(max, std::max(value, min));
     }
+
+    inline float randomFloat()
+    {
+        float a = static_cast<float>(rand());
+
+        return static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * a;
+    }
 }
 
 #endif //_TOOLS_H_

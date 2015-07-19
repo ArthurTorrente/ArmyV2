@@ -70,14 +70,16 @@ std::string TreeIa::mutate() const
 
         auto dChoose = static_cast<unsigned int>(std::rand()) % decisionNode.size();
 
+        auto dChooseIt = decisionNode[dChoose];
+
+        if (dChooseIt != sIaCode.begin())
         {
-            std::string tmp(sIaCode.begin(), decisionNode[dChoose]);
+            std::string tmp(sIaCode.begin(), dChooseIt);
             ss << tmp;
         }
 
-        auto endBranch = Factory::getBranch(decisionNode[dChoose], sIaCode.end());
+        auto endBranch = Factory::getBranch(dChooseIt, sIaCode.end());
 
-        
         Factory::makeDecisionNode(ss);
 
         if (endBranch != sIaCode.end())
@@ -103,7 +105,39 @@ std::string TreeIa::operator*(const TreeIa& t) const
         return (std::rand() % 2 == 0 ? sIaCode : sOtherIaCode);
     }
 
+    std::string* leftNode;
+    std::string* rightNode;
 
+    if (rand() % 2)
+    {
+        leftNode = &sIaCode;
+        rightNode = &sOtherIaCode;
+    }
+    else
+    {
+        leftNode = &sOtherIaCode;
+        rightNode = &sIaCode;
+    }
+
+    auto fDecisionNode = leftNode->find("?");
+    auto fActionNode = leftNode->find("!");
+    auto startLeftBranch = fDecisionNode < fActionNode ? fDecisionNode : fActionNode;
+
+    {
+        std::string tmp(leftNode->begin(), Factory::getBranch(leftNode->begin() + startLeftBranch, leftNode->end()));
+        ss << tmp;
+    }
+
+    fDecisionNode = rightNode->find("?");
+    fActionNode = rightNode->find("!");
+    startLeftBranch = fDecisionNode < fActionNode ? fDecisionNode : fActionNode;
+
+    auto startRightBranch = Factory::getBranch(rightNode->begin() + startLeftBranch, rightNode->end());
+
+    {
+        std::string tmp(startRightBranch, rightNode->end());
+        ss << tmp;
+    }
 
     return ss.str();
 }

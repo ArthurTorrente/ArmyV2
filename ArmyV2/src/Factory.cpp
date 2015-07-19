@@ -370,7 +370,12 @@ namespace Factory
     std::string::iterator getBranch(std::string::iterator& startBranch, const std::string::iterator& endOfString)
     {
         if (*startBranch != '?')
-            return endOfString;
+        {
+            auto decisionNode = std::find(startBranch, endOfString, "?");
+            auto actionNode = std::find(startBranch, endOfString, "!");
+
+            return decisionNode < actionNode ? decisionNode : actionNode;
+        }
 
         int cpt = 0;
 

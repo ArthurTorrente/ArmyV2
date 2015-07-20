@@ -32,7 +32,11 @@ void fight(const Army& a, const Army& b, int& scoreA, int& scoreB, bool log)
     Army B = b;
     AI ai;
     int turn = 1;
-    while(A.size()>0 && B.size()>0 && turn++ < 10000) {
+    
+    auto config = Config::getInstance();
+
+    while(A.size()>0 && B.size()>0 && turn++ < 10000)
+    {
 
         if(log) {
             std::cout<<"-------------------------------"<<std::endl;
@@ -60,32 +64,44 @@ void fight(const Army& a, const Army& b, int& scoreA, int& scoreB, bool log)
                 if(log)
                     std::cout<<"Unit#"<<it->unitId<<" (Army "<<((it->army)==&A?"A":"B")<<") : ";
 
-                //Unit& unit = it->army->getUnit(it->unitId);
                 auto unit = it->army->getUnit(it->unitId);
+
                 /**
                  * Old version
                  */
-                //std::unique_ptr<Action> action = ai(unit, *(it->army), *(it->opponents));
-                
+                std::unique_ptr<Action> action(nullptr);
+
+                if (config->useOldIa())
+                {
+                    action = ai(*unit, *(it->army), *(it->opponents));
+                }
                 /**
-                 * TreeIa version
-                 */
-                std::unique_ptr<Action> action = unit->getTree()(*unit, *(it->army), *(it->opponents));
+                * TreeIa version
+                */
+                else
+                {
+                    action = unit->getTree()(*unit, *(it->army), *(it->opponents));
+                }
                 
                 action->execute(log);
                 it->opponents->purge();
-            } catch(std::invalid_argument e) {
-
+            }
+            catch(std::invalid_argument e)
+            {
                 //can happens if the unit is already dead or if an army is empty
-                std::cerr << "catch" << std::endl;
                 continue;
             }
         }
     }
-    if(log) {
-        if(A.size() == 0) {
+    
+    if(log)
+    {
+        if(A.size() == 0)
+        {
             std::cout<<"Army B win "<<B.size()<<" to 0"<<std::endl;
-        } else {
+        }
+        else
+        {
             std::cout<<"Army A win "<<A.size()<<" to 0"<<std::endl;
         }
     }

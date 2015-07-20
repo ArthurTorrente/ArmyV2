@@ -1,6 +1,10 @@
 #ifndef _UNITTESTFACTORY_H_
 #define _UNITTESTFACTORY_H_
 
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
 #include "Factory.hpp"
 #include "FactoryException.hpp"
 
@@ -109,9 +113,51 @@ bool randomIa()
     return true;
 }
 
+bool mutate()
+{
+    TreeIa tree_1;
+    TreeIa tree_2;
+
+    std::string code_1(Factory::codeFromTree(tree_1));
+    std::string code_2(Factory::codeFromTree(tree_2));
+
+    while (code_1[0] != '?')
+    {
+        tree_1 = Factory::randomIa();
+        code_1 = Factory::codeFromTree(tree_1);
+    }
+        
+
+    while (code_2[0] != '!')
+    {
+        tree_2 = Factory::randomIa();
+        code_2 = Factory::codeFromTree(tree_2);
+    }
+
+
+    code_1 = tree_1.mutate();
+    code_2 = tree_2.mutate();
+
+    auto mutateTree_1 = Factory::treeFromCode(code_1);
+    auto mutateTree_2 = Factory::treeFromCode(code_2);
+
+    return Factory::codeFromTree(mutateTree_1) == code_1 && Factory::codeFromTree(mutateTree_2) == code_2;
+}
+
+bool crossOver()
+{
+    TreeIa t1, t2;
+
+    auto code = t1 * t2;
+
+    auto crossOverTree = Factory::treeFromCode(code);
+
+    return Factory::codeFromTree(crossOverTree) == code;
+}
+
 bool unitTest_Factory()
 {
-    return codeToTree() && randomIa();
+    return codeToTree() && randomIa() && mutate() && crossOver();
 }
 
 #endif //_UNITTESTFACTORY_H_

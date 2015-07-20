@@ -367,31 +367,35 @@ namespace Factory
         return treeFromCode(randomIa);
     }
 
-    std::string::iterator getBranch(std::string::iterator& startBranch, const std::string::iterator& endOfString)
+    std::string::iterator getBranch(std::string::iterator startBranch, const std::string::iterator& endOfString)
     {
+        if (startBranch == endOfString)
+            return endOfString;
+
         if (*startBranch != '?')
         {
-            auto decisionNode = std::find(startBranch, endOfString, "?");
-            auto actionNode = std::find(startBranch, endOfString, "!");
+            auto decisionNode = std::find(startBranch, endOfString, '?');
+            auto actionNode = std::find(startBranch, endOfString, '!');
 
             return decisionNode < actionNode ? decisionNode : actionNode;
         }
-
+        
         int cpt = 0;
+        ++startBranch;
 
         while (startBranch != endOfString)
         {
-            ++startBranch;
+            auto d = std::find(startBranch, endOfString, '?');
+            auto a = std::find(startBranch, endOfString, '!');
 
-            if (*startBranch == '?')
-                --cpt;
 
-            else if (*startBranch == '!')
+
+            if (cpt == 2)
             {
-                ++cpt;
+                auto d = std::find(startBranch, endOfString, '?');
+                auto a = std::find(startBranch, endOfString, '!');
 
-                if (cpt == 0)
-                    return startBranch + 1;
+                return d < a ? d : a;
             }
         }
 

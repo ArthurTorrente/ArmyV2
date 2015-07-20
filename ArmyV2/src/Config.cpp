@@ -47,6 +47,11 @@ bool Config::log() const
     return m_log;
 }
 
+bool Config::useOldIa() const
+{
+    return m_useOldIa;
+}
+
 void Config::setChooseNodeRatio(unsigned int ratio)
 {
     m_chooseNodeRatio = ratio;
@@ -62,10 +67,16 @@ void Config::setLog(bool log)
     m_log = log;
 }
 
+void Config::setUseOldIa(bool use)
+{
+    m_useOldIa = use;
+}
+
 Config::Config()
     : m_width(100),
     m_height(100),
     m_maxNodeRatio(100),
     m_chooseNodeRatio(75),
-    m_log(false)
+    m_log(false),
+    m_useOldIa(false)
 {}

@@ -44,13 +44,14 @@ std::unique_ptr<Action> TreeIa::operator()(Unit& unit, Army& allies, Army& oppon
     return m_root->getValue(unit, allies, opponent);
 }
 
+
 std::string TreeIa::mutate() const
 {
     std::string sIaCode = Factory::codeFromTree(*this);
     std::stringstream ss;
     std::vector<std::string::iterator> decisionNode;
     /* MUTATE */
-    
+
     if (sIaCode[0] == '!')
         Factory::makeActionNode(ss);
     
@@ -60,9 +61,13 @@ std::string TreeIa::mutate() const
 
         while (sBegin != sIaCode.end())
         {
-            sBegin = std::find(sBegin, sIaCode.end(), "?");
-
-            decisionNode.push_back(sBegin);
+            sBegin = std::find(sBegin, sIaCode.end(), '?');
+            
+            if (sBegin != sIaCode.end())
+            {
+                decisionNode.push_back(sBegin);
+                ++sBegin;
+            }
         }
 
         if (decisionNode.size() == 0)
@@ -88,9 +93,33 @@ std::string TreeIa::mutate() const
             ss << tmp;
         }
     }
-    
+
     return ss.str();
 }
+
+
+#if 0
+static bool changeNode()
+{
+
+}
+
+std::string TreeIa::mutate() const
+{
+    std::string sIaCode = Factory::codeFromTree(*this);
+    TreeIa mutateTree(Factory::treeFromCode(sIaCode));
+    
+    auto& root = mutateTree.getRoot();
+
+    if (!changeNode())
+    {
+        if (rand() % 2 == 0)
+            Factory::m
+    }
+
+    return Factory::codeFromTree(mutateTree);
+}
+#endif
 
 std::string TreeIa::operator*(const TreeIa& t) const
 {
@@ -119,20 +148,23 @@ std::string TreeIa::operator*(const TreeIa& t) const
         rightNode = &sIaCode;
     }
 
-    auto fDecisionNode = leftNode->find("?");
-    auto fActionNode = leftNode->find("!");
+    auto leftNodeStart = leftNode->begin() + 1;
+    auto rightNodeStart = rightNode->begin() + 1;
+
+    auto fDecisionNode = std::find(leftNodeStart, leftNode->end(), '?');
+    auto fActionNode = std::find(leftNodeStart, leftNode->end(), '!');
     auto startLeftBranch = fDecisionNode < fActionNode ? fDecisionNode : fActionNode;
 
     {
-        std::string tmp(leftNode->begin(), Factory::getBranch(leftNode->begin() + startLeftBranch, leftNode->end()));
+        std::string tmp(leftNode->begin(), Factory::getBranch(startLeftBranch, leftNode->end()));
         ss << tmp;
     }
 
-    fDecisionNode = rightNode->find("?");
-    fActionNode = rightNode->find("!");
+    fDecisionNode = std::find(rightNodeStart, rightNode->end(), '?');
+    fActionNode = std::find(rightNodeStart, rightNode->end(), '!');
     startLeftBranch = fDecisionNode < fActionNode ? fDecisionNode : fActionNode;
 
-    auto startRightBranch = Factory::getBranch(rightNode->begin() + startLeftBranch, rightNode->end());
+    auto startRightBranch = Factory::getBranch(startLeftBranch, rightNode->end());
 
     {
         std::string tmp(startRightBranch, rightNode->end());
@@ -148,6 +180,11 @@ const std::string TreeIa::getIaCode() const
 }
 
 const INodeUPtr& TreeIa::getRoot() const
+{
+    return m_root;
+}
+
+INodeUPtr& TreeIa::getRoot()
 {
     return m_root;
 }

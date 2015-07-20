@@ -58,6 +58,7 @@ public:
     * Getter of root
     */
     const INodeUPtr& getRoot() const;
+    INodeUPtr& getRoot();
 
     /**
     * Setter of root

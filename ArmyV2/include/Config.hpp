@@ -24,6 +24,8 @@ public:
 
     bool log() const;
 
+    bool useOldIa() const;
+
     /** Setter for size of board */
     void setWidth(unsigned int w);
     void setHeight(unsigned int h);
@@ -34,6 +36,8 @@ public:
     void setMaxNodeRatio(unsigned int);
 
     void setLog(bool);
+
+    void setUseOldIa(bool use);
 
 protected:
     /** Instance of config */
@@ -51,6 +55,8 @@ protected:
 
     /* Write into console the logs of battle */
     bool m_log;
+
+    bool m_useOldIa;
 
     Config();
 };

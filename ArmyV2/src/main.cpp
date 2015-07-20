@@ -13,7 +13,7 @@
 #include "DecisionTree/ActionNode.hpp"
 #include "Actions/MoveAction.hpp"
 
-//#define UNITTEST
+#define UNITTEST
 
 #ifdef UNITTEST
     #include "Extractor/UnitTest.hpp"

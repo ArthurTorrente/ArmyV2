@@ -19,7 +19,7 @@ namespace Factory
     /**
      * Return the end of the branch it begin at startBranch
      */
-    std::string::iterator getBranch(std::string::iterator& startBranch, const std::string::iterator& endOfString);
+    std::string::iterator getBranch(std::string::iterator startBranch, const std::string::iterator& endOfString);
 }
 
 #endif //_FACTORY_H_

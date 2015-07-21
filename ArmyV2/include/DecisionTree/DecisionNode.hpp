@@ -12,6 +12,12 @@
 #include "Army.hpp"
 #include "Extractor/IExtractor.hpp"
 
+/**
+ * Decision node take a decision
+ * It use two value extractor and one comparator.
+ * If the comparaison is true, it call the value of left node
+ */
+
 class DecisionNode : public INode
 {
 public:

@@ -101,9 +101,9 @@ bool randomIa()
 {
     try
     {
-        auto tree = Factory::randomIa();
-
-        auto randomIaCode = Factory::codeFromTree(tree);
+        auto treeCode = Factory::randomIa();
+        auto tree = Factory::treeFromCode(treeCode);
+        auto randomIaCode = tree.getIaCode();;
     }
     catch (Factory::FactoryException& fe)
     {
@@ -121,17 +121,21 @@ bool mutate()
     std::string code_1(Factory::codeFromTree(tree_1));
     std::string code_2(Factory::codeFromTree(tree_2));
 
+    std::string codeIa;
+
     while (code_1[0] != '?')
     {
-        tree_1 = Factory::randomIa();
-        code_1 = Factory::codeFromTree(tree_1);
+        codeIa = Factory::randomIa();
+        tree_1 = Factory::treeFromCode(codeIa);
+        code_1 = tree_1.getIaCode();
     }
         
 
     while (code_2[0] != '!')
     {
-        tree_2 = Factory::randomIa();
-        code_2 = Factory::codeFromTree(tree_2);
+        codeIa = Factory::randomIa();
+        tree_2 = Factory::treeFromCode(codeIa);
+        code_2 = tree_2.getIaCode();
     }
 
 
@@ -156,43 +160,74 @@ bool crossOver()
 
     std::string code_1(Factory::codeFromTree(t1)), code_2(Factory::codeFromTree(t2)), code_3(Factory::codeFromTree(t3)), code_4(Factory::codeFromTree(t4));
 
+    std::string codeIa;
     while (code_1[0] != '?')
     {
-        t1 = Factory::randomIa();
-        code_1 = Factory::codeFromTree(t1);
+        codeIa = Factory::randomIa();
+        t1 = Factory::treeFromCode(codeIa);
+        code_1 = t1.getIaCode();
     }
 
 
     while (code_2[0] != '!')
     {
-        t2 = Factory::randomIa();
-        code_2 = Factory::codeFromTree(t2);
+        codeIa = Factory::randomIa();
+        t2 = Factory::treeFromCode(codeIa);
+        code_2 = t2.getIaCode();
     }
 
     while (code_3[0] != '?')
     {
-        t3 = Factory::randomIa();
-        code_3 = Factory::codeFromTree(t3);
+        codeIa = Factory::randomIa();
+        t3 = Factory::treeFromCode(codeIa);
+        code_3 = t3.getIaCode();
     }
 
 
     while (code_4[0] != '!')
     {
-        t4 = Factory::randomIa();
-        code_4 = Factory::codeFromTree(t4);
+        codeIa = Factory::randomIa();
+        t4 = Factory::treeFromCode(codeIa);
+        code_4 = t4.getIaCode();
     }
 
     auto doubleD = t1 * t3;
     auto doubleA = t2 * t4;
-    auto da = t1 * t3;
-    auto ad = t3 * t1;
+    auto da = t1 * t2;
+    auto ad = t2 * t1;
+
+    return true;
+}
+
+bool unitTest_randomGen()
+{
+    unsigned int cpt = 1000;
+    std::string codeIa;
+    std::string codeTree;
+    while (cpt--)
+    {
+        try
+        {
+            codeIa = Factory::randomIa();
+            auto tree = Factory::treeFromCode(codeIa);
+            codeTree = tree.getIaCode();
+
+            if (codeIa != codeTree)
+                throw Factory::FactoryException("Code differents");
+            
+        }
+        catch (Factory::FactoryException&)
+        {
+            std::cout << "f has an error" << std::endl;
+        }
+    }
 
     return true;
 }
 
 bool unitTest_Factory()
 {
-    return codeToTree() && randomIa() && mutate() && crossOver();
+    return unitTest_randomGen() && codeToTree() && randomIa() && mutate() && crossOver();
 }
 
 #endif //_UNITTESTFACTORY_H_

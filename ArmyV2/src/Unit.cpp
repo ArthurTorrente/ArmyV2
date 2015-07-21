@@ -45,11 +45,19 @@ void Unit::init_()
 Unit::Unit(int globalLevel)
 {
     init_();
-    if(std::rand()%2)this->iaCode_ = "L";
-    else this->iaCode_ = "H";
-    if(rand()%8==0)this->iaCode_ += "D";
-    else this->iaCode_ += '0'+ (char)(rand()%7);
-    while(globalLevel--) {
+    
+    if(std::rand()%2)
+        this->iaCode_ = "L";
+    else
+        this->iaCode_ = "H";
+    
+    if(rand()%8==0)
+        this->iaCode_ += "D";
+    else
+        this->iaCode_ += '0'+ (char)(rand()%7);
+    
+    while(globalLevel--)
+    {
         this->capacities_[std::rand()%this->capacities_.size()]->upgrade();
     }
 }
@@ -74,8 +82,11 @@ Unit::Unit(std::string iaCode, int speedLevel, int lifeLevel, int armorLevel, in
 Unit::Unit(std::string iaCode, std::vector<int>& levels)
 {
     init_();
+
     this->iaCode_ = iaCode;
-    for(unsigned int i = 0; i < levels.size() && i < capacities_.size(); ++i) {
+
+    for(unsigned int i = 0; i < levels.size() && i < capacities_.size(); ++i)
+    {
         capacities_[i]->upgrade(levels[i]);
     }
 }
@@ -83,8 +94,11 @@ Unit::Unit(std::string iaCode, std::vector<int>& levels)
 Unit::Unit(std::string iaCode, std::vector<int>& levels, TreeIa& ia)
 {
     init_();
+
     this->iaCode_ = iaCode;
-    for (unsigned int i = 0; i < levels.size() && i < capacities_.size(); ++i) {
+
+    for (unsigned int i = 0; i < levels.size() && i < capacities_.size(); ++i)
+    {
         capacities_[i]->upgrade(levels[i]);
     }
 
@@ -94,11 +108,13 @@ Unit::Unit(std::string iaCode, std::vector<int>& levels, TreeIa& ia)
 
 //Copy constructor
 Unit::Unit(const Unit& unit)
-    :m_ia(Factory::treeFromCode(Factory::codeFromTree(unit.m_ia)))
+    :m_ia(Factory::treeFromCode(unit.m_ia.getIaCode()))
 {
     init_();
     this->iaCode_ = unit.iaCode_;
-    for(unsigned int i = 0;  i < capacities_.size(); ++i) {
+    
+    for(unsigned int i = 0;  i < capacities_.size(); ++i)
+    {
         capacities_[i]->upgrade(unit.capacities_[i]->getLevel());
     }
 }
@@ -188,7 +204,9 @@ Unit Unit::mutate()const
     levels[index]--;
     levels[index2]++;
 
-    return Unit(iaCode_,levels);
+    auto mutateTree = Factory::treeFromCode(m_ia.mutate());
+
+    return Unit(iaCode_,levels, mutateTree);
 }
 
 
@@ -197,35 +215,53 @@ Unit Unit::mutate()const
 Unit Unit::operator*(const Unit& unit)const
 {
     std::vector<int> maxLevels(7);
-    for(int i = 0; i < 7; ++i) {
+    
+    for(int i = 0; i < 7; ++i)
+    {
         maxLevels[i] = std::max(capacities_[i]->getLevel(), unit.getCapacity(i)->getLevel());
     }
+    
     int gA = this->getLevel();
     int gB = unit.getLevel();
     int global = gA;
+    
     if(gA!=gB)
         global = std::min(gA, gB)+std::rand()%std::abs(gA-gB);
+    
     std::vector<int> levels(7,0);
-    while(global) {
+    
+    while(global)
+    {
         int index = std::rand()%7;
-        if(levels[index]<maxLevels[index]) {
+
+        if(levels[index]<maxLevels[index])
+        {
             levels[index]++;
             global--;
         }
     }
+    
+    auto crossTreeCode = m_ia * unit.m_ia;
+    auto crossTree = Factory::treeFromCode(crossTreeCode);
+
     if(std::rand()%2)
-        return Unit(iaCode_,levels);
-    return Unit(unit.getIACode(),levels);
+        return Unit(iaCode_, levels, crossTree);
+
+    return Unit(unit.getIACode(), levels, crossTree);
 }
 
 
 //Save the current unit in the given output stream.
 void Unit::save(std::ostream& out)const
 {
-    std::for_each(capacities_.begin(), capacities_.end(),  [&out](const std::unique_ptr<Capacity>& c) {
-        out<<c->getLevel()<<" ";
+    std::for_each(capacities_.begin(), capacities_.end(),  [&out](const std::unique_ptr<Capacity>& c)
+    {
+        out<<c->getLevel() <<" ";
     });
-    out<<iaCode_<<std::endl;
+
+    out << iaCode_ << " ";
+
+    out << m_ia.getIaCode() << std::endl;
 }
 
 
@@ -235,9 +271,17 @@ Unit Unit::load(std::istream& in)
     in.exceptions(std::istream::failbit | std::istream::eofbit);
     std::vector<int> levels(7);
     std::string iacode;
-    std::for_each(levels.begin(), levels.end(), [&in](int& level) {
+    std::string treeIaCode;
+
+    std::for_each(levels.begin(), levels.end(), [&in](int& level)
+    {
         in >> level;
     });
+
     in >> iacode;
-    return Unit(iacode, levels);
+    in >> treeIaCode;
+
+    auto tree = Factory::treeFromCode(treeIaCode);
+
+    return Unit(iacode, levels, tree);
 }

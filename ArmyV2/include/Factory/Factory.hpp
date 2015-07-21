@@ -11,7 +11,7 @@ namespace Factory
     /**
      * Make a random ia
      */
-    TreeIa randomIa();
+    std::string randomIa();
 
     void makeDecisionNode(std::stringstream& ss);
     void makeActionNode(std::stringstream& ss);

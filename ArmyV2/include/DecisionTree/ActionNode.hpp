@@ -8,6 +8,15 @@
 #include "INode.hpp"
 #include "IACodeCollection.hpp"
 
+/**
+ * Action Node return specific action
+ *
+ * Two type of ActionNode are availiable
+ * The first it use for Action needs an extractor
+ * The second it use for Action don't use an extrator
+ *
+ * The out and the extractor are templated
+ */
 template<typename OUT, typename EXTRACTOR>
 class ActionNode : public INode
 {
@@ -71,6 +80,13 @@ public:
     }
 };
 
+/**
+ * Template function is proxy for make an Action
+ *
+ * It use because we can't have a two definition of template class with different type parameter
+ *
+ * Ex : Class<T>, Class<T, U>
+ */
 template<typename ACTIONTYPE, typename EXTRACTOR>
 ActionNode<ACTIONTYPE, EXTRACTOR>* getAction(EXTRACTOR& ex)
 {

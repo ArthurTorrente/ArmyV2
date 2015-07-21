@@ -7,24 +7,33 @@
 
 TreeIa::TreeIa()
 {
-    (*this) = std::move(Factory::randomIa());
+    m_iaCode = Factory::randomIa();
+    //(*this) = std::move();
+    *this = Factory::treeFromCode(m_iaCode);
 }
 
-TreeIa::TreeIa(INodeUPtr& root)
-    : m_root(std::move(root))
+TreeIa::TreeIa(INodeUPtr& root, const std::string& codeIa)
+    : m_iaCode(codeIa),
+    m_root(std::move(root))
 {
     if (m_root == nullptr)
     {
-        (*this) = std::move(Factory::randomIa());
+        m_iaCode = Factory::randomIa();
+        *this = Factory::treeFromCode(m_iaCode);
+        //(*this) = std::move(Factory::randomIa());
     }
 }
 
 TreeIa::TreeIa(TreeIa&& t)
-    : m_root(std::move(t.m_root))
+    : m_iaCode(std::move(t.m_iaCode)),
+    m_root(std::move(t.m_root))
 {
     if (m_root == nullptr)
     {
-        (*this) = std::move(Factory::randomIa());
+        m_iaCode = Factory::randomIa();
+        
+        *this = Factory::treeFromCode(m_iaCode);
+        //(*this) = std::move(Factory::randomIa());
     }
 }
 
@@ -34,6 +43,13 @@ TreeIa& TreeIa::operator=(TreeIa&& tree)
     {
         m_root.release();
         m_root = std::move(tree.m_root);
+        m_iaCode = std::move(tree.m_iaCode);
+
+        if (m_root == nullptr)
+        {
+            m_iaCode = Factory::randomIa();
+            *this = Factory::treeFromCode(m_iaCode);
+        }
     }
 
     return *this;
@@ -97,30 +113,6 @@ std::string TreeIa::mutate() const
     return ss.str();
 }
 
-
-#if 0
-static bool changeNode()
-{
-
-}
-
-std::string TreeIa::mutate() const
-{
-    std::string sIaCode = Factory::codeFromTree(*this);
-    TreeIa mutateTree(Factory::treeFromCode(sIaCode));
-    
-    auto& root = mutateTree.getRoot();
-
-    if (!changeNode())
-    {
-        if (rand() % 2 == 0)
-            Factory::m
-    }
-
-    return Factory::codeFromTree(mutateTree);
-}
-#endif
-
 std::string TreeIa::operator*(const TreeIa& t) const
 {
     std::string sIaCode(getIaCode());
@@ -128,47 +120,95 @@ std::string TreeIa::operator*(const TreeIa& t) const
     std::stringstream ss;
 
     /* CROSS OVER */
+    /**
+    * 3 cas
+    *
+    * 2 Action : random entre les deux
+    * 1 action 1 Decision : Decision en root et placement de l'action soit sur le node finale de gauche soit de droite
+    * 2 Decision : random choix du root et du noeud gauche et noeud droit de l'autre tree
+    */
 
-    if (sIaCode[0] == '!' || sOtherIaCode[0] == '!')
+    if (sIaCode[0] == '!' && sOtherIaCode[0] == '!')
     {
         return (std::rand() % 2 == 0 ? sIaCode : sOtherIaCode);
     }
-
-    std::string* leftNode;
-    std::string* rightNode;
-
-    if (rand() % 2)
+    else if (sIaCode[0] != sOtherIaCode[0])
     {
-        leftNode = &sIaCode;
-        rightNode = &sOtherIaCode;
+        std::string* actionNode = &sIaCode;
+        std::string* decisionNode = &sOtherIaCode;
+
+        if (sIaCode[0] == '?')
+            std::swap(decisionNode, actionNode);
+
+        auto childFinder = decisionNode->begin() + 1;
+
+        auto decisionNodeFinder = std::find(childFinder, decisionNode->end(), '?');
+        auto actionNodeFinder = std::find(childFinder, decisionNode->end(), '!');
+
+        auto startChild = decisionNodeFinder < actionNodeFinder ? decisionNodeFinder : actionNodeFinder;
+
+        auto endChild = Factory::getBranch(startChild, decisionNode->end());
+
+        if (rand() % 2 == 0)
+        {
+            //actionNode is left child of decisionNode
+            std::string tmp(decisionNode->begin(), startChild);
+
+            ss << tmp;
+            ss << *actionNode;
+
+            tmp.assign(endChild, decisionNode->end());
+            ss << tmp;
+        }
+        else
+        {
+            //actionNode is right child of decisionNode
+            std::string tmp(decisionNode->begin(), endChild);
+            
+            ss << tmp;
+            ss << *actionNode;
+        }
     }
     else
     {
-        leftNode = &sOtherIaCode;
-        rightNode = &sIaCode;
-    }
 
-    auto leftNodeStart = leftNode->begin() + 1;
-    auto rightNodeStart = rightNode->begin() + 1;
+        std::string* leftNode;
+        std::string* rightNode;
 
-    auto fDecisionNode = std::find(leftNodeStart, leftNode->end(), '?');
-    auto fActionNode = std::find(leftNodeStart, leftNode->end(), '!');
-    auto startLeftBranch = fDecisionNode < fActionNode ? fDecisionNode : fActionNode;
+        if (rand() % 2)
+        {
+            leftNode = &sIaCode;
+            rightNode = &sOtherIaCode;
+        }
+        else
+        {
+            leftNode = &sOtherIaCode;
+            rightNode = &sIaCode;
+        }
 
-    {
-        std::string tmp(leftNode->begin(), Factory::getBranch(startLeftBranch, leftNode->end()));
-        ss << tmp;
-    }
+        auto leftNodeStart = leftNode->begin() + 1;
+        auto rightNodeStart = rightNode->begin() + 1;
 
-    fDecisionNode = std::find(rightNodeStart, rightNode->end(), '?');
-    fActionNode = std::find(rightNodeStart, rightNode->end(), '!');
-    startLeftBranch = fDecisionNode < fActionNode ? fDecisionNode : fActionNode;
+        auto fDecisionNode = std::find(leftNodeStart, leftNode->end(), '?');
+        auto fActionNode = std::find(leftNodeStart, leftNode->end(), '!');
+        auto startLeftBranch = fDecisionNode < fActionNode ? fDecisionNode : fActionNode;
 
-    auto startRightBranch = Factory::getBranch(startLeftBranch, rightNode->end());
+        {
+            auto endBranch = Factory::getBranch(startLeftBranch, leftNode->end());
+            std::string tmp(leftNode->begin(), endBranch);
+            ss << tmp;
+        }
 
-    {
-        std::string tmp(startRightBranch, rightNode->end());
-        ss << tmp;
+        fDecisionNode = std::find(rightNodeStart, rightNode->end(), '?');
+        fActionNode = std::find(rightNodeStart, rightNode->end(), '!');
+        startLeftBranch = (fDecisionNode < fActionNode ? fDecisionNode : fActionNode) + 1;
+
+        auto startRightBranch = Factory::getBranch(startLeftBranch, rightNode->end());
+
+        {
+            std::string tmp(startRightBranch, rightNode->end());
+            ss << tmp;
+        }
     }
 
     return ss.str();
@@ -176,7 +216,8 @@ std::string TreeIa::operator*(const TreeIa& t) const
 
 std::string TreeIa::getIaCode() const
 {
-    return m_root->getCode();
+    return m_iaCode;
+    //return m_root->getCode();
 }
 
 const INodeUPtr& TreeIa::getRoot() const
@@ -192,4 +233,5 @@ INodeUPtr& TreeIa::getRoot()
 void TreeIa::setRoot(std::unique_ptr<INode>& root)
 {
     m_root = std::move(root);
+    m_iaCode = Factory::codeFromTree(*this);
 }

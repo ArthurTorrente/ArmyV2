@@ -39,6 +39,18 @@ public:
 
     void setUseOldIa(bool use);
 
+    unsigned int I() const;
+    unsigned int T() const;
+    unsigned int N() const;
+    unsigned int X() const;
+    unsigned int Y() const;
+
+    void setI(unsigned int);
+    void setT(unsigned int);
+    void setN(unsigned int);
+    void setX(unsigned int);
+    void setY(unsigned int);
+
 protected:
     /** Instance of config */
     static std::shared_ptr<Config> m_instance;
@@ -57,6 +69,15 @@ protected:
     bool m_log;
 
     bool m_useOldIa;
+
+    /**
+     * Application param
+     */
+    unsigned int m_I;
+    unsigned int m_T;
+    unsigned int m_N;
+    unsigned int m_X;
+    unsigned int m_Y;
 
     Config();
 };

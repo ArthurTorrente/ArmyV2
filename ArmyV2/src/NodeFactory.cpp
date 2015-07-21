@@ -13,7 +13,7 @@ namespace Factory
         static bool isValidComparator(char comparator)
         {
             static char validComparator[] = {
-                '>', '<', '=', '!'
+                '>', '<', '=', '^'
             };
             
             auto compFound = std::find(validComparator, validComparator + 3, comparator);
@@ -46,14 +46,14 @@ namespace Factory
                 };
                 break;
 
-            case '!':
+            case '^':
                 return[](float a, float b){
                     return a != b;
                 };
                 break;
 
             default:
-                return std::function<bool(float, float)>(nullptr);
+                throw Factory::FactoryException("Bad comparator");
             }
         }
 

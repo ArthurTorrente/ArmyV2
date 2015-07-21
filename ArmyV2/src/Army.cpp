@@ -115,7 +115,8 @@ Army Army::mutate()const
     Army mutated(*this);
     unsigned int count = 1 + std::rand() % units_.size();
     
-    while(count--) {
+    while(count--)
+    {
         if(std::rand() % 3 == 0 || units_.size() == 1)
             mutated.units_[std::rand() % units_.size()] = UnitSPtr(new Unit(units_[0]->getLevel()));
 

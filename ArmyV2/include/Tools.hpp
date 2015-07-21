@@ -20,7 +20,7 @@ namespace tools
     * Variadic template uses for remove the warnings, unused parameter function
     */
     template < typename T, typename... TArgs >
-    void unusedArg(const T& value, TArgs... args)
+    void unusedArg(const T& value, TArgs&... args)
     {   
         (void)value;
 

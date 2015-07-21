@@ -35,7 +35,7 @@ void fight(const Army& a, const Army& b, int& scoreA, int& scoreB, bool log)
     
     auto config = Config::getInstance();
 
-    while(A.size()>0 && B.size()>0 && turn++ < 10000)
+    while(A.size()>0 && B.size()>0 && turn++ < 1000)
     {
 
         if(log) {

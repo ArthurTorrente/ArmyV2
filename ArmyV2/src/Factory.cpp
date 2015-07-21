@@ -18,7 +18,7 @@ namespace Factory
         {
             INodeUPtr root(node::getNode(ss));
 
-            return TreeIa(root);
+            return TreeIa(root, code);
         }
         catch (...)
         {
@@ -315,7 +315,7 @@ namespace Factory
     static void makeComparator(std::stringstream& ss)
     {
         static char validComparator[] = {
-            '>', '<', '=', '!'
+            '>', '<', '=', '^'
         };
 
         int comparatorChoos = rand() % sizeof(validComparator);
@@ -338,18 +338,24 @@ namespace Factory
         makeComparator(ss);
         makeFloatExtractor(ss);
 
-        for (unsigned int i = 0; i < 2; ++i)
-        {
-            unsigned int randomRatio = static_cast<unsigned int>(rand()) % 10;
+        auto config = Config::getInstance();
 
-            if (randomRatio <= 8)
-                makeActionNode(ss);
-            else
-                makeDecisionNode(ss);
-        }
+        unsigned int randomRatio = static_cast<unsigned int>(rand()) % config->getMaxNodeRatio();
+
+        if (randomRatio <= config->getChooseNodeRatio())
+            makeActionNode(ss);
+        else
+            makeDecisionNode(ss);
+
+        randomRatio = static_cast<unsigned int>(rand()) % config->getMaxNodeRatio();
+
+        if (randomRatio <= config->getChooseNodeRatio())
+            makeActionNode(ss);
+        else
+            makeDecisionNode(ss);
     }
 
-    TreeIa randomIa()
+    std::string randomIa()
     {
         std::stringstream ssRandom;
 
@@ -362,16 +368,13 @@ namespace Factory
         else
             makeDecisionNode(ssRandom);
 
-        std::string randomIa(ssRandom.str());
-
-        return treeFromCode(randomIa);
+        return ssRandom.str();
     }
 
     std::string::iterator getBranch(std::string::iterator startBranch, const std::string::iterator& endOfString)
     {
         if (startBranch == endOfString)
             return endOfString;
-
 
         if (*startBranch == '?')
         {
@@ -397,6 +400,10 @@ namespace Factory
                 if (cpt == 2)
                     break;
             }
+        }
+        else
+        {
+            ++startBranch;
         }
 
         auto decisionNode = std::find(startBranch, endOfString, '?');

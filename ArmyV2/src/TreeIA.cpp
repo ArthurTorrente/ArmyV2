@@ -47,7 +47,7 @@ std::unique_ptr<Action> TreeIa::operator()(Unit& unit, Army& allies, Army& oppon
 
 std::string TreeIa::mutate() const
 {
-    std::string sIaCode = Factory::codeFromTree(*this);
+    std::string sIaCode(getIaCode());
     std::stringstream ss;
     std::vector<std::string::iterator> decisionNode;
     /* MUTATE */
@@ -123,13 +123,13 @@ std::string TreeIa::mutate() const
 
 std::string TreeIa::operator*(const TreeIa& t) const
 {
-    std::string sIaCode(Factory::codeFromTree(*this));
-    std::string sOtherIaCode(Factory::codeFromTree(t));
+    std::string sIaCode(getIaCode());
+    std::string sOtherIaCode(t.getIaCode());
     std::stringstream ss;
 
     /* CROSS OVER */
 
-    if (sIaCode[0] == '!' && sOtherIaCode[0] == '!')
+    if (sIaCode[0] == '!' || sOtherIaCode[0] == '!')
     {
         return (std::rand() % 2 == 0 ? sIaCode : sOtherIaCode);
     }
@@ -174,7 +174,7 @@ std::string TreeIa::operator*(const TreeIa& t) const
     return ss.str();
 }
 
-const std::string TreeIa::getIaCode() const
+std::string TreeIa::getIaCode() const
 {
     return m_root->getCode();
 }

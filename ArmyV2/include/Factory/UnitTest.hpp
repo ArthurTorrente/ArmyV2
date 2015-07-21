@@ -135,24 +135,59 @@ bool mutate()
     }
 
 
-    code_1 = tree_1.mutate();
-    code_2 = tree_2.mutate();
+    auto mutate_code_1 = tree_1.mutate();
+    auto mutate_code_2 = tree_2.mutate();
 
-    auto mutateTree_1 = Factory::treeFromCode(code_1);
-    auto mutateTree_2 = Factory::treeFromCode(code_2);
+    auto mutateTree_1 = Factory::treeFromCode(mutate_code_1);
+    auto mutateTree_2 = Factory::treeFromCode(mutate_code_2);
 
-    return Factory::codeFromTree(mutateTree_1) == code_1 && Factory::codeFromTree(mutateTree_2) == code_2;
+    auto mutateTree1IaCode = mutateTree_1.getIaCode();
+    auto mutateTree2IaCode = mutateTree_2.getIaCode();
+
+    bool tree1AIsGood = mutateTree1IaCode == mutate_code_1 && mutate_code_1 != code_1;
+    bool tree2AIsGood = mutateTree2IaCode == mutate_code_2 && mutate_code_2 != code_2;
+    
+    return tree1AIsGood && tree2AIsGood;
 }
 
 bool crossOver()
 {
-    TreeIa t1, t2;
+    TreeIa t1, t2, t3, t4;
 
-    auto code = t1 * t2;
+    std::string code_1(Factory::codeFromTree(t1)), code_2(Factory::codeFromTree(t2)), code_3(Factory::codeFromTree(t3)), code_4(Factory::codeFromTree(t4));
 
-    auto crossOverTree = Factory::treeFromCode(code);
+    while (code_1[0] != '?')
+    {
+        t1 = Factory::randomIa();
+        code_1 = Factory::codeFromTree(t1);
+    }
 
-    return Factory::codeFromTree(crossOverTree) == code;
+
+    while (code_2[0] != '!')
+    {
+        t2 = Factory::randomIa();
+        code_2 = Factory::codeFromTree(t2);
+    }
+
+    while (code_3[0] != '?')
+    {
+        t3 = Factory::randomIa();
+        code_3 = Factory::codeFromTree(t3);
+    }
+
+
+    while (code_4[0] != '!')
+    {
+        t4 = Factory::randomIa();
+        code_4 = Factory::codeFromTree(t4);
+    }
+
+    auto doubleD = t1 * t3;
+    auto doubleA = t2 * t4;
+    auto da = t1 * t3;
+    auto ad = t3 * t1;
+
+    return true;
 }
 
 bool unitTest_Factory()

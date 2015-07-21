@@ -123,6 +123,7 @@ public:
 
     FarNearExtractor(bool isFar, SetExtractorUPtr& sex, PointExtractorUPtr& pex)
         : UnitExtractor(),
+        m_isFar(isFar),
         m_setExtractor(std::move(sex)),
         m_pointExtractor(std::move(pex))
     {

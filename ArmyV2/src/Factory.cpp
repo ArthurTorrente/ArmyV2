@@ -372,33 +372,36 @@ namespace Factory
         if (startBranch == endOfString)
             return endOfString;
 
-        if (*startBranch != '?')
+
+        if (*startBranch == '?')
         {
-            auto decisionNode = std::find(startBranch, endOfString, '?');
-            auto actionNode = std::find(startBranch, endOfString, '!');
+            int cpt = 0;
+            ++startBranch;
 
-            return decisionNode < actionNode ? decisionNode : actionNode;
-        }
-        
-        int cpt = 0;
-        ++startBranch;
-
-        while (startBranch != endOfString)
-        {
-            auto d = std::find(startBranch, endOfString, '?');
-            auto a = std::find(startBranch, endOfString, '!');
-
-
-
-            if (cpt == 2)
+            while (startBranch != endOfString)
             {
                 auto d = std::find(startBranch, endOfString, '?');
                 auto a = std::find(startBranch, endOfString, '!');
 
-                return d < a ? d : a;
+                if (d < a)
+                {
+                    --cpt;
+                    startBranch = d + 1;
+                }
+                else
+                {
+                    ++cpt;
+                    startBranch = a + 1;
+                }
+
+                if (cpt == 2)
+                    break;
             }
         }
 
-        return endOfString;
+        auto decisionNode = std::find(startBranch, endOfString, '?');
+        auto actionNode = std::find(startBranch, endOfString, '!');
+
+        return decisionNode < actionNode ? decisionNode : actionNode;
     }
 }

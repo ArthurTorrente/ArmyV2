@@ -127,7 +127,7 @@ public:
     {
         std::string code("N");
 
-        code += (m_type == MIN ? "L" : " H");
+        code += (m_type == MIN ? "L" : "H");
         code += '0' + static_cast<char>(m_capacityIndex);
         code += std::to_string(m_n);
         code += m_setExtractor->getCode();

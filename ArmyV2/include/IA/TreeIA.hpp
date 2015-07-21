@@ -52,7 +52,7 @@ public:
     /**
      * Getter of IACode
      */
-    const std::string getIaCode() const;
+    std::string getIaCode() const;
 
     /**
     * Getter of root

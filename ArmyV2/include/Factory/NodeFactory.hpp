@@ -10,6 +10,11 @@ namespace Factory
 {
     namespace node
     {
+        /**
+         * Get a node from code
+         *
+         * The node can be an action or a decision
+         */
         INodeUPtr getNode(std::stringstream& code);
     }
 }

@@ -63,11 +63,18 @@ std::unique_ptr<Action> TreeIa::operator()(Unit& unit, Army& allies, Army& oppon
 
 std::string TreeIa::mutate() const
 {
+    /**
+     * Mutation change one branch of Tree
+     *
+     * It gets all the decision node into the tree and take a random decision node
+     * it generates a new decision branch for replace the older
+     */
     std::string sIaCode(getIaCode());
     std::stringstream ss;
     std::vector<std::string::iterator> decisionNode;
     /* MUTATE */
 
+    /* If only action node regenerate new action node */
     if (sIaCode[0] == '!')
         Factory::makeActionNode(ss);
     
@@ -75,6 +82,7 @@ std::string TreeIa::mutate() const
     {
         auto sBegin = sIaCode.begin();
 
+        /* Get all decision node */
         while (sBegin != sIaCode.end())
         {
             sBegin = std::find(sBegin, sIaCode.end(), '?');
@@ -89,10 +97,12 @@ std::string TreeIa::mutate() const
         if (decisionNode.size() == 0)
             throw std::exception("Ia code don't have a decision node");
 
+        /* take random */
         auto dChoose = static_cast<unsigned int>(std::rand()) % decisionNode.size();
 
         auto dChooseIt = decisionNode[dChoose];
 
+        /* copy from begin to choose decision node */
         if (dChooseIt != sIaCode.begin())
         {
             std::string tmp(sIaCode.begin(), dChooseIt);
@@ -101,8 +111,10 @@ std::string TreeIa::mutate() const
 
         auto endBranch = Factory::getBranch(dChooseIt, sIaCode.end());
 
+        /* generate newer decision node */
         Factory::makeDecisionNode(ss);
 
+        /* copy the rest of current iaCode */
         if (endBranch != sIaCode.end())
         {
             std::string tmp(endBranch, sIaCode.end());

@@ -5,7 +5,10 @@
 
 namespace Factory
 {
+    /* Make a tree with a code */
     TreeIa treeFromCode(const std::string& code);
+
+    /* Make a string with with tree*/
     std::string codeFromTree(const TreeIa& tree);
 
     /**
@@ -13,7 +16,10 @@ namespace Factory
      */
     std::string randomIa();
 
+    /* Make a random decision node */
     void makeDecisionNode(std::stringstream& ss);
+
+    /* Make an action node */
     void makeActionNode(std::stringstream& ss);
 
     /**

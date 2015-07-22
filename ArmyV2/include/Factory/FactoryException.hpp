@@ -5,6 +5,10 @@
 
 namespace Factory
 {
+    /**
+    * Custom exception
+    * It throw when factory has an error
+    */
     class FactoryException : public std::exception
     {
     public:

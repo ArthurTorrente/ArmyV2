@@ -39,6 +39,7 @@ public:
 
     void setUseOldIa(bool use);
 
+    /* Getter and setter of application parameters */
     unsigned int I() const;
     unsigned int T() const;
     unsigned int N() const;
@@ -50,7 +51,7 @@ public:
     void setN(unsigned int);
     void setX(unsigned int);
     void setY(unsigned int);
-
+    /* ===================== */
 protected:
     /** Instance of config */
     static std::shared_ptr<Config> m_instance;
@@ -68,6 +69,7 @@ protected:
     /* Write into console the logs of battle */
     bool m_log;
 
+    /* flag use the old IA system */
     bool m_useOldIa;
 
     /**

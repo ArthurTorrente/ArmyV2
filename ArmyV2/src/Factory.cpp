@@ -371,6 +371,12 @@ namespace Factory
         return ssRandom.str();
     }
 
+    /**
+     * Return the end of branch
+     *
+     * If the first caracter is a ? search all child node
+     * If the first caracter is a ! or other, return the first branch begin with !
+     */
     std::string::iterator getBranch(std::string::iterator startBranch, const std::string::iterator& endOfString)
     {
         if (startBranch == endOfString)

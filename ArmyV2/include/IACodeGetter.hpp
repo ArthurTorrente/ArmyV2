@@ -3,6 +3,9 @@
 
 #include <string>
 
+/**
+ * Interface use for create IACode from Tree
+ */
 class IACodeGetter
 {
 public:

@@ -80,7 +80,8 @@ void fight(const Army& a, const Army& b, int& scoreA, int& scoreB, bool log)
                 */
                 else
                 {
-                    action = unit->getTree()(*unit, *(it->army), *(it->opponents));
+                    TreeIa& tree = unit->getTree();
+                    action = tree(*unit, *(it->army), *(it->opponents));
                 }
                 
                 action->execute(log);

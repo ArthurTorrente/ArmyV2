@@ -5,9 +5,6 @@ Maxime HELAINE
 Alexandre RIVET
 Arthur TORRENTE
 
-TODO :
-Test unitaire Mutate et CrossOver de TreeIA (Peut ne pas fonctionner)
-
 
 Tâches réalisés:
 Arthur TORRENTE:

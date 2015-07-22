@@ -36,6 +36,9 @@ namespace tools
         return std::min(max, std::max(value, min));
     }
 
+    /**
+     * Return a random floating value
+     */
     inline float randomFloat()
     {
         float a = static_cast<float>(rand());

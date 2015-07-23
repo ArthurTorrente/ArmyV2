@@ -20,10 +20,6 @@ struct ArmyWrapper {
     }
 };
 
-
-
-
-
 //Train armies by genetic algorithm,  with fitness function obtained by tournament
 //params :
 // - iterations : the maximum number of iterations of the genetic algorithm
